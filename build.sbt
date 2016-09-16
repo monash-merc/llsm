@@ -29,7 +29,6 @@ lazy val core = project
   .settings(moduleName := "llsm-core")
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
-  .settings(addLibs(vAll, "cats-core"):_*)
   .settings(
     libraryDependencies ++= Seq(
       "net.imglib2"   % "imglib2"                 % "3.2.0"           % "provided",
