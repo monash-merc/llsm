@@ -1,7 +1,7 @@
 package llsm
 package io.metadata
 
-import cats.data.Xor
+import cats.syntax.either._
 import scala.util.{Try, Success, Failure}
 
 /**
@@ -20,35 +20,35 @@ final object Parser extends ParserInstances {
 
   def apply[A](s: String)(implicit parser: Parser[A]): Result[A] = parser(s)
 
-  // Parser.Result[A] type is simply a alias for Xor
-  type Result[A] = Xor[ParsingFailure, A]
+  // Parser.Result[A] type is simply a alias for Either
+  type Result[A] = Either[ParsingFailure, A]
 
 }
 
 private[metadata] sealed abstract class ParserInstances {
 
   implicit val stringParser = new Parser[String] {
-    def apply(s: String) = Xor.right(s)
+    def apply(s: String) = Either.right(s)
   }
 
   implicit val intParser = new Parser[Int] {
     def apply(s: String) = Try(s.toInt) match {
-      case Success(v) => Xor.right(v)
-      case Failure(e) => Xor.left(ParsingFailure("Failed to parse Int", e))
+      case Success(v) => Either.right(v)
+      case Failure(e) => Either.left(ParsingFailure("Failed to parse Int", e))
     }
   }
 
   implicit val doubleParser = new Parser[Double] {
     def apply(s: String) = Try(s.toDouble) match {
-      case Success(v) => Xor.right(v)
-      case Failure(e) => Xor.left(ParsingFailure("Failed to parse Double", e))
+      case Success(v) => Either.right(v)
+      case Failure(e) => Either.left(ParsingFailure("Failed to parse Double", e))
     }
   }
 
   implicit val booleanParser = new Parser[Boolean] {
     def apply(s: String) = Try(s.toBoolean) match {
-      case Success(v) => Xor.right(v)
-      case Failure(e) => Xor.left(ParsingFailure("Failed to parse Boolean", e))
+      case Success(v) => Either.right(v)
+      case Failure(e) => Either.left(ParsingFailure("Failed to parse Boolean", e))
     }
   }
 }

@@ -2,7 +2,7 @@ package llsm.io.metadata
 
 import org.scalatest.Matchers._
 import org.scalacheck.Gen
-import cats.data.Xor
+import cats.syntax.either._
 
 class MetadataParserSpec extends MetadataSuite {
 
@@ -12,7 +12,7 @@ class MetadataParserSpec extends MetadataSuite {
     assert(Parser[String](in) == Xor.right("Hellow"))
   }
   it should "parse all strings" in forAll { (s: String) =>
-    assert(Parser[String](s) == Xor.right(s))
+    assert(Parser[String](s) == Either.right(s))
   }
 
   "A Parser[Int]" should "parse an int from a string" in {
@@ -53,13 +53,13 @@ Z motion :	Sample piezo"""
     val wf = Parser[Waveform](wave)
 
     wf match {
-      case Xor.Right(Waveform(wt, channels, cyc, zm)) => {
+      case Right(Waveform(wt, channels, cyc, zm)) => {
         assertResult("Linear")(wt)
         assertResult("Sample piezo")(zm)
         assertResult("per Z")(cyc)
         assertResult(0)(channels(0).id)
       }
-      case Xor.Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
+      case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
   }
 
@@ -67,7 +67,7 @@ Z motion :	Sample piezo"""
     val file: String = "Resolution test 4_ch1_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
 
     Parser[FilenameMetadata](file) match {
-      case Xor.Right(FilenameMetadata(n, c, tidx, wl, ts, ats)) => {
+      case Right(FilenameMetadata(n, c, tidx, wl, ts, ats)) => {
         assertResult("Resolution test 4")(n)
         assertResult(1)(c)
         assertResult(1)(tidx)
@@ -75,7 +75,7 @@ Z motion :	Sample piezo"""
         assertResult(7480L)(ts)
         assertResult(8884606L)(ats)
       }
-      case Xor.Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
+      case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
   }
   it should "parse any channel and stack number >= 0" in forAll(Gen.choose(0, Integer.MAX_VALUE), Gen.choose(0, 9999)) { (c: Int, s: Int) =>
@@ -85,7 +85,7 @@ Z motion :	Sample piezo"""
       val fn: String = s"Resolution test 4_ch${c}_stack${paddedS}_488nm_0007480msec_0008884606msecAbs.tif"
       val pfn: Parser.Result[FilenameMetadata] = Parser[FilenameMetadata](fn)
       pfn should be ('right)
-      pfn should be (Xor.right(FilenameMetadata("Resolution test 4", c, s, 488, 7480L, 8884606L)))
+      pfn should be (Either.right(FilenameMetadata("Resolution test 4", c, s, 488, 7480L, 8884606L)))
     }
   }
   it should "parse any wavelength 0 <= wl <= 9999" in forAll(Gen.choose(0, 9999)) { (w: Int) =>
@@ -95,7 +95,7 @@ Z motion :	Sample piezo"""
       val pfn: Parser.Result[FilenameMetadata] = Parser[FilenameMetadata](fn)
 
       pfn should be ('right)
-      pfn should be (Xor.right(FilenameMetadata("Resolution test 4", 1, 1, w, 7480L, 8884606L)))
+      pfn should be (Either.right(FilenameMetadata("Resolution test 4", 1, 1, w, 7480L, 8884606L)))
     }
   }
   it should "fail when passed a malformed file name" in {
@@ -112,8 +112,8 @@ Z motion :	Sample piezo"""
     val file: String = "Resolution test 4_ch1_stack000b_488nm_0007480msec_0008884606msecAbs.tif"
 
     Parser[FilenameMetadata](file) match {
-      case Xor.Left(ParsingFailure(_, e)) => throw e
-      case _ => fail("Expected a Xor.Left with ParsingFailure but got Xor.Right")
+      case Left(ParsingFailure(_, e)) => throw e
+      case _ => fail("Expected a Either.Left with ParsingFailure but got Either.Right")
     }
   }
 }
