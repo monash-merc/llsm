@@ -58,7 +58,14 @@ trait ImplicitParsers {
     }
   }
 
-  implicit val wfCycleParser = new Parser[Waveform.Cycle]  {
+  implicit val wfTypeParser = new Parser[Waveform.Type] {
+    def apply(s: String): Parser.Result[Waveform.Type] = s.split("\\t").toList match {
+      case List(_, t) => Xor.right(Waveform.Type(t))
+      case _ => Xor.left(ParsingFailure("Unexpected structure: unable to parse waveform type from metadata file.", new Throwable("Unexpected structure: unable to parse waveform type from metadata file.")))
+    }
+  }
+
+  implicit val wfCycleParser = new Parser[Waveform.Cycle] {
     def apply(s: String): Parser.Result[Waveform.Cycle] = s.split("\\t").toList match {
       case List(_, cyc) => Xor.right(Waveform.Cycle(cyc))
       case _ => Xor.left(ParsingFailure("Unexpected structure: unable to parse cycle mode from metadata file.", new Throwable("Unexpected structure: unable to parse cycle mode from metadata file.")))
@@ -72,9 +79,21 @@ trait ImplicitParsers {
     }
   }
 
+  private[this] def sequenceChannels(xGalv: List[Waveform.Stage], zGalv: List[Waveform.Stage], zPZT: List[Waveform.Stage], sPZT: List[Waveform.Stage], stack: List[Waveform.Stack], excitation: List[Waveform.Excitation]): List[Waveform.Channel] = {
+    for {
+      xg <- xGalv
+      zg <- zGalv
+      zp <- zPZT
+      sp <- sPZT
+      s <- stack
+      ex <- excitation
+    } yield Waveform.Channel(xg.channel, s.number, xg, zg, zp, sp, ex)
+  }
+
   implicit val wfParser = new Parser[Waveform] {
     def apply(s: String): Parser.Result[Waveform] = s.split("\\n\\n").toList match {
       case List(t, xg, zg, zp, sp, stacks, ex, cycle, zmotion) => for {
+        wft <- Parser[Waveform.Type](t.trim)
         xGalv <- xg.split("\\n").toList.map(l => Parser[Waveform.Stage](l)).sequence
         zGalv <- zg.split("\\n").toList.map(l => Parser[Waveform.Stage](l)).sequence
         zPZT <- zp.split("\\n").toList.map(l => Parser[Waveform.Stage](l)).sequence
@@ -83,7 +102,7 @@ trait ImplicitParsers {
         exp <- ex.split("\\n").toList.map(l => Parser[Waveform.Excitation](l)).sequence
         cyc <- Parser[Waveform.Cycle](cycle.trim)
         zm <- Parser[Waveform.ZMotion](zmotion.trim)
-      } yield Waveform(t, xGalv, zGalv, zPZT, sPZT, st, exp, cyc, zm)
+      } yield Waveform(wft.name, sequenceChannels(xGalv, zGalv, zPZT, sPZT, st, exp), cyc.mode, zm.mode)
     }
   }
 

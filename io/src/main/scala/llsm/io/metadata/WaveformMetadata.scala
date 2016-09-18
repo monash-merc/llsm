@@ -1,9 +1,11 @@
 package llsm
 package io.metadata
 
-case class Waveform(wfType: String, xGalvo: List[Waveform.Stage], zGalvo: List[Waveform.Stage], zPZT: List[Waveform.Stage], sPZT: List[Waveform.Stage], stackNo: List[Waveform.Stack], excitation: List[Waveform.Excitation], cycle: Waveform.Cycle, zmotion: Waveform.ZMotion)
+case class Waveform(wfType: String, channels: List[Waveform.Channel], cycle: String, zmotion: String)
 
 object Waveform {
+  case class Type(name: String)
+  case class Channel(id: Int, stack: Int, xGalvo: Stage, zGalvo: Stage, zPZT: Stage, sPZT: Stage, excitation: Excitation)
   case class Stage(channel: Int, offset: Double, interval: Double, excitationPixels: Int)
   case class Stack(channel: Int, number: Int)
   case class Excitation(channel: Int, filter: String, laser: Int, power: Int, exposure: Double)

@@ -9,7 +9,7 @@ class MetadataParserSpec extends MetadataSuite {
   "A Parser[String]" should " simply return the string" in {
     val in: String = "Hellow"
 
-    assert(Parser[String](in).getOrElse("Ouch") == "Hellow")
+    assert(Parser[String](in) == Xor.right("Hellow"))
   }
   it should "parse all strings" in forAll { (s: String) =>
     assert(Parser[String](s) == Xor.right(s))
@@ -53,11 +53,11 @@ Z motion :	Sample piezo"""
     val wf = Parser[Waveform](wave)
 
     wf match {
-      case Xor.Right(Waveform(wt, xGalv, zGalv, zPZT, sPZT, st, ex, cyc, zm)) => {
-        assertResult(Waveform.ZMotion("Sample piezo"))(zm)
-        assertResult(Waveform.Cycle("per Z"))(cyc)
-        assertResult(List(Waveform.Excitation(0, "N/A", 561, 2, 3), Waveform.Excitation(1, "N/A", 488, 20, 3)))(ex)
-        assertResult(List(Waveform.Stage(0, 0, 0.1, 101), Waveform.Stage(1, 0, 0.1, 101)))(xGalv)
+      case Xor.Right(Waveform(wt, channels, cyc, zm)) => {
+        assertResult("Linear")(wt)
+        assertResult("Sample piezo")(zm)
+        assertResult("per Z")(cyc)
+        assertResult(0)(channels(0).id)
       }
       case Xor.Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
