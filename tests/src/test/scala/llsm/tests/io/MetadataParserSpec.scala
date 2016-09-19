@@ -9,7 +9,7 @@ class MetadataParserSpec extends MetadataSuite {
   "A Parser[String]" should " simply return the string" in {
     val in: String = "Hellow"
 
-    assert(Parser[String](in) == Xor.right("Hellow"))
+    assert(Parser[String](in) == Either.right("Hellow"))
   }
   it should "parse all strings" in forAll { (s: String) =>
     assert(Parser[String](s) == Either.right(s))
@@ -18,7 +18,7 @@ class MetadataParserSpec extends MetadataSuite {
   "A Parser[Int]" should "parse an int from a string" in {
     val in: String = "1"
 
-    assertResult(1)(Parser[Int](in).getOrElse("Ouch"))
+    assertResult(Right(1))(Parser[Int](in))
   }
   it should "fail with an Error when the string cannont be cast to an integer" in {
     val hello: String = "hello"
