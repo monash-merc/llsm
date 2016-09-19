@@ -108,6 +108,7 @@ lazy val commonSettings = sharedCommonSettings ++
   addTestLibs(vAll) ++
   addCompilerPlugins(vAll, "kind-projector", "paradise") ++ Seq(
   scalacOptions ++= scalacAllOptions,
+  scalacOptions += "-Ypartial-unification",
   parallelExecution in Test := false,
   resolvers ++= Seq(
     "imagej.public" at "http://maven.imagej.net/content/groups/public"
