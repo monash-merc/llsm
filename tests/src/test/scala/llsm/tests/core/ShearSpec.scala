@@ -6,7 +6,7 @@ import org.scalatest.Matchers._
 import org.scalacheck.Gen
 
 class ShearSpec extends BaseSuite {
-  "A ShearIntervalTransform" should "c[shearDimension] += c[referenceDimension] * shearFactor" in forAll((Gen.choose(2, 10), "nDim"), (Gen.choose(0, 9), "shearDimension"), (Gen.choose(0, 9), "referenceDimension"), (Gen.choose(-5, 5), "shearFactor"), (Gen.choose(1L, 1000L), "c")) {
+  "A ShearIntervalTransform" should "c[shearDimension] += c[referenceDimension] * shearFactor" in forAll((Gen.choose(2, 10), "nDim"), (Gen.choose(0, 9), "shearDimension"), (Gen.choose(0, 9), "referenceDimension"), (Gen.choose(-5, 5), "shearFactor"), (Gen.choose(1L, 1000L), "c"), maxDiscardedFactor(10)) {
     (nDim: Int, shearDimension: Int, referenceDimension: Int, shearFactor: Int, c: Long) =>
       whenever(nDim > 1 && shearDimension < nDim && referenceDimension < nDim && shearDimension != referenceDimension && shearFactor != 0) {
         val source: Array[Long] = Array.fill[Long](nDim)(c)
