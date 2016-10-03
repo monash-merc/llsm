@@ -45,7 +45,7 @@ lazy val io = project
   .settings(addLibs(vAll, "shapeless", "cats-core"):_*)
   .settings(
     libraryDependencies ++= Seq(
-      "io.scif"   % "scifio"              % "0.27.3",
+      "io.scif"   % "scifio"              % "0.29.0",
       "io.scif"   % "scifio-bf-compat"    % "2.0.0"
     )
   )
@@ -65,8 +65,8 @@ lazy val ij = project
   .settings(commonJvmSettings:_*)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imagej"    % "imagej"          % "2.0.0-rc-49" % "provided",
-      "net.imagej"    % "imagej-legacy"   % "0.20.1"      % "provided",
+      "net.imagej"    % "imagej"          % "2.0.0-rc-55" % "provided",
+      "net.imagej"    % "imagej-legacy"   % "0.23.2"      % "provided",
       "org.scijava"   % "scripting-scala" % "0.1.0"       % "provided"
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
