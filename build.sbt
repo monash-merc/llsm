@@ -42,13 +42,21 @@ lazy val io = project
   .settings(moduleName := "llsm-io")
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
-  .settings(addLibs(vAll, "shapeless", "simulacrum", "iteratee-files"):_*)
+  .settings(addLibs(vAll, "shapeless", "cats-core"):_*)
   .settings(
     libraryDependencies ++= Seq(
       "io.scif"   % "scifio"              % "0.27.3",
       "io.scif"   % "scifio-bf-compat"    % "2.0.0"
     )
   )
+
+lazy val streaming = project
+  .disablePlugins(AssemblyPlugin)
+  .dependsOn(core, io)
+  .settings(moduleName := "llsm-streaming")
+  .settings(rootSettings:_*)
+  .settings(commonJvmSettings:_*)
+  .settings(addLibs(vAll, "shapeless", "iteratee-files"):_*)
 
 lazy val ij = project
   .dependsOn(core)
