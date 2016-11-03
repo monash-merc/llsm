@@ -1,7 +1,6 @@
 package llsm
 
 import net.imglib2.{Interval, RandomAccessible, RandomAccessibleInterval, RealRandomAccessible}
-import net.imglib2.img.Img
 import net.imglib2.`type`.numeric.RealType
 import net.imglib2.interpolation.InterpolatorFactory
 import net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory
@@ -28,11 +27,11 @@ object Deskew {
     Views.interval(RealViews.transform(input, rs.inverse), bb.getInterval)
   }
 
-  def deskewStack[A <: RealType[A]](input: Img[A], shearDim: Int, refDim: Int, slice_offset: Int): RandomAccessibleInterval[A] = {
+  def deskewStack[A <: RealType[A]](input: RandomAccessibleInterval[A], shearDim: Int, refDim: Int, slice_offset: Int): RandomAccessibleInterval[A] = {
     shearedView[A](Views.extendZero(input), input, shearDim, refDim, slice_offset)
   }
 
-  def deskewRealStack[A <: RealType[A]](input: Img[A], shearDim: Int, referenceDim: Int, shearInterval: Double, interpolator: InterpolatorFactory[A, RandomAccessible[A]] = new NearestNeighborInterpolatorFactory[A]()): RandomAccessibleInterval[A] = {
+  def deskewRealStack[A <: RealType[A]](input: RandomAccessibleInterval[A], shearDim: Int, referenceDim: Int, shearInterval: Double, interpolator: InterpolatorFactory[A, RandomAccessible[A]] = new NearestNeighborInterpolatorFactory[A]()): RandomAccessibleInterval[A] = {
     val iv = Views.interpolate[A, RandomAccessible[A]](Views.extendZero(input), interpolator)
     realShearedView[A](iv, input, shearDim, referenceDim, shearInterval)
   }

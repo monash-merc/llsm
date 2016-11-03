@@ -8,9 +8,12 @@ object Dependencies {
   // Versions for libraries and packages
   // Package -> version
   val versions = Map[String, String](
-    "scalac"    ->  "2.11.8",
-    "cats"      ->  "0.7.0",
-    "iteratee"  ->  "0.6.1"
+    "scalac"          ->  "2.11.8",
+    "cats"            ->  "0.8.0",
+    "kind-projector"  ->  "0.9.2",
+    "iteratee"        ->  "0.7.0",
+    "scalacheck"      ->  "1.13.3",
+    "scalatest"       ->  "3.0.0"
   )
 
   // library definitions and links to their versions

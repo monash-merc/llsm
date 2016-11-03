@@ -2,7 +2,8 @@ package llsm
 package io.metadata
 
 import cats.syntax.either._
-import scala.util.{Try, Success, Failure}
+import scala.util.Try
+import scala.reflect.runtime.universe._
 
 /**
  * Parser typeclass.
@@ -25,32 +26,31 @@ final object Parser extends ParserInstances {
 
 }
 
-private[metadata] sealed abstract class ParserInstances {
+private[metadata] abstract class ParserInstances {
 
-  implicit val stringParser = new Parser[String] {
-    def apply(s: String) = Either.right(s)
-  }
-
-  implicit val intParser = new Parser[Int] {
-    def apply(s: String) = Try(s.toInt) match {
-      case Success(v) => Either.right(v)
-      case Failure(e) => Either.left(ParsingFailure("Failed to parse Int", e))
+  def createParser[A: TypeTag](func: String => A): Parser[A] =
+    new Parser[A] {
+      def apply(s: String): Parser.Result[A] =
+        Either.fromTry(Try(func(s))).leftMap(e => ParsingFailure(s"Failed to parse ${typeOf[A]}:\n${e.getMessage}", e))
     }
-  }
 
-  implicit val doubleParser = new Parser[Double] {
-    def apply(s: String) = Try(s.toDouble) match {
-      case Success(v) => Either.right(v)
-      case Failure(e) => Either.left(ParsingFailure("Failed to parse Double", e))
-    }
-  }
+  final implicit val stringParser: Parser[String] =
+    createParser(str => str)
 
-  implicit val booleanParser = new Parser[Boolean] {
-    def apply(s: String) = Try(s.toBoolean) match {
-      case Success(v) => Either.right(v)
-      case Failure(e) => Either.left(ParsingFailure("Failed to parse Boolean", e))
-    }
-  }
+  final implicit val booleanParser: Parser[Boolean] =
+    createParser(str => str.toBoolean)
+
+  final implicit val intParser: Parser[Int] =
+    createParser(str => str.toInt)
+
+  final implicit val longParser: Parser[Long] =
+    createParser(str => str.toLong)
+
+  final implicit val floatParser: Parser[Float] =
+    createParser(str => str.toFloat)
+
+  final implicit val doubleParser: Parser[Double] =
+    createParser(str => str.toDouble)
 }
 
 /**

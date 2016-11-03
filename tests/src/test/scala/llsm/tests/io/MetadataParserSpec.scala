@@ -50,10 +50,10 @@ Excitation Filter, Laser, Power (%), Exp(ms) (1) :	N/A	488	20	3
 Cycle lasers :	per Z
 
 Z motion :	Sample piezo"""
-    val wf = Parser[Waveform](wave)
+    val wf = Parser[WaveformMetadata](wave)
 
     wf match {
-      case Right(Waveform(wt, channels, cyc, zm)) => {
+      case Right(WaveformMetadata(wt, nSlices, zPZTOffset, sPZTOffset, channels, nFrames, cyc, zm)) => {
         assertResult("Linear")(wt)
         assertResult("Sample piezo")(zm)
         assertResult("per Z")(cyc)
@@ -61,6 +61,55 @@ Z motion :	Sample piezo"""
       }
       case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
+  }
+
+  "A Parser[CameraMetadata]" should "parse CameraMetadata from a block of text" in {
+    val text: String = """Model :	C11440-22C
+Serial :	3296
+Frame Transfer :	OFF
+Trigger :	External
+Exp(s) :	0.00101
+Cycle(s) :	0.00226
+Cycle(Hz) :	442.34 Hz
+Frame Mode :	Run Till Abort
+Readout Mode :	Image
+ROI :	Left=897 Top=897 Right=1152 Bot=1152
+Binning :	X=1 Y=1
+# of Pixels :	X=2048 Y=2048
+VSSspeed :	-1.0000
+HSSspeed :	0.0000
+VSSAmplitude :	Normal
+Output Amplifier :	EM Amp
+Temp(C) :	0.00000
+AD Channel :	0
+EM Gain :	0
+HS Speed index :	0
+Preamp Gain :	0
+Bit depth :	0
+Baseline Clamp :	Yes
+Spool :	Enabled?=No File stem=Unknown type # buffs=10 Method=16-buit TIFF
+# of Exps :	10040 exp(s)
+Cropped :	On?=No # of pix=X=2048 Y=2048  Bin=X=1 Y=1
+L ROI :	Left=897 Top=897 Right=0 Bot=1152
+R ROI :	Left=0 Top=897 Right=1152 Bot=1152
+FOV ROI :	Left=897 Top=897 Right=1152 Bot=1152
+# of Imgs :	10040 img(s)
+subROIs :	Unknown type
+"""
+
+    val cam = Parser[CameraMetadata](text)
+
+    cam match {
+      case Right(c: CameraMetadata) => {
+        assertResult("C11440-22C")(c.model)
+        assertResult(CameraMetadata.ROI(897L, 897L, 1152L, 1152L))(c.roi)
+        assertResult(10040)(c.imgNumber)
+        assertResult(0)(c.bitDepth)
+      }
+      case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
+    }
+
+
   }
 
   "A Parser[FilenameMetadata]" should "parse LLSM Metadata from a list of LLSM data files" in {

@@ -42,11 +42,11 @@ lazy val io = project
   .settings(moduleName := "llsm-io")
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
-  .settings(addLibs(vAll, "shapeless", "cats-core"):_*)
+  .settings(addLibs(vAll, "cats-core"):_*)
   .settings(
     libraryDependencies ++= Seq(
-      "io.scif"   % "scifio"              % "0.29.0",
-      "io.scif"   % "scifio-bf-compat"    % "2.0.0"
+      "io.scif"   % "scifio"              % "0.29.0"  % "provided",
+      "io.scif"   % "scifio-bf-compat"    % "2.0.0"   % "provided"
     )
   )
 
@@ -59,7 +59,7 @@ lazy val streaming = project
   .settings(addLibs(vAll, "shapeless", "iteratee-files"):_*)
 
 lazy val ij = project
-  .dependsOn(core)
+  .dependsOn(core, io)
   .settings(moduleName := "llsm-ij")
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
@@ -73,6 +73,7 @@ lazy val ij = project
     fork in run := true,
     javaOptions += "-Xmx4G",
     test in assembly := {},
+    assemblyJarName in assembly := "llsm-ij.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
     run in Compile <<= Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run))
   )
@@ -88,7 +89,9 @@ lazy val tests = project
   .settings(
     libraryDependencies ++= Seq(
       "net.imglib2"   % "imglib2"                 % "3.2.0"           % "test",
-      "net.imglib2"   % "imglib2-realtransform"   % "2.0.0-beta-32"   % "test"
+      "net.imglib2"   % "imglib2-realtransform"   % "2.0.0-beta-32"   % "test",
+      "io.scif"       % "scifio"                  % "0.29.0"          % "test",
+      "io.scif"       % "scifio-bf-compat"        % "2.0.0"           % "test"
     )
   )
 
@@ -102,28 +105,27 @@ lazy val benchmark = project
 
 lazy val docs = project
   .disablePlugins(AssemblyPlugin)
-  .configure(mkDocConfig(gh, rootSettings, commonJvmSettings, core, io, ij))
+  .configure(mkDocConfig(gh, rootSettings, commonJvmSettings, core, io))
 
 
 /**
  * Settings
  */
-lazy val buildSettings = sharedBuildSettings(gh, vAll) ++ Seq(
-  scalaOrganization := "org.typelevel"
-  )
+lazy val buildSettings = localSharedBuildSettings(vAll)
 
 lazy val commonSettings = sharedCommonSettings ++
   addTestLibs(vAll) ++
   addCompilerPlugins(vAll, "kind-projector", "paradise") ++ Seq(
   scalacOptions ++= scalacAllOptions,
   scalacOptions += "-Ypartial-unification",
+  scalacOptions += "-Yinline-warnings",
   parallelExecution in Test := false,
   resolvers ++= Seq(
     "imagej.public" at "http://maven.imagej.net/content/groups/public"
-  ),
-  libraryDependencies += "com.lihaoyi" % "ammonite-repl" % "0.6.2" % "test" cross CrossVersion.full,
-  initialCommands in (Test, console) := """ammonite.repl.Main().run()"""
-) ++ warnUnusedImport ++ unidocCommonSettings // spurious warnings from macro annotations expected
+  )
+  // libraryDependencies += "com.lihaoyi" % "ammonite" % "0.7.8" % "test" cross CrossVersion.full,
+  // initialCommands in (Test, console) := """ammonite.Main().run()"""
+) ++ warnUnusedImport ++ unidocCommonSettings ++ update2_12// spurious warnings from macro annotations expected
 
 lazy val commonJvmSettings = sharedJvmSettings
 
@@ -132,3 +134,36 @@ lazy val disciplineDependencies = Seq(addLibs(vAll, "discipline", "scalacheck" )
 lazy val publishSettings = sharedPublishSettings(gh, devs) ++ credentialSettings ++ sharedReleaseProcess
 
 lazy val scoverageSettings = sharedScoverageSettings(60)
+
+// sharedScoverageSettings from sbt-catalyst not compatible with recent
+// sbt-coverage build
+def sharedScoverageSettings(min: Int = 80) = Seq(
+  coverageMinimum := min,
+  coverageFailOnMinimum := false
+  //   ,coverageHighlighting := scalaBinaryVersion.value != "2.10"
+  )
+
+def localSharedBuildSettings(v: Versions) = Seq(
+  scalaOrganization := "org.typelevel",
+  scalaVersion := v.vers("scalac"),
+  crossScalaVersions := Seq("2.12.0-RC2", scalaVersion.value)
+  )
+
+val cmdlineProfile = sys.props.getOrElse("sbt.profile", default = "")
+
+def profile: Project ⇒ Project = p => cmdlineProfile match {
+  case "2.12.x" => p.disablePlugins(scoverage.ScoverageSbtPlugin)
+  case _ => p
+}
+
+lazy val update2_12 = Seq(
+  scalacOptions -= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) =>
+        "-Yinline-warnings"
+      case _ =>
+        ""
+    }
+  }
+  )
+
