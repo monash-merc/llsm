@@ -1,7 +1,6 @@
 package llsm
 package ij
 
-import cats.syntax.either._
 import llsm.Deskew
 import llsm.io._
 import java.io.File

@@ -64,6 +64,8 @@ lazy val ij = project
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
   .settings(
+    scalaVersion := "2.12.0-RC2",
+    crossScalaVersions := Seq(scalaVersion.value),
     libraryDependencies ++= Seq(
       "net.imagej"    % "imagej"          % "2.0.0-rc-55" % "provided",
       "net.imagej"    % "imagej-legacy"   % "0.23.2"      % "provided",
@@ -80,7 +82,7 @@ lazy val ij = project
 
 lazy val tests = project
   .disablePlugins(AssemblyPlugin)
-  .dependsOn(core, io, ij)
+  .dependsOn(core, io)
   .settings(moduleName := "llsm-tests")
   .settings(rootSettings:_*)
   .settings(commonJvmSettings:_*)
