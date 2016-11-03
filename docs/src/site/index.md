@@ -1,3 +1,8 @@
+---
+layout: default
+title: "Home"
+section: "home"
+---
 # Introduction
 `llsm` is a set of Scala libraries and application code for working with Lattice Light Sheet Microscopy (LLSM) data. It aims to set out a standard way for preprocessing LLSM data and encoding it in open image formats. Features include:
 * Read and parse LLSM metadata from raw LLSM data.
