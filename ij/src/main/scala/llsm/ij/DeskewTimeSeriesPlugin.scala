@@ -64,7 +64,10 @@ class DeskewTimeSeriesPlugin extends Command {
     } yield {
       val xIndex = imeta.getAxisIndex(Axes.X)
       val zIndex = imeta.getAxisIndex(Axes.Z)
-      val cIndex = imeta.getAxisIndex(Axes.CHANNEL)
+      val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
+        case -1 => None
+        case i: Int => Some(i)
+      }
 
       log.warn(imeta)
       log.warn(imeta.getAxisLength(Axes.X))
@@ -85,7 +88,10 @@ class DeskewTimeSeriesPlugin extends Command {
         case "Lanczos" => Deskew.deskewRealStack(img, xIndex, zIndex, shearFactor, new LanczosInterpolatorFactory())
       }
 
-      val out: ImagePlus = ImageJFunctions.wrap(Views.permute(rai, cIndex, 2), s"${imeta.getName}_deskewed")
+      val out: ImagePlus = cIndex match {
+        case Some(i) => ImageJFunctions.wrap(Views.permute(rai, i, 2), s"${imeta.getName}_deskewed")
+        case None => ImageJFunctions.wrap(rai, s"${imeta.getName}_deskewed")
+        }
       val cal = new Calibration(out)
       cal.setUnit("um")
       cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
@@ -98,7 +104,7 @@ class DeskewTimeSeriesPlugin extends Command {
       }
 
       out.setCalibration(cal)
-      // out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt, imeta.getAxisLength(Axes.Z).toInt, imeta.getAxisLength(Axes.TIME).toInt)
+      out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt, imeta.getAxisLength(Axes.Z).toInt, imeta.getAxisLength(Axes.TIME).toInt)
       out
     }
 
