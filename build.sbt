@@ -73,7 +73,7 @@ lazy val ij = project
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
     fork in run := true,
-    javaOptions += "-Xmx4G",
+    javaOptions += "-Xmx8G",
     test in assembly := {},
     assemblyJarName in assembly := "llsm-ij.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
@@ -125,9 +125,7 @@ lazy val commonSettings = sharedCommonSettings ++
   resolvers ++= Seq(
     "imagej.public" at "http://maven.imagej.net/content/groups/public"
   )
-  // libraryDependencies += "com.lihaoyi" % "ammonite" % "0.7.8" % "test" cross CrossVersion.full,
-  // initialCommands in (Test, console) := """ammonite.Main().run()"""
-) ++ warnUnusedImport ++ unidocCommonSettings ++ update2_12// spurious warnings from macro annotations expected
+) ++ warnUnusedImport ++ unidocCommonSettings ++ update2_12 ++ addAmmonite// spurious warnings from macro annotations expected
 
 lazy val commonJvmSettings = sharedJvmSettings
 
@@ -166,6 +164,19 @@ lazy val update2_12 = Seq(
       case _ =>
         ""
     }
-  }
-  )
+  })
+
+lazy val addAmmonite = Seq(
+  libraryDependencies ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => Seq()
+      case _ => Seq("com.lihaoyi" % "ammonite" % "0.8.0" % "test" cross CrossVersion.full)
+    }
+  },
+  initialCommands in (Test, console) := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 12)) => """"""
+      case _ => """ammonite.Main().run()"""
+    }
+  })
 
