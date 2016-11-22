@@ -9,11 +9,11 @@ object Dependencies {
   // Package -> version
   val versions = Map[String, String](
     "scalac"          ->  "2.11.8",
-    "cats"            ->  "0.8.0",
-    "kind-projector"  ->  "0.9.2",
-    "iteratee"        ->  "0.7.0",
-    "scalacheck"      ->  "1.13.3",
-    "scalatest"       ->  "3.0.0"
+    "cats"            ->  "0.8.1",
+    "kind-projector"  ->  "0.9.3",
+    "iteratee"        ->  "0.7.1",
+    "scalacheck"      ->  "1.13.4",
+    "scalatest"       ->  "3.0.1"
   )
 
   // library definitions and links to their versions
