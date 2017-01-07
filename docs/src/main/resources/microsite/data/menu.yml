@@ -1,0 +1,9 @@
+options:
+  - title: Getting Started
+    url: docs/index.html
+
+  - title: Deskewing
+    url: docs/deskew.html
+
+  - title: Benchmarks
+    url: docs/benchmark.html

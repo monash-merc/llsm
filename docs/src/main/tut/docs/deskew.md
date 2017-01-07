@@ -1,9 +1,6 @@
 ---
-layout: "default"
-title: "De-skewing"
-section: "Preprocessing"
-source: "core/src/main/scala/llsm/Deskew.scala"
-scalaDoc: "#llsm.Deskew"
+layout: docs
+title: "Deskewing"
 ---
 
 # De-skewing LLSM data

@@ -4,7 +4,7 @@ import java.io.{File}
 import java.lang.Math
 
 import scala.collection.JavaConverters._
-import scala.collection.immutable.TreeSet
+import scala.collection.immutable.{ListMap, TreeSet}
 import scala.io.Source
 import scala.util.Try
 import scala.util.matching.Regex
@@ -14,12 +14,11 @@ import llsm.io.metadata.implicits._
 import llsm.io.metadata.{CameraMetadata, FilenameMetadata, Parser, ParsingFailure, TextMetadata, WaveformMetadata}
 import net.imagej.axis.{Axes, CalibratedAxis, DefaultLinearAxis}
 import net.imglib2.{RandomAccessibleInterval}
-import net.imglib2.`type`.numeric.RealType
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import net.imglib2.view.Views
 import _root_.io.scif.{ImageMetadata, DefaultImageMetadata}
 import _root_.io.scif.config.SCIFIOConfig
-import _root_.io.scif.img.{ImgOpener, SCIFIOImgPlus}
+import _root_.io.scif.img.ImgOpener
 import _root_.io.scif.util.FormatTools
 
 sealed trait LLSMIOError
@@ -121,20 +120,19 @@ package object io {
     fnMeta.leftMap { case ParsingFailure(m, e) => MetadataIOError(s"$m:\n$e") }
   }
 
-  private[this] def splitFileNamesByRegex[A <: RealType[A]](imgs: List[(SCIFIOImgPlus[A], File)], regex: Regex): Either[LLSMIOError, List[List[(SCIFIOImgPlus[A], File)]]] = {
-
-    Either.fromTry(Try {
-      imgs.groupBy {
-        case (i, p) => regex.findFirstIn(p.getName).getOrElse(throw new Exception(s"Could not group files using regex: ${regex.toString}"))
-      }.values.toList
-    }).leftMap(e => ImgIOError(e.getMessage))
-  }
-
+  /**
+   * Takes a list of files and groups them based on a Regex.
+   * Groups are sorted by key.
+   * @return Try[List[List[File]]]
+   */
   def groupImgsByRegex(imgPaths: List[File], regex: Regex): Try[List[List[File]]] =
-    Try(imgPaths.groupBy(p => {
-      val regex(m) = p.getName
-      m
-    }).values.toList)
+    Try {
+      val groupD = imgPaths.groupBy(p => {
+        val regex(m) = p.getName
+        m
+      })
+      ListMap(groupD.toSeq.sortBy(_._1):_*).values.toList
+    }
 
   def readSplitImgs(imgPaths: List[File], regex: List[Regex], imgOpener: ImgOpener, sc: SCIFIOConfig): Either[LLSMIOError, RandomAccessibleInterval[UnsignedShortType]] = {
     regex match {
@@ -162,7 +160,7 @@ package object io {
       (if (meta.getAxisLength(Axes.TIME) > 1) List(timeRegex) else Nil) // ++
       // (if (meta.getAxisLength(Axes.CHANNEL) > 1) List(chRegex) else Nil)
 
-    readSplitImgs(imgPaths, regexs, imgOpener, sc)
+    readSplitImgs(imgPaths.sorted, regexs, imgOpener, sc)
   }
 }
 

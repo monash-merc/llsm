@@ -1,34 +1,162 @@
-import org.typelevel.{Dependencies => typelevel}
-import llsm.{Dependencies => llsm}
+import ReleaseTransformations._
+import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
+import sbtunidoc.Plugin.UnidocKeys._
+import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
-scalaVersion in ThisBuild := "2.11.8"
+/**
+ * Settings
+ */
+
+val disabledReplOptions = Set("-Ywarn-unused-import")
+
+lazy val buildSettings = Seq(
+  organization := "edu.monash",
+  licenses ++= Seq(
+    ("MIT", url("http://opensource.org/licenses/MIT")),
+    ("BSD New", url("http://opensource.org/licenses/BSD-3-Clause"))
+	),
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.8"),
+  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.3" cross CrossVersion.binary)
+  )
+
+lazy val commonSettings = List(
+  scalacOptions ++= List(
+    "-deprecation",
+    "-encoding", "UTF-8",
+    "-feature",
+    "-language:existentials",
+    "-language:higherKinds",
+    "-language:implicitConversions",
+    "-unchecked",
+    "-Xfatal-warnings",
+    "-Xlint",
+    "-Yno-adapted-args",
+    "-Ywarn-dead-code",
+    "-Ywarn-numeric-widen",
+    "-Ywarn-value-discard"
+  ) ++ scalaVersionFlags(scalaVersion.value),
+  resolvers ++= Seq(
+    "imagej.public" at "http://maven.imagej.net/content/groups/public"
+  ),
+  scalacOptions in (Compile, console) ~= { _.filterNot(disabledReplOptions.contains(_)) },
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+  libraryDependencies ++= scalaVersionDeps(scalaVersion.value),
+  libraryDependencies ++= Seq("com.lihaoyi" % "ammonite" % "0.8.1" % "test" cross CrossVersion.full),
+  initialCommands in (Test, console) := """ammonite.Main().run()"""
+)
+
+lazy val publishSettings = List(
+  publishMavenStyle := true,
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+  },
+  publishArtifact in Test := false,
+  homepage := Some(url("https://github.com/keithschulze/llsm")),
+  pomIncludeRepository := Function.const(false),
+  pomExtra := (
+    <scm>
+      <url>git@github.com:keithschulze/llsm.git</url>
+      <connection>scm:git:git@github.com:keithschulze/llsm.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>keithschulze</id>
+        <name>Keith Schulze</name>
+        <url>http://keithschulze.com</url>
+      </developer>
+    </developers>
+  ),
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseProcess := List[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    ReleaseStep(action = Command.process("package", _)),
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    ReleaseStep(action = Command.process("publishSigned", _)),
+    setNextVersion,
+    commitNextVersion,
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    pushChanges)
+)
+
+lazy val noPublishSettings = List(
+  publish := (),
+  publishLocal := (),
+  publishArtifact := false
+)
+
+lazy val scoverageSettings = Seq(
+  coverageMinimum := 60,
+  coverageFailOnMinimum := false
+  )
+
+lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+
+lazy val docMappingsApiDir = settingKey[String]("Subdirectory in site target directory for API docs")
+
+lazy val docSettings = Seq(
+  micrositeName := "llsm",
+  micrositeDescription := "Lattice LightSheet Microscopy image processing library",
+  micrositeAuthor := "Keith Schulze",
+  micrositeHighlightTheme := "atom-one-light",
+  micrositeBaseUrl := "llsm",
+  micrositeDocumentationUrl := "/llsm/docs/",
+  micrositeGithubOwner := "keithschulze",
+  micrositeGithubRepo := "llsm",
+  autoAPIMappings := true,
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, io),
+  docMappingsApiDir := "api",
+  addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docMappingsApiDir),
+  git.remoteRepo := "git@github.com:keithschulze/llsm.git",
+  ghpagesNoJekyll := false,
+  fork in tut := true,
+  fork in (ScalaUnidoc, unidoc) := true,
+  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+      "-doc-source-url", "https://github.com/keithschulze/llsm/tree/master€{FILE_PATH}.scala",
+      "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
+      "-diagrams"
+    ),
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+)
 
 disablePlugins(AssemblyPlugin)
 
-//Project Settings
-val gh = GitHubSettings(org = "keithschulze", proj = "llsm", publishOrg = "edu.monash", license = mit)
-val devs = Seq(Dev("Keith Schulze", "keithschulze"))
+//Projects
 
-val vers = typelevel.versions ++ llsm.versions
-val libs = typelevel.libraries ++ llsm.libraries
-val addins = typelevel.scalacPlugins ++ llsm.scalacPlugins
-val vAll = Versions(vers, libs, addins)
-
-lazy val rootSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
-
-lazy val root = project
+lazy val docs = project.in(file("docs"))
   .disablePlugins(AssemblyPlugin)
-  .configure(mkRootJvmConfig(gh.proj, rootSettings, commonJvmSettings))
-  .aggregate(core, io, ij, tests, docs)
-  .dependsOn(core, io, ij, tests % "compile;test-internal -> test")
+  .enablePlugins(MicrositesPlugin)
+  .settings(moduleName := "llsm-docs")
+  .settings(llsmSettings)
+  .settings(noPublishSettings)
+  .settings(unidocSettings)
+  .settings(ghpages.settings)
+  .settings(docSettings)
+  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
+  .dependsOn(core, io)
 
-lazy val core = project
+lazy val llsm = project.in(file("."))
+  .disablePlugins(AssemblyPlugin)
+  .settings(llsmSettings)
+  .settings(noPublishSettings)
+  .aggregate(core, io, ij, tests, docs)
+  .dependsOn(core, io, ij, tests % "compile;test-internal -> test", benchmark % "compile-internal;test-internal -> test")
+
+lazy val core = project.in(file("core"))
   .disablePlugins(AssemblyPlugin)
   .settings(moduleName := "llsm-core")
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
       "net.imglib2"   % "imglib2"                 % "3.2.0"           % "provided",
@@ -36,35 +164,37 @@ lazy val core = project
     )
   )
 
-lazy val io = project
+lazy val io = project.in(file("io"))
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core)
   .settings(moduleName := "llsm-io")
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
-  .settings(addLibs(vAll, "cats-core"):_*)
+  .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.scif"   % "scifio"              % "0.29.0"  % "provided",
-      "io.scif"   % "scifio-bf-compat"    % "2.0.0"   % "provided"
+      "org.typelevel"   %% "cats-core"            % "0.8.1",
+      "com.chuusai"     %% "shapeless"            % "2.3.2",
+      "io.scif"         %  "scifio"               % "0.29.0"  % "provided",
+      "io.scif"         %  "scifio-bf-compat"     % "2.0.0"   % "provided"
     )
   )
 
-lazy val streaming = project
+lazy val streaming = project.in(file("streaming"))
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core, io)
   .settings(moduleName := "llsm-streaming")
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
-  .settings(addLibs(vAll, "shapeless", "iteratee-files"):_*)
+  .settings(llsmSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "io.iteratee"   %% "iteratee-files"            % "0.8.0"
+    )
+  )
 
-lazy val ij = project
+lazy val ij = project.in(file("ij"))
   .dependsOn(core, io)
   .settings(moduleName := "llsm-ij")
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(llsmSettings)
   .settings(
-    scalaVersion := "2.12.0-RC2",
+    scalaVersion := "2.12.0",
     crossScalaVersions := Seq(scalaVersion.value),
     libraryDependencies ++= Seq(
       "net.imagej"    % "imagej"          % "2.0.0-rc-55" % "provided",
@@ -80,103 +210,41 @@ lazy val ij = project
     run in Compile <<= Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run))
   )
 
-lazy val tests = project
+lazy val tests = project.in(file("tests"))
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core, io)
   .settings(moduleName := "llsm-tests")
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(llsmSettings:_*)
   .settings(noPublishSettings:_*)
-  .settings(addLibs(vAll, "scalatest", "scalacheck"):_*)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2"   % "imglib2"                 % "3.2.0"           % "test",
-      "net.imglib2"   % "imglib2-realtransform"   % "2.0.0-beta-32"   % "test",
-      "io.scif"       % "scifio"                  % "0.29.0"          % "test",
-      "io.scif"       % "scifio-bf-compat"        % "2.0.0"           % "test"
+      "org.scalacheck"  %%  "scalacheck"              % "1.13.4",
+      "org.scalatest"   %%  "scalatest"               % "3.0.1",
+      "net.imglib2"     %   "imglib2"                 % "3.2.0"           % "test",
+      "net.imglib2"     %   "imglib2-realtransform"   % "2.0.0-beta-32"   % "test",
+      "io.scif"         %   "scifio"                  % "0.29.0"          % "test",
+      "io.scif"         %   "scifio-bf-compat"        % "2.0.0"           % "test"
     )
   )
 
-lazy val benchmark = project
+lazy val benchmark = project.in(file("benchmark"))
   .disablePlugins(AssemblyPlugin)
-  .dependsOn(core, io, ij)
   .enablePlugins(JmhPlugin)
-  .settings(rootSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(llsmSettings:_*)
   .settings(noPublishSettings:_*)
-
-lazy val docs = project
-  .disablePlugins(AssemblyPlugin)
-  .configure(mkDocConfig(gh, rootSettings, commonJvmSettings, core, io))
+  .dependsOn(core, io, ij)
 
 
-/**
- * Settings
- */
-lazy val buildSettings = localSharedBuildSettings(vAll)
 
-lazy val commonSettings = sharedCommonSettings ++
-  addTestLibs(vAll) ++
-  addCompilerPlugins(vAll, "kind-projector", "paradise") ++ Seq(
-  scalacOptions ++= scalacAllOptions,
-  scalacOptions += "-Ypartial-unification",
-  scalacOptions += "-Yinline-warnings",
-  parallelExecution in Test := false,
-  resolvers ++= Seq(
-    "imagej.public" at "http://maven.imagej.net/content/groups/public"
-  )
-) ++ warnUnusedImport ++ unidocCommonSettings ++ update2_12 ++ addAmmonite// spurious warnings from macro annotations expected
 
-lazy val commonJvmSettings = sharedJvmSettings
-
-lazy val disciplineDependencies = Seq(addLibs(vAll, "discipline", "scalacheck" ):_*)
-
-lazy val publishSettings = sharedPublishSettings(gh, devs) ++ credentialSettings ++ sharedReleaseProcess
-
-lazy val scoverageSettings = sharedScoverageSettings(60)
-
-// sharedScoverageSettings from sbt-catalyst not compatible with recent
-// sbt-coverage build
-def sharedScoverageSettings(min: Int = 80) = Seq(
-  coverageMinimum := min,
-  coverageFailOnMinimum := false
-  //   ,coverageHighlighting := scalaBinaryVersion.value != "2.10"
-  )
-
-def localSharedBuildSettings(v: Versions) = Seq(
-  scalaOrganization := "org.typelevel",
-  scalaVersion := v.vers("scalac"),
-  crossScalaVersions := Seq("2.12.0-RC2", scalaVersion.value)
-  )
-
-val cmdlineProfile = sys.props.getOrElse("sbt.profile", default = "")
-
-def profile: Project ⇒ Project = p => cmdlineProfile match {
-  case "2.12.x" => p.disablePlugins(scoverage.ScoverageSbtPlugin)
-  case _ => p
+def scalaVersionFlags(version: String): List[String] = CrossVersion.partialVersion(version) match {
+  case Some((2, 11)) => List("-Ywarn-unused-import")
+  case Some((2, 12)) => List("-Ypartial-unification", "-Ywarn-unused-import")
+  case _             => List.empty
 }
 
-lazy val update2_12 = Seq(
-  scalacOptions -= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) =>
-        "-Yinline-warnings"
-      case _ =>
-        ""
-    }
-  })
-
-lazy val addAmmonite = Seq(
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => Seq()
-      case _ => Seq("com.lihaoyi" % "ammonite" % "0.8.0" % "test" cross CrossVersion.full)
-    }
-  },
-  initialCommands in (Test, console) := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) => """"""
-      case _ => """ammonite.Main().run()"""
-    }
-  })
-
+def scalaVersionDeps(version: String): List[ModuleID] = CrossVersion.partialVersion(version) match {
+  case Some((2, 11)) => List(compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"))
+  case Some((2, 12)) => List.empty
+  case _             => List.empty
+}
