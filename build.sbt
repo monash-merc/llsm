@@ -116,6 +116,15 @@ lazy val docSettings = Seq(
   micrositeDocumentationUrl := "/llsm/docs/",
   micrositeGithubOwner := "keithschulze",
   micrositeGithubRepo := "llsm",
+  micrositePalette := Map(
+    "brand-primary"     -> "#FFFFFF",
+    "brand-secondary"   -> "#006CAC",
+    "brand-tertiary"    -> "#004E7C",
+    "gray-dark"         -> "#242424",
+    "gray"              -> "#575757",
+    "gray-light"        -> "#E3E2E3",
+    "gray-lighter"      -> "#F5F6F6",
+    "white-color"       -> "#FFFFFF"),
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, io),
   docMappingsApiDir := "api",
@@ -196,7 +205,7 @@ lazy val ij = project.in(file("ij"))
   .settings(moduleName := "llsm-ij")
   .settings(llsmSettings)
   .settings(
-    scalaVersion := "2.12.0",
+    scalaVersion := "2.12.1",
     crossScalaVersions := Seq(scalaVersion.value),
     libraryDependencies ++= Seq(
       "net.imagej"    % "imagej"          % "2.0.0-rc-55" % "provided",
