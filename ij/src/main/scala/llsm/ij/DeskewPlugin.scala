@@ -8,7 +8,11 @@ import net.imagej.axis.{Axes, CalibratedAxis, DefaultLinearAxis}
 import net.imagej.DatasetService
 import net.imglib2.img.Img
 import net.imglib2.img.display.imagej.ImageJFunctions
-import net.imglib2.interpolation.randomaccess.{NearestNeighborInterpolatorFactory, NLinearInterpolatorFactory, LanczosInterpolatorFactory}
+import net.imglib2.interpolation.randomaccess.{
+  NearestNeighborInterpolatorFactory,
+  NLinearInterpolatorFactory,
+  LanczosInterpolatorFactory
+}
 import net.imglib2.`type`.numeric.RealType
 import org.scijava.ItemIO
 import org.scijava.command.Command
@@ -18,7 +22,9 @@ import _root_.ij.ImagePlus
 import _root_.ij.measure.Calibration
 import scala.language.existentials
 
-@Plugin(`type` = classOf[Command], headless = true, menuPath = "Plugins>LLSM>Deskew Single Stack")
+@Plugin(`type` = classOf[Command],
+        headless = true,
+        menuPath = "Plugins>LLSM>Deskew Single Stack")
 class DeskewPlugin extends Command {
 
   @Parameter(`type` = ItemIO.INPUT)
@@ -30,7 +36,9 @@ class DeskewPlugin extends Command {
   @Parameter(label = "Sample piezo increment", required = true)
   var sampleIncrement: Double = 0.3000
 
-  @Parameter(label = "Interpolation scheme", choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"), required = false)
+  @Parameter(label = "Interpolation scheme",
+             choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
+             required = false)
   var interpolation: String = "None"
 
   @Parameter(label = "Output Virtual Stack")
@@ -46,16 +54,18 @@ class DeskewPlugin extends Command {
   // var out: ImagePlus = _
 
   /**
-  * Entry point to running a plugin.
-  */
+    * Entry point to running a plugin.
+    */
   override def run(): Unit = {
-    val ip: Img[T] forSome {type T <: RealType[T]} = input.getImgPlus.getImg.asInstanceOf[Img[T] forSome {type T <: RealType[T]}]
+    val ip: Img[T] forSome { type T <: RealType[T] } = input.getImgPlus.getImg
+      .asInstanceOf[Img[T] forSome { type T <: RealType[T] }]
 
     val shearFactor: Double = (Math.cos(Math.toRadians(31.8)) * sampleIncrement) / pixelSize
 
     val zInterval: Double = Math.sin(Math.toRadians(31.8)) * sampleIncrement
 
-    var axes: Array[CalibratedAxis] = Array.ofDim[CalibratedAxis](input.numDimensions)
+    var axes: Array[CalibratedAxis] =
+      Array.ofDim[CalibratedAxis](input.numDimensions)
 
     input.axes(axes)
 
@@ -76,16 +86,33 @@ class DeskewPlugin extends Command {
     // out = ds.create(Deskew.deskewStack(ip, xIndex, zIndex, shearFactor))
     // out.setAxes(axes)
     val rai = interpolation match {
-      case "None" => Deskew.deskewStack(ip, xIndex, zIndex, Math.round(shearFactor).toInt)
-      case "Nearest Neighbour" => Deskew.deskewRealStack(ip, xIndex, zIndex, shearFactor, new NearestNeighborInterpolatorFactory())
-      case "Linear" => Deskew.deskewRealStack(ip, xIndex, zIndex, shearFactor, new NLinearInterpolatorFactory())
-      case "Lanczos" => Deskew.deskewRealStack(ip, xIndex, zIndex, shearFactor, new LanczosInterpolatorFactory())
+      case "None" =>
+        Deskew.deskewStack(ip, xIndex, zIndex, Math.round(shearFactor).toInt)
+      case "Nearest Neighbour" =>
+        Deskew.deskewRealStack(ip,
+                               xIndex,
+                               zIndex,
+                               shearFactor,
+                               new NearestNeighborInterpolatorFactory())
+      case "Linear" =>
+        Deskew.deskewRealStack(ip,
+                               xIndex,
+                               zIndex,
+                               shearFactor,
+                               new NLinearInterpolatorFactory())
+      case "Lanczos" =>
+        Deskew.deskewRealStack(ip,
+                               xIndex,
+                               zIndex,
+                               shearFactor,
+                               new LanczosInterpolatorFactory())
     }
-    val outputName: String = s"${input.getImgPlus().getName().split('.').head}_deskewed_$interpolation"
+    val outputName: String =
+      s"${input.getImgPlus().getName().split('.').head}_deskewed_$interpolation"
 
     if (virtual) {
       val out: ImagePlus = ImageJFunctions.wrap(rai, outputName)
-      val cal = new Calibration(out)
+      val cal            = new Calibration(out)
       cal.setUnit("um")
       cal.pixelWidth = pixelSize
       cal.pixelHeight = pixelSize
@@ -93,7 +120,9 @@ class DeskewPlugin extends Command {
 
       out.setCalibration(cal)
       out.setTitle(outputName)
-      out.setDimensions(input.dimension(Axes.CHANNEL).toInt, input.dimension(Axes.Z).toInt, input.dimension(Axes.TIME).toInt)
+      out.setDimensions(input.dimension(Axes.CHANNEL).toInt,
+                        input.dimension(Axes.Z).toInt,
+                        input.dimension(Axes.TIME).toInt)
 
       ui.show(out)
     } else {

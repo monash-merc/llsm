@@ -6,17 +6,17 @@ import scala.util.Try
 import scala.reflect.runtime.universe._
 
 /**
- * Parser typeclass.
- */
+  * Parser typeclass.
+  */
 trait Parser[A] {
   def apply(s: String): Parser.Result[A]
 }
 
 /**
- * Utilities and basic instances for [[Parser]] typeclass.
- *
- * @author Keith Schulze
- */
+  * Utilities and basic instances for [[Parser]] typeclass.
+  *
+  * @author Keith Schulze
+  */
 final object Parser extends ParserInstances {
 
   def apply[A](s: String)(implicit parser: Parser[A]): Result[A] = parser(s)
@@ -31,7 +31,11 @@ private[metadata] abstract class ParserInstances {
   def createParser[A: TypeTag](func: String => A): Parser[A] =
     new Parser[A] {
       def apply(s: String): Parser.Result[A] =
-        Either.fromTry(Try(func(s))).leftMap(e => ParsingFailure(s"Failed to parse ${typeOf[A]}:\n${e.getMessage}", e))
+        Either
+          .fromTry(Try(func(s)))
+          .leftMap(e =>
+            ParsingFailure(s"Failed to parse ${typeOf[A]}:\n${e.getMessage}",
+                           e))
     }
 
   final implicit val stringParser: Parser[String] =
@@ -54,8 +58,9 @@ private[metadata] abstract class ParserInstances {
 }
 
 /**
- * Exception class to represent failures in parsing.
- */
-final case class ParsingFailure(message: String, underlying: Throwable) extends Exception {
+  * Exception class to represent failures in parsing.
+  */
+final case class ParsingFailure(message: String, underlying: Throwable)
+    extends Exception {
   final override def getMessage: String = message
 }

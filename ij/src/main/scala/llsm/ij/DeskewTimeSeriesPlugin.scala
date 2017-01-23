@@ -9,7 +9,11 @@ import java.lang.Math
 import net.imagej.DatasetService
 import net.imagej.axis.Axes
 import net.imglib2.img.display.imagej.ImageJFunctions
-import net.imglib2.interpolation.randomaccess.{NearestNeighborInterpolatorFactory, NLinearInterpolatorFactory, LanczosInterpolatorFactory}
+import net.imglib2.interpolation.randomaccess.{
+  NearestNeighborInterpolatorFactory,
+  NLinearInterpolatorFactory,
+  LanczosInterpolatorFactory
+}
 import net.imglib2.view.Views
 import org.scijava.ItemIO
 import org.scijava.command.Command
@@ -19,7 +23,9 @@ import org.scijava.plugin.{Plugin, Parameter}
 import _root_.ij.ImagePlus
 import _root_.ij.measure.Calibration
 
-@Plugin(`type` = classOf[Command], headless = true, menuPath = "Plugins>LLSM>Deskew Time Series")
+@Plugin(`type` = classOf[Command],
+        headless = true,
+        menuPath = "Plugins>LLSM>Deskew Time Series")
 class DeskewTimeSeriesPlugin extends Command {
 
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
@@ -31,7 +37,9 @@ class DeskewTimeSeriesPlugin extends Command {
   @Parameter(label = "Sample piezo increment", required = true)
   var sampleIncrement: Double = 0.3000
 
-  @Parameter(label = "Interpolation scheme", choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"), required = false)
+  @Parameter(label = "Interpolation scheme",
+             choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
+             required = false)
   var interpolation: String = "None"
 
   @Parameter
@@ -47,8 +55,8 @@ class DeskewTimeSeriesPlugin extends Command {
   // var out: ImagePlus = _
 
   /**
-  * Entry point to running a plugin.
-  */
+    * Entry point to running a plugin.
+    */
   override def run(): Unit = {
     if (!input.isDirectory) {
       log.error("input must be a directory")
@@ -60,12 +68,14 @@ class DeskewTimeSeriesPlugin extends Command {
 
     val output: Either[LLSMIOError, ImagePlus] = for {
       imeta <- extractMetadata(input)
-      img <- readImgs(input.listFiles().filter(_.getName contains ".tif").toList, imeta)
+      img <- readImgs(
+        input.listFiles().filter(_.getName contains ".tif").toList,
+        imeta)
     } yield {
       val xIndex = imeta.getAxisIndex(Axes.X)
       val zIndex = imeta.getAxisIndex(Axes.Z)
       val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
-        case -1 => None
+        case -1     => None
         case i: Int => Some(i)
       }
 
@@ -80,18 +90,38 @@ class DeskewTimeSeriesPlugin extends Command {
       img.dimensions(imgDims)
       log.warn(Arrays.toString(imgDims))
 
-
       val rai = interpolation match {
-        case "None" => Deskew.deskewStack(img, xIndex, zIndex, Math.round(shearFactor).toInt)
-        case "Nearest Neighbour" => Deskew.deskewRealStack(img, xIndex, zIndex, shearFactor, new NearestNeighborInterpolatorFactory())
-        case "Linear" => Deskew.deskewRealStack(img, xIndex, zIndex, shearFactor, new NLinearInterpolatorFactory())
-        case "Lanczos" => Deskew.deskewRealStack(img, xIndex, zIndex, shearFactor, new LanczosInterpolatorFactory())
+        case "None" =>
+          Deskew.deskewStack(img,
+                             xIndex,
+                             zIndex,
+                             Math.round(shearFactor).toInt)
+        case "Nearest Neighbour" =>
+          Deskew.deskewRealStack(img,
+                                 xIndex,
+                                 zIndex,
+                                 shearFactor,
+                                 new NearestNeighborInterpolatorFactory())
+        case "Linear" =>
+          Deskew.deskewRealStack(img,
+                                 xIndex,
+                                 zIndex,
+                                 shearFactor,
+                                 new NLinearInterpolatorFactory())
+        case "Lanczos" =>
+          Deskew.deskewRealStack(img,
+                                 xIndex,
+                                 zIndex,
+                                 shearFactor,
+                                 new LanczosInterpolatorFactory())
       }
 
       val out: ImagePlus = cIndex match {
-        case Some(i) => ImageJFunctions.wrap(Views.permute(rai, i, 2), s"${imeta.getName}_deskewed")
+        case Some(i) =>
+          ImageJFunctions.wrap(Views.permute(rai, i, 2),
+                               s"${imeta.getName}_deskewed")
         case None => ImageJFunctions.wrap(rai, s"${imeta.getName}_deskewed")
-        }
+      }
       val cal = new Calibration(out)
       cal.setUnit("um")
       cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
@@ -104,7 +134,9 @@ class DeskewTimeSeriesPlugin extends Command {
       }
 
       out.setCalibration(cal)
-      out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt, imeta.getAxisLength(Axes.Z).toInt, imeta.getAxisLength(Axes.TIME).toInt)
+      out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
+                        imeta.getAxisLength(Axes.Z).toInt,
+                        imeta.getAxisLength(Axes.TIME).toInt)
       out
     }
 
@@ -112,7 +144,8 @@ class DeskewTimeSeriesPlugin extends Command {
       case Right(img) => {
         ui.show(img)
       }
-      case Left(MetadataIOError(e)) => log.error(s"Error reading metadata:\n$e")
+      case Left(MetadataIOError(e)) =>
+        log.error(s"Error reading metadata:\n$e")
       case Left(ImgIOError(e)) => log.error(s"Error reading images:\n$e")
     }
   }

@@ -23,11 +23,12 @@ class MetadataParserSpec extends MetadataSuite {
   it should "fail with an Error when the string cannont be cast to an integer" in {
     val hello: String = "hello"
 
-    Parser[Int](hello) should be ('left)
+    Parser[Int](hello) should be('left)
   }
 
   "A Parser[Waveform]" should "parse LLSM waveform metadata from a block of text" in {
-    val wave = """Waveform type :	Linear
+    val wave =
+      """Waveform type :	Linear
 
 X Galvo Offset, Interval (um), # of Pixels for Excitation (0) :	0	0.1	101
 X Galvo Offset, Interval (um), # of Pixels for Excitation (1) :	0	0.1	101
@@ -53,7 +54,15 @@ Z motion :	Sample piezo"""
     val wf = Parser[WaveformMetadata](wave)
 
     wf match {
-      case Right(WaveformMetadata(wt, nSlices, zPZTOffset, sPZTOffset, channels, nFrames, cyc, zm)) => {
+      case Right(
+          WaveformMetadata(wt,
+                           nSlices,
+                           zPZTOffset,
+                           sPZTOffset,
+                           channels,
+                           nFrames,
+                           cyc,
+                           zm)) => {
         assertResult("Linear")(wt)
         assertResult("Sample piezo")(zm)
         assertResult("per Z")(cyc)
@@ -64,7 +73,8 @@ Z motion :	Sample piezo"""
   }
 
   "A Parser[CameraMetadata]" should "parse CameraMetadata from a block of text" in {
-    val text: String = """Model :	C11440-22C
+    val text: String =
+      """Model :	C11440-22C
 Serial :	3296
 Frame Transfer :	OFF
 Trigger :	External
@@ -109,11 +119,11 @@ subROIs :	Unknown type
       case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
 
-
   }
 
   "A Parser[FilenameMetadata]" should "parse LLSM Metadata from a list of LLSM data files" in {
-    val file: String = "Resolution test 4_ch1_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
+    val file: String =
+      "Resolution test 4_ch1_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
 
     Parser[FilenameMetadata](file) match {
       case Right(FilenameMetadata(n, c, tidx, wl, ts, ats)) => {
@@ -127,42 +137,54 @@ subROIs :	Unknown type
       case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
   }
-  it should "parse any channel and stack number >= 0" in forAll(Gen.choose(0, Integer.MAX_VALUE), Gen.choose(0, 9999)) { (c: Int, s: Int) =>
+  it should "parse any channel and stack number >= 0" in forAll(
+    Gen.choose(0, Integer.MAX_VALUE),
+    Gen.choose(0, 9999)) { (c: Int, s: Int) =>
     whenever(c >= 0 && s >= 0 && s <= 9999) {
       val paddedS = "%04d".format(s)
 
-      val fn: String = s"Resolution test 4_ch${c}_stack${paddedS}_488nm_0007480msec_0008884606msecAbs.tif"
+      val fn: String =
+        s"Resolution test 4_ch${c}_stack${paddedS}_488nm_0007480msec_0008884606msecAbs.tif"
       val pfn: Parser.Result[FilenameMetadata] = Parser[FilenameMetadata](fn)
-      pfn should be ('right)
-      pfn should be (Either.right(FilenameMetadata("Resolution test 4", c, s, 488, 7480L, 8884606L)))
+      pfn should be('right)
+      pfn should be(
+        Either.right(
+          FilenameMetadata("Resolution test 4", c, s, 488, 7480L, 8884606L)))
     }
   }
-  it should "parse any wavelength 0 <= wl <= 9999" in forAll(Gen.choose(0, 9999)) { (w: Int) =>
+  it should "parse any wavelength 0 <= wl <= 9999" in forAll(
+    Gen.choose(0, 9999)) { (w: Int) =>
     whenever(w >= 0 && w <= 9999) {
-      val fn: String = s"Resolution test 4_ch1_stack0001_${w}nm_0007480msec_0008884606msecAbs.tif"
+      val fn: String =
+        s"Resolution test 4_ch1_stack0001_${w}nm_0007480msec_0008884606msecAbs.tif"
 
       val pfn: Parser.Result[FilenameMetadata] = Parser[FilenameMetadata](fn)
 
-      pfn should be ('right)
-      pfn should be (Either.right(FilenameMetadata("Resolution test 4", 1, 1, w, 7480L, 8884606L)))
+      pfn should be('right)
+      pfn should be(
+        Either.right(
+          FilenameMetadata("Resolution test 4", 1, 1, w, 7480L, 8884606L)))
     }
   }
   it should "fail when passed a malformed file name" in {
     val file: String = "Test_hello.txt"
 
-    Parser[FilenameMetadata](file) should be ('left)
+    Parser[FilenameMetadata](file) should be('left)
   }
   it should "fail when the channel number isn't an Int" in {
-    val file: String = "Resolution test 4_chh_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
+    val file: String =
+      "Resolution test 4_chh_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
 
-    Parser[FilenameMetadata](file) should be ('left)
+    Parser[FilenameMetadata](file) should be('left)
   }
-  a [NumberFormatException] should be thrownBy {
-    val file: String = "Resolution test 4_ch1_stack000b_488nm_0007480msec_0008884606msecAbs.tif"
+  a[NumberFormatException] should be thrownBy {
+    val file: String =
+      "Resolution test 4_ch1_stack000b_488nm_0007480msec_0008884606msecAbs.tif"
 
     Parser[FilenameMetadata](file) match {
       case Left(ParsingFailure(_, e)) => throw e
-      case _ => fail("Expected a Either.Left with ParsingFailure but got Either.Right")
+      case _ =>
+        fail("Expected a Either.Left with ParsingFailure but got Either.Right")
     }
   }
 }
