@@ -213,19 +213,6 @@ lazy val io = project
     )
   )
 
-lazy val streaming = project
-  .in(file("streaming"))
-  .disablePlugins(AssemblyPlugin)
-  .dependsOn(core, io)
-  .settings(moduleName := "llsm-streaming")
-  .settings(buildSettings)
-  .settings(llsmSettings)
-  .settings(
-    libraryDependencies ++= Seq(
-      "io.iteratee" %% "iteratee-files" % "0.8.0"
-    )
-  )
-
 lazy val ij = project
   .in(file("ij"))
   .dependsOn(core, io)
