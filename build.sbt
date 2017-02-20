@@ -16,7 +16,7 @@ val disabledReplOptions = Set("-Ywarn-unused-import")
 
 lazy val buildSettings = Seq(
   scalaVersion := "2.11.8",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.1"),
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   libraryDependencies ++= scalaVersionDeps(scalaVersion.value)
 )
 
@@ -110,7 +110,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val llsmSettings = commonSettings ++ publishSettings ++ scoverageSettings
+lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val docMappingsApiDir =
   settingKey[String]("Subdirectory in site target directory for API docs")
@@ -162,7 +162,6 @@ lazy val docs = project
   .disablePlugins(AssemblyPlugin)
   .enablePlugins(MicrositesPlugin)
   .settings(moduleName := "llsm-docs")
-  .settings(buildSettings)
   .settings(llsmSettings)
   .settings(noPublishSettings)
   .settings(unidocSettings)
@@ -188,12 +187,11 @@ lazy val core = project
   .in(file("core"))
   .disablePlugins(AssemblyPlugin)
   .settings(moduleName := "llsm-core")
-  .settings(buildSettings)
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2" % "imglib2"               % "3.2.0"         % "provided",
-      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-32" % "provided"
+      "net.imglib2" % "imglib2"               % "3.3.0"         % "provided",
+      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-35" % "provided"
     )
   )
 
@@ -202,14 +200,13 @@ lazy val io = project
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core)
   .settings(moduleName := "llsm-io")
-  .settings(buildSettings)
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core"       % "0.8.1",
-      "com.chuusai"   %% "shapeless"       % "2.3.2",
-      "io.scif"       % "scifio"           % "0.29.0" % "provided",
-      "io.scif"       % "scifio-bf-compat" % "2.0.0" % "provided"
+      "org.typelevel" %% "cats-core"       % "0.9.0",
+      "org.typelevel" %% "cats-free"       % "0.9.0",
+      "io.scif"       % "scifio"           % "0.31.0" % "provided",
+      "io.scif"       % "scifio-bf-compat" % "2.0.2" % "provided"
     )
   )
 
@@ -219,12 +216,11 @@ lazy val ij = project
   .settings(moduleName := "llsm-ij")
   .settings(llsmSettings)
   .settings(
-    scalaVersion := "2.12.1",
-    crossScalaVersions := Seq("2.12.1"),
     libraryDependencies ++= Seq(
-      "net.imagej"  % "imagej"          % "2.0.0-rc-55" % "provided",
-      "net.imagej"  % "imagej-legacy"   % "0.23.2"      % "provided",
-      "org.scijava" % "scripting-scala" % "0.1.0"       % "provided"
+      "net.imagej"  % "imagej"          % "2.0.0-rc-58" % "provided",
+      "net.imagej"  % "imagej-legacy"   % "0.23.4"      % "provided",
+      "org.scijava" % "scripting-scala" % "0.2.0"       % "provided",
+      "sc.fiji"       % "bigdataviewer-vistools"  % "1.0.0-beta-4" % "provided"
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
     fork in run := true,
@@ -243,7 +239,6 @@ lazy val tests = project
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core, io)
   .settings(moduleName := "llsm-tests")
-  .settings(buildSettings)
   .settings(llsmSettings: _*)
   .settings(noPublishSettings: _*)
   .settings(
@@ -261,7 +256,6 @@ lazy val benchmark = project
   .in(file("benchmark"))
   .disablePlugins(AssemblyPlugin)
   .enablePlugins(JmhPlugin)
-  .settings(buildSettings)
   .settings(llsmSettings: _*)
   .settings(noPublishSettings: _*)
   .dependsOn(core, io)
@@ -277,7 +271,8 @@ lazy val benchmark = project
 def scalaVersionFlags(version: String): List[String] =
   CrossVersion.partialVersion(version) match {
     case Some((2, 11)) => List("-Ywarn-unused-import")
-    case Some((2, 12)) => List("-Ypartial-unification", "-Ywarn-unused-import")
+    case Some((2, 12)) => List("-Ypartial-unification")
+    // case Some((2, 12)) => List("-Ypartial-unification", "-Ywarn-unused-import")
     case _             => List.empty
   }
 

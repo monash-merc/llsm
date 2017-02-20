@@ -1,8 +1,10 @@
 package llsm
 package ij
 
+import cats.syntax.either._
 import llsm.Deskew
 import llsm.io._
+import llsm.io.metadata.Metadata._
 import java.io.File
 import java.util.Arrays
 import java.lang.Math
@@ -34,8 +36,8 @@ class DeskewTimeSeriesPlugin extends Command {
   @Parameter(label = "X/Y voxel size (um)", required = true)
   var pixelSize: Double = 0.1018
 
-  @Parameter(label = "Sample piezo increment", required = true)
-  var sampleIncrement: Double = 0.3000
+  @Parameter(label = "Incident objective angle")
+  var objectiveAngle: Double = 31.8
 
   @Parameter(label = "Interpolation scheme",
              choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
@@ -62,12 +64,9 @@ class DeskewTimeSeriesPlugin extends Command {
       log.error("input must be a directory")
     }
 
-    val shearFactor: Double = (Math.cos(Math.toRadians(31.8)) * sampleIncrement) / pixelSize
-
-    val zInterval: Double = Math.sin(Math.toRadians(31.8)) * sampleIncrement
-
     val output: Either[LLSMIOError, ImagePlus] = for {
-      imeta <- extractMetadata(input)
+      meta <- extractMetadata(input).leftMap[LLSMIOError](LLSMIOError.MetadataIOError)
+      imeta <- convertMetadata(meta)
       img <- readImgs(
         input.listFiles().filter(_.getName contains ".tif").toList,
         imeta)
@@ -78,6 +77,10 @@ class DeskewTimeSeriesPlugin extends Command {
         case -1     => None
         case i: Int => Some(i)
       }
+
+      val shearFactor: Double = (Math.cos(Math.toRadians(objectiveAngle)) * meta.waveform.sPZTOffset) / pixelSize
+
+      val zInterval: Double = Math.sin(Math.toRadians(objectiveAngle)) * meta.waveform.sPZTOffset + meta.waveform.zPZTOffset
 
       log.warn(imeta)
       log.warn(imeta.getAxisLength(Axes.X))
@@ -144,9 +147,9 @@ class DeskewTimeSeriesPlugin extends Command {
       case Right(img) => {
         ui.show(img)
       }
-      case Left(MetadataIOError(e)) =>
+      case Left(LLSMIOError.MetadataIOError(e)) =>
         log.error(s"Error reading metadata:\n$e")
-      case Left(ImgIOError(e)) => log.error(s"Error reading images:\n$e")
+      case Left(LLSMIOError.ImgIOError(e)) => log.error(s"Error reading images:\n$e")
     }
   }
 }

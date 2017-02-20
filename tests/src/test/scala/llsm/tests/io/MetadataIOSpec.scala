@@ -1,6 +1,7 @@
 package llsm.io
 
 import llsm.io.metadata.MetadataSuite
+import llsm.io.metadata.Metadata
 import java.io.File
 import org.scalatest.Matchers._
 
@@ -13,7 +14,7 @@ class MetadataIOSpec extends MetadataSuite {
         .toURI
         .getPath)
 
-    val meta = readMetadataFromTxtFile(f)
+    val meta = Metadata.readMetadataFromTxtFile(f)
 
     meta should be('right)
   }

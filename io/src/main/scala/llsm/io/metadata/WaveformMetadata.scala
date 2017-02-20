@@ -27,7 +27,7 @@ object WaveformMetadata {
   case class Excitation(channel: Int,
                         filter: String,
                         laser: Int,
-                        power: Int,
+                        power: Double,
                         exposure: Double)
   case class Cycle(mode: String)
   case class ZMotion(mode: String)

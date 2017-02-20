@@ -117,7 +117,7 @@ trait ImplicitParsers {
               .leftMap(err =>
                 ParsingFailure("Could not parse laser wavelength.", err))
             power <- Either
-              .fromTry(Try(p.toInt))
+              .fromTry(Try(p.toDouble))
               .leftMap(err =>
                 ParsingFailure("Could not parse laser power.", err))
             exp <- Either
