@@ -190,8 +190,8 @@ lazy val core = project
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2" % "imglib2"               % "3.3.0"         % "provided",
-      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-35" % "provided"
+      "net.imglib2" % "imglib2"               % "3.2.1"         % "provided",
+      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-34" % "provided"
     )
   )
 
@@ -205,7 +205,7 @@ lazy val io = project
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-core"       % "0.9.0",
       "org.typelevel" %% "cats-free"       % "0.9.0",
-      "io.scif"       % "scifio"           % "0.31.0" % "provided",
+      "io.scif"       % "scifio"           % "0.31.1" % "provided",
       "io.scif"       % "scifio-bf-compat" % "2.0.2" % "provided"
     )
   )
@@ -217,8 +217,8 @@ lazy val ij = project
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imagej"  % "imagej"          % "2.0.0-rc-58" % "provided",
-      "net.imagej"  % "imagej-legacy"   % "0.23.4"      % "provided",
+      "net.imagej"  % "imagej"          % "2.0.0-rc-59" % "provided",
+      "net.imagej"  % "imagej-legacy"   % "0.23.5"      % "provided",
       "org.scijava" % "scripting-scala" % "0.2.0"       % "provided",
       "sc.fiji"       % "bigdataviewer-vistools"  % "1.0.0-beta-4" % "provided"
     ),
@@ -226,7 +226,7 @@ lazy val ij = project
     fork in run := true,
     javaOptions += "-Xmx8G",
     test in assembly := {},
-    assemblyJarName in assembly := "llsm-ij.jar",
+    assemblyJarName in assembly := s"llsm-ij_${scalaVersion.value}.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value
       .copy(includeScala = false),
     run in Compile <<= Defaults.runTask(fullClasspath in Compile,
@@ -245,10 +245,10 @@ lazy val tests = project
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck"           % "1.13.4",
       "org.scalatest"  %% "scalatest"            % "3.0.1",
-      "net.imglib2"    % "imglib2"               % "3.2.0" % "test",
-      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-32" % "test",
-      "io.scif"        % "scifio"                % "0.29.0" % "test",
-      "io.scif"        % "scifio-bf-compat"      % "2.0.0" % "test"
+      "net.imglib2"    % "imglib2"               % "3.2.1" % "test",
+      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34" % "test",
+      "io.scif"        % "scifio"                % "0.31.1" % "test",
+      "io.scif"        % "scifio-bf-compat"      % "2.0.2" % "test"
     )
   )
 
@@ -261,10 +261,10 @@ lazy val benchmark = project
   .dependsOn(core, io)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2"    % "imglib2"               % "3.2.0",
-      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-32",
-      "io.scif"        % "scifio"                % "0.29.0",
-      "io.scif"        % "scifio-bf-compat"      % "2.0.0"
+      "net.imglib2"    % "imglib2"               % "3.2.1",
+      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34",
+      "io.scif"        % "scifio"                % "0.31.1",
+      "io.scif"        % "scifio-bf-compat"      % "2.0.2"
     )
   )
 
