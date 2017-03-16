@@ -17,7 +17,7 @@ class ShearSpec extends BaseSuite {
     (nDim: Int, shearDimension: Int, referenceDimension: Int, shearFactor: Int,
      c: Long) =>
       whenever(
-        nDim > 1 && shearDimension < nDim && referenceDimension < nDim && shearDimension != referenceDimension && shearFactor != 0) {
+        nDim > 1 && shearDimension < nDim && referenceDimension < nDim && shearDimension != referenceDimension) {
         val source: Array[Long] = Array.fill[Long](nDim)(c)
         val target: Array[Long] = Array.ofDim[Long](nDim)
 
@@ -55,11 +55,6 @@ class ShearSpec extends BaseSuite {
       new ShearIntervalTransform(5, 2, 2, 3)
     }
   }
-  it should "throw an IllegalArgumentException when the shearFactor == 0" in {
-    assertThrows[IllegalArgumentException] {
-      new ShearIntervalTransform(5, 1, 2, 0)
-    }
-  }
 
   "A RealShearTransform" should "c[shearDimension] += c[referenceDimension] * shearFactor" in forAll(
     (Gen.choose(2, 10), "nDim"),
@@ -71,7 +66,7 @@ class ShearSpec extends BaseSuite {
     (nDim: Int, shearDimension: Int, referenceDimension: Int,
      shearFactor: Double, c: Double) =>
       whenever(
-        nDim > 1 && shearDimension < nDim && referenceDimension < nDim && shearDimension != referenceDimension && shearFactor != 0.0) {
+        nDim > 1 && shearDimension < nDim && referenceDimension < nDim && shearDimension != referenceDimension) {
         val source: Array[Double] = Array.fill[Double](nDim)(c)
         val target: Array[Double] = Array.ofDim[Double](nDim)
 
@@ -104,11 +99,6 @@ class ShearSpec extends BaseSuite {
   it should "throw an IllegalArgumentException when shearDimension == referenceDimension" in {
     assertThrows[IllegalArgumentException] {
       new RealShearTransform(5, 2, 2, 3.0)
-    }
-  }
-  it should "throw an IllegalArgumentException when the shearFactor == 0" in {
-    assertThrows[IllegalArgumentException] {
-      new RealShearTransform(5, 1, 2, 0.0)
     }
   }
 }

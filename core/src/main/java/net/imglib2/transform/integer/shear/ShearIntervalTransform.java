@@ -64,7 +64,6 @@ public class ShearIntervalTransform implements InvertibleTransform, BoundingBoxT
     else if (shearDim >= nDim) throw new IllegalArgumentException("shearDimension cannot be greater than nDim.");
     else if (refDim >= nDim) throw new IllegalArgumentException("referenceDimension cannot be greater than nDim.");
     else if (refDim == shearDim) throw new IllegalArgumentException("referenceDimension cannot be equal to shearDimension.");
-    else if (shearFactor == 0) throw new IllegalArgumentException("shearFactor cannot be zero.");
 
     this.nDim = nDim;
     this.shearDimension = shearDim;
@@ -175,7 +174,6 @@ public class ShearIntervalTransform implements InvertibleTransform, BoundingBoxT
   }
 
   public void setShearInterval(int shearFactor) {
-    if (shearFactor == 0) throw new IllegalArgumentException("shearFactor cannot be zero.");
     this.shearFactor = shearFactor;
   }
 }

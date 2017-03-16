@@ -65,7 +65,6 @@ public class RealShearTransform implements InvertibleRealTransform, BoundingBoxT
     else if (shearDimension >= nDim) throw new IllegalArgumentException("shearDimension cannot be greater than nDim.");
     else if (referenceDimension >= nDim) throw new IllegalArgumentException("referenceDimension cannot be greater than nDim.");
     else if (referenceDimension == shearDimension) throw new IllegalArgumentException("referenceDimension cannot be equal to shearDimension.");
-    else if (shearFactor == 0.0) throw new IllegalArgumentException("shearFactor cannot be zero.");
 
     this.nDim = nDim;
     this.shearDimension = shearDimension;
@@ -184,7 +183,6 @@ public class RealShearTransform implements InvertibleRealTransform, BoundingBoxT
   }
 
   public void setShearInterval(double shearFactor) {
-    if (shearFactor == 0) throw new IllegalArgumentException("shearFactor cannot be zero.");
     this.shearFactor = shearFactor;
   }
 }
