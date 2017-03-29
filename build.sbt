@@ -222,9 +222,9 @@ lazy val ij = project
   .settings(
     libraryDependencies ++= Seq(
       "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
-      "net.imagej"  % "imagej"          % "2.0.0-rc-59" % "provided",
-      "net.imagej"  % "imagej-legacy"   % "0.23.5"      % "provided",
-      "org.scijava" % "scripting-scala" % "0.2.0"       % "provided",
+      "net.imagej"    % "imagej"                % "2.0.0-rc-59"   % "provided",
+      "net.imagej"    % "imagej-legacy"         % "0.23.5"        % "provided",
+      "org.scijava"   % "scripting-scala"       % "0.2.0"         % "provided",
       "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
