@@ -1,5 +1,4 @@
-package llsm
-package ij
+package llsm.ij
 
 import llsm.Deskew
 import java.lang.Math
