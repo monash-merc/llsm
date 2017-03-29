@@ -9,16 +9,11 @@ import net.imglib2.interpolation.randomaccess.{
   LanczosInterpolatorFactory
 }
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
-import org.scijava.Context
 import _root_.io.scif.img.ImgOpener
 import _root_.io.scif.config.SCIFIOConfig
 
-class DeskewContext {
-  val context: Context = new Context
+trait FakeDeskewData extends BenchmarkContext {
   val imgio: ImgOpener = new ImgOpener(context)
-}
-
-class FakeDeskewData extends DeskewContext {
   val conf: SCIFIOConfig =
     new SCIFIOConfig().imgOpenerSetOpenAllImages(false).imgOpenerSetIndex(0)
   val fakeImg: String =
