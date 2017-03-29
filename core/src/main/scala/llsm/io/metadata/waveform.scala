@@ -1,10 +1,9 @@
-package llsm
-package io.metadata
+package llsm.io.metadata
 
 case class WaveformMetadata(wfType: String,
                             nSlices: Long,
-                            zPZTOffset: Double,
-                            sPZTOffset: Double,
+                            zPZTInterval: Double,
+                            sPZTInterval: Double,
                             channels: List[WaveformMetadata.Channel],
                             nFrames: Int,
                             cycle: String,

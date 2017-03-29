@@ -1,20 +1,21 @@
 package llsm.io
 
+import java.nio.file.{Path, Paths}
+
 import llsm.io.metadata.MetadataSuite
-import llsm.io.metadata.Metadata
-import java.io.File
+import llsm.io.metadata.LLSMMeta
 import org.scalatest.Matchers._
 
 class MetadataIOSpec extends MetadataSuite {
 
   "readMetadataFromTxtFile" should "parse Waveform and Camera metadata from a text file" in {
-    val f: File = new File(
+    val f: Path = Paths.get(
       getClass
         .getResource("/io/data/Resolution test 4_Settings.txt")
         .toURI
         .getPath)
 
-    val meta = Metadata.readMetadataFromTxtFile(f)
+    val meta = LLSMMeta.readMetadataFromTxtFile(f)
 
     meta should be('right)
   }

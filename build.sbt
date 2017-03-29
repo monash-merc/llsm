@@ -135,7 +135,7 @@ lazy val docSettings = Seq(
     "white-color"     -> "#FFFFFF"
   ),
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, io),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, api),
   docMappingsApiDir := "api",
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc),
                        docMappingsApiDir),
@@ -169,16 +169,16 @@ lazy val docs = project
   .settings(docSettings)
   .settings(tutScalacOptions ~= (_.filterNot(
     Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
-  .dependsOn(core, io)
+  .dependsOn(core, api)
 
 lazy val llsm = project
   .in(file("."))
   .disablePlugins(AssemblyPlugin)
   .settings(llsmSettings)
   .settings(noPublishSettings)
-  .aggregate(core, io, ij, tests, docs)
+  .aggregate(core, api, ij, tests, docs)
   .dependsOn(core,
-             io,
+             api,
              ij,
              tests     % "compile;test-internal -> test",
              benchmark % "compile-internal;test-internal -> test")
@@ -191,40 +191,45 @@ lazy val core = project
   .settings(
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % "3.2.1"         % "provided",
-      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-34" % "provided"
-    )
+      "net.imglib2" % "imglib2-algorithm"     % "0.6.2"         % "provided",
+      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-34" % "provided",
+      "io.scif"     % "scifio"                % "0.31.1"        % "provided"
+    ) ++ coreVersionDeps(scalaVersion.value)
   )
 
-lazy val io = project
-  .in(file("io"))
+lazy val api = project
+  .in(file("api"))
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core)
-  .settings(moduleName := "llsm-io")
+  .settings(moduleName := "llsm-api")
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core"       % "0.9.0",
-      "org.typelevel" %% "cats-free"       % "0.9.0",
-      "io.scif"       % "scifio"           % "0.31.1" % "provided",
-      "io.scif"       % "scifio-bf-compat" % "2.0.2" % "provided"
+      "org.typelevel" %% "cats-free"            % "0.9.0",
+      "net.imglib2"   % "imglib2"               % "3.2.1"         % "provided",
+      "net.imglib2"   % "imglib2-realtransform" % "2.0.0-beta-34" % "provided",
+      "io.scif"       % "scifio"                % "0.31.1"        % "provided",
+      "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
+      "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
     )
   )
 
 lazy val ij = project
   .in(file("ij"))
-  .dependsOn(core, io)
+  .dependsOn(core, api)
   .settings(moduleName := "llsm-ij")
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
+      "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
       "net.imagej"  % "imagej"          % "2.0.0-rc-59" % "provided",
       "net.imagej"  % "imagej-legacy"   % "0.23.5"      % "provided",
       "org.scijava" % "scripting-scala" % "0.2.0"       % "provided",
-      "sc.fiji"       % "bigdataviewer-vistools"  % "1.0.0-beta-4" % "provided"
+      "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
     fork in run := true,
-    javaOptions += "-Xmx8G",
+    javaOptions ++= Seq("-Xmx12G"),//, "-Dscijava.log.level=debug"),
     test in assembly := {},
     assemblyJarName in assembly := s"llsm-ij_${scalaVersion.value}.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value
@@ -237,7 +242,7 @@ lazy val ij = project
 lazy val tests = project
   .in(file("tests"))
   .disablePlugins(AssemblyPlugin)
-  .dependsOn(core, io)
+  .dependsOn(core, api)
   .settings(moduleName := "llsm-tests")
   .settings(llsmSettings: _*)
   .settings(noPublishSettings: _*)
@@ -245,10 +250,11 @@ lazy val tests = project
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck"           % "1.13.4",
       "org.scalatest"  %% "scalatest"            % "3.0.1",
-      "net.imglib2"    % "imglib2"               % "3.2.1" % "test",
-      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34" % "test",
-      "io.scif"        % "scifio"                % "0.31.1" % "test",
-      "io.scif"        % "scifio-bf-compat"      % "2.0.2" % "test"
+      "net.imglib2"    % "imglib2"               % "3.2.1",
+      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34",
+      "io.scif"        % "scifio"                % "0.31.1",
+      "io.scif"        % "scifio-ome-xml"        % "0.14.2",
+      "sc.fiji"        % "bigdataviewer-core"    % "3.0.3"
     )
   )
 
@@ -258,13 +264,17 @@ lazy val benchmark = project
   .enablePlugins(JmhPlugin)
   .settings(llsmSettings: _*)
   .settings(noPublishSettings: _*)
-  .dependsOn(core, io)
+  .dependsOn(core, api)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2"    % "imglib2"               % "3.2.1",
-      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34",
-      "io.scif"        % "scifio"                % "0.31.1",
-      "io.scif"        % "scifio-bf-compat"      % "2.0.2"
+      "net.imglib2"   %   "imglib2"                 % "3.2.1",
+      "net.imglib2"   %   "imglib2-realtransform"   % "2.0.0-beta-34",
+      "net.imagej"    %   "imagej"                  % "2.0.0-rc-59",
+      "io.scif"       %   "scifio"                  % "0.31.1",
+      "io.scif"       %   "scifio-ome-xml"          % "0.14.2",
+      "sc.fiji"       %   "bigdataviewer-core"      % "3.0.3",
+      "io.monix"      %%  "monix-eval"              % "2.2.2",
+      "io.monix"      %%  "monix-cats"              % "2.2.2"
     )
   )
 
@@ -281,6 +291,15 @@ def scalaVersionDeps(version: String): List[ModuleID] =
     case Some((2, 11)) =>
       List(
         compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"))
+    case Some((2, 12)) => List.empty
+    case _             => List.empty
+  }
+
+
+def coreVersionDeps(version: String): List[ModuleID] =
+  CrossVersion.partialVersion(version) match {
+    case Some((2, 11)) =>
+      List("org.typelevel" %% "cats-core"       % "0.9.0")
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }

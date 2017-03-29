@@ -1,5 +1,4 @@
-package llsm
-package io.metadata
+package llsm.io.metadata
 
 case class FilenameMetadata(name: String,
                             channel: Int,

@@ -66,6 +66,7 @@ Z motion :	Sample piezo"""
         assertResult("Linear")(wt)
         assertResult("Sample piezo")(zm)
         assertResult("per Z")(cyc)
+        assertResult(2)(channels.size)
         assertResult(0)(channels(0).id)
       }
       case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
@@ -119,6 +120,16 @@ subROIs :	Unknown type
       case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
     }
 
+  }
+
+  "A Parser[SampleStage]" should "parse the angle between the stage and bessel as a Double" in forAll("ang") {
+    (ang: Double) =>
+      val str: String = s"Angle between stage and bessel beam (deg) = $ang"
+
+      Parser[SampleStage](str) match {
+        case Right(SampleStage(a)) => a should equal (ang)
+        case Left(ParsingFailure(m, e)) => fail(s"$m:\n$e")
+      }
   }
 
   "A Parser[FilenameMetadata]" should "parse LLSM Metadata from a list of LLSM data files" in {

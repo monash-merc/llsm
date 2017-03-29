@@ -1,9 +1,6 @@
-package llsm
-package io.metadata
+package llsm.io.metadata
 
-import cats.syntax.either._
-import scala.util.Try
-import scala.reflect.runtime.universe._
+import scala.util.{Left, Failure, Right, Success, Try}
 
 /**
   * Parser typeclass.
@@ -28,14 +25,15 @@ final object Parser extends ParserInstances {
 
 private[metadata] abstract class ParserInstances {
 
-  def createParser[A: TypeTag](func: String => A): Parser[A] =
+  def createParser[A](func: String => A): Parser[A] =
     new Parser[A] {
       def apply(s: String): Parser.Result[A] =
-        Either
-          .fromTry(Try(func(s)))
-          .leftMap(e =>
-            ParsingFailure(s"Failed to parse ${typeOf[A]}:\n${e.getMessage}",
+        Try(func(s)) match {
+          case Success(r) => Right(r)
+          case Failure(e) =>
+            Left(ParsingFailure(s"Failed to parse:\n${e.getMessage}",
                            e))
+        }
     }
 
   final implicit val stringParser: Parser[String] =
