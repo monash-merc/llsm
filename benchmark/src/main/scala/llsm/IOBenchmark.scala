@@ -60,7 +60,7 @@ class IOBenchmark extends IOContext {
         img,
         0,
         2,
-        Deskew.calcShearFactor(m.waveform.sPZTOffset, m.sample.angle, m.config.xVoxelSize),
+        Deskew.calcShearFactor(m.waveform.sPZTInterval, m.sample.angle, m.config.xVoxelSize),
         m.config.interpolation)
     } yield deskewedImg
 

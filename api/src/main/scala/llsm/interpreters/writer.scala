@@ -19,7 +19,6 @@ import io.scif.{ ImageMetadata, Metadata, SCIFIO, Writer }
 import io.scif.config.SCIFIOConfig
 import io.scif.codec.CompressionType
 import io.scif.img.{ImgSaver, SCIFIOImgPlus}
-import io.scif.ome.OMEMetadata
 import llsm.Deskew
 import llsm.algebras.{ImgWriterAPI, ImgWriterF, LowWriterAPI, LowWriterF, WriteSCIFIO, WriteHDF5}
 import llsm.fp._

@@ -5,7 +5,7 @@ import java.lang.Math
 import scala.collection.JavaConverters._
 import scala.collection.immutable.TreeSet
 
-import io.scif.{ImageMetadata, DefaultImageMetadata, DefaultMetadata, Metadata}
+import io.scif.{ImageMetadata, DefaultImageMetadata}
 import io.scif.util.FormatTools
 import llsm.Deskew
 import net.imagej.axis.{Axes, CalibratedAxis, DefaultLinearAxis}
