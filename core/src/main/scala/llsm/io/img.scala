@@ -35,19 +35,19 @@ object ImgUtils {
   def aggregateImgs(lImgs: List[LLSMStack]): LLSMImg = {
     val aggImg: Img[UnsignedShortType] = {
       val tStacks: List[RandomAccessibleInterval[UnsignedShortType]] =
-        ListMap(
-          lImgs
-            .groupBy(_.meta.filename.timeStamp)
-            .toSeq
-            .sortBy(_._1): _*).values
-          .map(cStacks => {
-            val cGroups: List[RandomAccessibleInterval[UnsignedShortType]] =
-              cStacks.map(c => c.img)
-            if (cGroups.size > 1)
-              Views.stack[UnsignedShortType](cGroups.asJava)
-            else cGroups.head
-          })
-          .toList
+        lImgs
+          .groupBy(_.meta.filename.stack)
+          .toSeq
+          .sortBy(_._1)
+          .map {
+            case (_, cStack) => {
+              val cGroups: List[RandomAccessibleInterval[UnsignedShortType]] =
+                cStack.map(c => c.img)
+              if (cGroups.size > 1)
+                Views.stack[UnsignedShortType](cGroups.asJava)
+              else cGroups.head
+            }
+          }.toList
       ImgView.wrap(
         if (tStacks.size > 1) Views.stack[UnsignedShortType](tStacks.asJava)
         else tStacks.head,

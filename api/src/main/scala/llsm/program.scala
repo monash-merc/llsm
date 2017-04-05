@@ -37,7 +37,7 @@ object Programs {
   def processImgs[F[_]: Metadata: ImgReader: Process: Progress](
       paths: List[Path]
   ): ParSeq[F, LLSMImg] =
-    paths.traverse(p => ParSeq.liftSeq(processImg[F](p))).map(ImgUtils.aggregateImgs)
+    paths.traverse(p => ParSeq.liftSeq(processImg[F](p))).map(lImgs => ImgUtils.aggregateImgs(lImgs))
 
   def processStacks[F[_]: Metadata: ImgReader: Process: Progress](
       paths: List[Path]
