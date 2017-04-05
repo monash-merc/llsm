@@ -60,6 +60,7 @@ lazy val commonSettings = List(
     _.filterNot(disabledReplOptions.contains(_))
   },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+  wartremoverWarnings in (Compile, compile) ++= Warts.unsafe,
   libraryDependencies ++= Seq(
     "com.lihaoyi" % "ammonite" % "1.0.0" % "test" cross CrossVersion.full),
   sourceGenerators in Test += Def.task {

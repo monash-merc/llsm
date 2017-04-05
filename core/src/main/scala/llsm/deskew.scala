@@ -67,8 +67,7 @@ object Deskew {
       shearDim: Int,
       referenceDim: Int,
       shearInterval: Double,
-      interpolator: InterpolatorFactory[A, RandomAccessible[A]] =
-        new NearestNeighborInterpolatorFactory[A]())
+      interpolator: InterpolatorFactory[A, RandomAccessible[A]])
     : RandomAccessibleInterval[A] = {
     val iv = Views.interpolate[A, RandomAccessible[A]](
       Views.extendZero(input), interpolator)
