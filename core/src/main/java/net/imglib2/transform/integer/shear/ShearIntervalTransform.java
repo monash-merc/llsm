@@ -33,6 +33,8 @@
  */
 package net.imglib2.transform.integer.shear;
 
+import java.util.Arrays;
+
 import net.imglib2.Localizable;
 import net.imglib2.Positionable;
 import net.imglib2.transform.InvertibleTransform;
@@ -43,137 +45,175 @@ import net.imglib2.transform.integer.BoundingBoxTransform;
  * Invertible shear transform that shears by whole pixel units.
  * coordinate[shearDimension] += coordinate[referenceDimension] * shearFactor
  *
- * Inverse is calculated by taking the inverse of the shearFactor.
- *
- * @author Philip Hanslovsky
+ * @author Philipp Hanslovsky
  * @author Keith Schulze
+ *
  */
-public class ShearIntervalTransform implements InvertibleTransform, BoundingBoxTransform {
+public class ShearIntervalTransform implements InvertibleTransform, BoundingBoxTransform
+{
 
-  private int nDim;
-  private int shearDimension;
-  private int referenceDimension;
-  private int shearFactor;
 
-  public ShearIntervalTransform(int nDim, int shearDim, int refDim) {
-    this(nDim, shearDim, refDim, 1);
-  }
+	private final int nDim;
+	private final int shearDimension;
+	private final int referenceDimension;
+	private final int shearFactor;
 
-  public ShearIntervalTransform(int nDim, int shearDim, int refDim, int shearFactor) {
-    if (nDim < 2) throw new IllegalArgumentException("nDim cannot be < 2");
-    else if (shearDim >= nDim) throw new IllegalArgumentException("shearDimension cannot be greater than nDim.");
-    else if (refDim >= nDim) throw new IllegalArgumentException("referenceDimension cannot be greater than nDim.");
-    else if (refDim == shearDim) throw new IllegalArgumentException("referenceDimension cannot be equal to shearDimension.");
 
-    this.nDim = nDim;
-    this.shearDimension = shearDim;
-    this.referenceDimension = refDim;
-    this.shearFactor = shearFactor;
-  }
+	/**
+	 * @param nDim						Number of dimensions (source and target dimensions must be the same)
+	 * @param shearDimension			Dimension to be sheared.
+	 * @param referenceDimension		Dimension used as reference for shear.
+	 * @param shearFactor				Interval for shear i.e., amount to shift shear dimension with respect
+	 *									an increment in the reference referenceDimension.
+	 * @throws IllegalArgumentException	if nDim < 2, shearDimension >= nDim, referenceDimension >= nDim,
+	 *									referenceDimension == shearDimension
+	 */
+	public ShearIntervalTransform(
+			int nDim,
+			int shearDimension,
+			int referenceDimension,
+			int shearFactor)
+	{
+		if (nDim < 2) throw new IllegalArgumentException("nDim cannot be < 2");
+		else if (shearDimension >= nDim) throw new IllegalArgumentException("shearDimension cannot be greater than nDim.");
+		else if (referenceDimension >= nDim) throw new IllegalArgumentException("referenceDimension cannot be greater than nDim.");
+    	else if (referenceDimension == shearDimension) throw new IllegalArgumentException("referenceDimension cannot be equal to shearDimension.");
 
-  public int numSourceDimensions() {
-    return this.nDim;
-  }
+		this.nDim = nDim;
+		this.shearDimension = shearDimension;
+		this.referenceDimension = referenceDimension;
+		this.shearFactor = shearFactor;
+	}
 
-  public int numTargetDimensions() {
-    return this.nDim;
-  }
 
-  public void apply(long[] source, long[] target) {
-    if (source.length != this.nDim || target.length != this.nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
+	/**
+	 * Auxillary constructor where the shearFactor defaults to 1.
+	 *
+	 * @param nDim					Number of dimensions (source and target dimensions must be the same)
+	 * @param shearDimension		Dimension to be sheared.
+	 * @param referenceDimension	Dimension used as reference for shear.
+	 */
+	public ShearIntervalTransform(
+			int nDim,
+			int shearDimension,
+			int referenceDimension)
+	{
+		this( nDim, shearDimension, referenceDimension, 1 );
+	}
 
-    System.arraycopy(source, 0, target, 0, source.length);
-    target[this.shearDimension] += target[this.referenceDimension] * this.shearFactor;
-  }
 
-  public void apply(int[] source, int[] target) {
-    if (source.length != this.nDim || target.length != this.nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
+	@Override
+	public int numSourceDimensions()
+	{
+		return this.nDim;
+	}
 
-    System.arraycopy(source, 0, target, 0, source.length);
-    target[this.shearDimension] += target[this.referenceDimension] * this.shearFactor;
-  }
 
-  public void apply(Localizable source, Positionable target) {
-    if (source.numDimensions() != nDim || target.numDimensions() != nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
+	@Override
+	public int numTargetDimensions()
+	{
+		return this.nDim;
+	}
 
-    target.setPosition(source);
-    target.setPosition(source.getLongPosition(this.shearDimension) + source.getLongPosition(this.referenceDimension) * this.shearFactor, this.shearDimension);
-  }
 
-  public void applyInverse(long[] source, long[] target) {
-    if (source.length != this.nDim || target.length != this.nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
+	@Override
+	public void apply( long[] source, long[] target )
+	{
+		assert source.length == this.nDim && target.length == this.nDim;
 
-    System.arraycopy(target, 0, source, 0, target.length);
-    source[this.shearDimension] -= source[this.referenceDimension] * this.shearFactor;
-  }
+		System.arraycopy( source, 0, target, 0, source.length );
+		target[this.shearDimension] += source[this.referenceDimension] * this.shearFactor;
+	}
 
-  public void applyInverse(int[] source, int[] target) {
-    if (source.length != this.nDim || target.length != this.nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
 
-    System.arraycopy(target, 0, source, 0, target.length);
-    source[this.shearDimension] -= source[this.referenceDimension] * this.shearFactor;
-  }
+	@Override
+	public void apply( int[] source, int[] target )
+	{
+		assert source.length == this.nDim && target.length == this.nDim;
 
-  public void applyInverse(Positionable source, Localizable target) {
-    if (source.numDimensions() != this.nDim || target.numDimensions() != this.nDim)
-      throw new IllegalArgumentException("Source and target coordinates must be of the same dimensionality as the transform.");
+		System.arraycopy( source, 0, target, 0, source.length );
+		target[this.shearDimension] += source[this.referenceDimension] * this.shearFactor;
+	}
 
-    source.setPosition(target);
-    source.setPosition(target.getLongPosition(this.shearDimension) - target.getLongPosition(this.referenceDimension) * this.shearFactor, this.shearDimension);
-  }
 
-  public ShearIntervalTransform copy() {
-    return new ShearIntervalTransform(this.nDim, this.shearDimension, this.referenceDimension, this.shearFactor);
-  }
+	@Override
+	public void apply( Localizable source, Positionable target )
+	{
+		assert source.numDimensions() == nDim && target.numDimensions() == nDim;
 
-  public ShearIntervalTransform inverse() {
-    return new ShearIntervalTransform(this.nDim, this.shearDimension, this.referenceDimension, -this.shearFactor);
-  }
+		target.setPosition( source );
+		target.setPosition( source.getLongPosition( this.shearDimension ) + source.getLongPosition( this.referenceDimension ) * this.shearFactor, this.shearDimension );
+	}
 
-  public BoundingBox transform(BoundingBox bb) {
-    bb.orderMinMax();
-    long[] c = bb.corner2;
-    long diff = c[this.referenceDimension] - bb.corner1[this.referenceDimension];
-    c[this.shearDimension] += diff * this.shearFactor;
-    return bb;
-  }
 
-  public int getShearDimension() {
-    return this.shearDimension;
-  }
+	@Override
+	public void applyInverse( long[] source, long[] target )
+	{
+		assert source.length == this.nDim && target.length == this.nDim;
 
-  public void setShearDimension(int shearDimension) {
-    if (shearDimension >= this.nDim)
-      throw new IllegalArgumentException("Shear dimension is outside the dimension range of this transform: numDimensions = " + this.nDim + " and shearDimension = " + shearDimension);
-    else if (shearDimension == this.referenceDimension)
-      throw new IllegalArgumentException("shearDimension and referenceDimension cannot be equal.");
+		System.arraycopy( target, 0, source, 0, target.length );
+		source[this.shearDimension] -= target[this.referenceDimension] * this.shearFactor;
+	}
 
-    this.shearDimension = shearDimension;
-  }
 
-  public int getReferenceDimension() {
-    return this.referenceDimension;
-  }
+	@Override
+	public void applyInverse( int[] source, int[] target )
+	{
+		assert source.length == this.nDim && target.length == this.nDim;
 
-  public void setReferenceDimension(int referenceDimension) {
-    if (referenceDimension >= this.nDim)
-      throw new IllegalArgumentException("Reference dimension is outside the dimension range of this transform: numDimensions = " + this.nDim + " and referenceDimension = " + referenceDimension);
-    else if (referenceDimension == this.shearDimension)
-      throw new IllegalArgumentException("shearDimension and referenceDimension cannot be equal.");
+		System.arraycopy( target, 0, source, 0, target.length );
+		source[this.shearDimension] -= target[this.referenceDimension] * this.shearFactor;
+	}
 
-    this.referenceDimension = referenceDimension;
-  }
 
-  public int getShearInterval() {
-    return this.shearFactor;
-  }
+	@Override
+	public void applyInverse( Positionable source, Localizable target )
+	{
+		assert source.numDimensions() == this.nDim && target.numDimensions() == this.nDim;
 
-  public void setShearInterval(int shearFactor) {
-    this.shearFactor = shearFactor;
-  }
+		source.setPosition( target );
+		source.setPosition( target.getLongPosition( this.shearDimension ) - target.getLongPosition( this.referenceDimension ) * this.shearFactor, this.shearDimension );
+	}
+
+
+	public ShearIntervalTransform copy()
+	{
+		return new ShearIntervalTransform( this.nDim, this.shearDimension, this.referenceDimension, this.shearFactor );
+	}
+
+
+	@Override
+	public ShearIntervalTransform inverse()
+	{
+		return new ShearIntervalTransform( this.nDim, this.shearDimension, this.referenceDimension, -this.shearFactor );
+	}
+
+
+	@Override
+	public BoundingBox transform( BoundingBox bb )
+	{
+		bb.orderMinMax();
+		long[] c2 = Arrays.copyOf(bb.corner2, bb.corner2.length);
+		long diff = c2[this.referenceDimension] - bb.corner1[this.referenceDimension];
+		c2[this.shearDimension] += diff * this.shearFactor;
+		return new BoundingBox( bb.corner1, c2 );
+	}
+
+
+	public int getShearDimension()
+	{
+		return this.shearDimension;
+	}
+
+
+	public int getReferenceDimension()
+	{
+		return this.referenceDimension;
+	}
+
+
+	public int getShearFactor()
+	{
+		return this.shearFactor;
+	}
 }
