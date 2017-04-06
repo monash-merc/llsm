@@ -1,6 +1,5 @@
 package llsm.io
 
-import scala.collection.mutable.ListMap
 import scala.collection.JavaConverters._
 
 import io.scif.ImageMetadata
