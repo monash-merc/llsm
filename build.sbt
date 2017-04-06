@@ -99,6 +99,21 @@ lazy val publishSettings = List(
   )
 )
 
+lazy val ijPublishSettings = List(
+  releaseProcess := List[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    ReleaseStep(action = Command.process("ij/assembly", _)),
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  )
+)
+
 lazy val noPublishSettings = List(
   publish := (),
   publishLocal := (),
@@ -110,7 +125,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val llsmSettings = buildSettings ++ commonSettings ++ noPublishSettings ++ scoverageSettings
 
 lazy val docMappingsApiDir =
   settingKey[String]("Subdirectory in site target directory for API docs")
@@ -219,6 +234,7 @@ lazy val ij = project
   .dependsOn(core, api)
   .settings(moduleName := "llsm-ij")
   .settings(llsmSettings)
+  .settings(ijPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
       "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
