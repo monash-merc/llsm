@@ -1,0 +1,25 @@
+sudo: false
+
+language: scala
+
+scala:
+  - 2.11.8
+
+jdk:
+  - oraclejdk7
+
+matrix:
+  include:
+    - scala: 2.12.1
+      jdk: oraclejdk8
+
+cache:
+  directories:
+  - $HOME/.sbt/0.13/dependency
+  - $HOME/.sbt/boot/scala*
+  - $HOME/.sbt/launchers
+  - $HOME/.ivy2/cache
+
+script:
+  - sbt -jvm-opts ./.jvmopts ++$TRAVIS_SCALA_VERSION clean tests/test
+
