@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/keithschulze/llsm.png)](https://travis-ci.org/keithschulze/llsm/)
+
 # llsm
 `llsm` is a set of Scala libraries for preprocessing and conversion of raw data
 from early implementations of the Lattice Light-sheet Microscope<sup>1</sup>.
