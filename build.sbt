@@ -1,5 +1,4 @@
 import ReleaseTransformations._
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
@@ -131,8 +130,8 @@ lazy val docMappingsApiDir =
   settingKey[String]("Subdirectory in site target directory for API docs")
 
 lazy val docSettings = Seq(
-  micrositeName := "llsm",
-  micrositeDescription := "Lattice LightSheet Microscopy image processing library",
+  micrositeName := "LLSM",
+  micrositeDescription := "Lattice Light-Sheet Microscopy",
   micrositeAuthor := "Keith Schulze",
   micrositeHighlightTheme := "atom-one-light",
   micrositeBaseUrl := "llsm",
@@ -140,13 +139,13 @@ lazy val docSettings = Seq(
   micrositeGithubOwner := "keithschulze",
   micrositeGithubRepo := "llsm",
   micrositePalette := Map(
-    "brand-primary"   -> "#FFFFFF",
-    "brand-secondary" -> "#006CAC",
-    "brand-tertiary"  -> "#004E7C",
-    "gray-dark"       -> "#242424",
-    "gray"            -> "#575757",
-    "gray-light"      -> "#E3E2E3",
-    "gray-lighter"    -> "#F5F6F6",
+    "brand-primary"   -> "#43C5E4",
+    "brand-secondary" -> "#006CAB",
+    "brand-tertiary"  -> "#009FD8",
+    "gray-dark"       -> "#231F20",
+    "gray"            -> "#423F40",
+    "gray-light"      -> "#939598",
+    "gray-lighter"    -> "#F7F8F8",
     "white-color"     -> "#FFFFFF"
   ),
   autoAPIMappings := true,
@@ -180,7 +179,6 @@ lazy val docs = project
   .settings(llsmSettings)
   .settings(noPublishSettings)
   .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
   .settings(tutScalacOptions ~= (_.filterNot(
     Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))

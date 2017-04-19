@@ -12,14 +12,14 @@ import org.scijava.Context
 
 trait ImgReaderInterpreters {
 
-  /** Returns an SCIFIO based interpreter for the [[llsm.io.algebras.ImgReaderAPI]]
+  /** Returns an SCIFIO based interpreter for the [[llsm.algebras.ImgReaderAPI]]
    *
-   *  Interprets the [[llsm.io.algerbras.ImgReaderAPI]] DSL using SCIFIO to
+   *  Interprets the [[llsm.algebras.ImgReaderAPI]] DSL using SCIFIO to
    *  implement reading functionality and captures the result in a specified
-   *  container M that has an instance of [[cats.MonadError]].
+   *  container M that has an instance of MonadError.
    *
-   *  @param context scijava [[org.scijava.Context]]
-   *  @tparam M return type that needs an instance of [[cats.MonadError]]
+   *  @param context scijava org.scijava.Context
+   *  @tparam M return type that needs an instance of cats.MonadError
    */
   def scifioReader[M[_]](
     context: Context

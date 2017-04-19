@@ -43,10 +43,10 @@ object MetadataUtils {
     imeta
   }
 
-  /** Convert LLSM metadata to SCIFIO ImageMedata
+  /** Convert LLSM metadata to SCIFIO ImageMetadata
    *
    * Takes an LLSM metadata heirachy and compiles it into a default
-   * implementation of [[io.scif.ImageMetdata]].
+   * implementation of io.scif.ImageMetadata.
    * @param metadata List of LLSM FileMetadata objects
    * @return ImageMetadata
    */

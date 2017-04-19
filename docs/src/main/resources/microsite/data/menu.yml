@@ -1,9 +1,25 @@
 options:
-  - title: Getting Started
+  - title: Introduction
     url: docs/index.html
 
-  - title: Deskewing
-    url: docs/deskew.html
+  - title: Users
+    url: docs/users/index.html
+    menu_section: users
 
-  - title: Benchmarks
-    url: docs/benchmark.html
+    nested_options:
+      - title: Getting Started
+        url: docs/users/index.html
+
+      - title: ImageJ/Fiji Plugins
+        url: docs/users/imagej.html
+
+      - title: Deskewing
+        url: docs/users/deskew.html
+
+  - title: Instrument Operators
+    url: docs/operators.html
+    menu_section: operators
+
+  - title: Developers
+    url: docs/dev/index.html
+    menu_section: develop

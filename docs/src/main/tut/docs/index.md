@@ -1,8 +1,14 @@
 ---
 layout: docs
-title: Getting Started
+title: LLSM Documentation
 ---
 
-# Prerequisites
+# LLSM Documentation
 
-# Setting Up
+The `llsm` documentation is divided into three parts:
+
+* Documentation for `llsm` ImageJ/Fiji plugins users.
+* Documentation for developers who want to used the `llsm` libraries.
+* Documentation for LLSM instrument operators about general good practices for LLSM imaging.
+
+
