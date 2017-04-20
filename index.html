@@ -1,0 +1,75 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><title>LLSM</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Lattice Light-Sheet Microscopy" /><meta name="author" content="Keith Schulze" /><meta name="og:image" content="/llsm/img/poster.png" /><meta name="og:title" content="LLSM" /><meta name="og:site_name" content="LLSM" /><meta name="og:url" content="" /><meta name="og:type" content="website" /><meta name="og:description" content="Lattice Light-Sheet Microscopy" /><meta name="twitter:image" content="/llsm/img/poster.png" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="" /><meta name="kazari-dependencies" content="" /><meta name="kazari-resolvers" content="" /><link rel="icon" type="image/png" href="/llsm/img/favicon.png" /><link rel="icon" type="image/png" sizes="16x16" href="/llsm/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/llsm/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/llsm/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/llsm/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/llsm/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/llsm/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/llsm/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/llsm/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/llsm/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/llsm/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/llsm/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/llsm/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/llsm/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/llsm/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/llsm/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/llsm/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/llsm/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/llsm/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/llsm/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/llsm/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/llsm/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/llsm/css/style.css" /><link rel="stylesheet" href="/llsm/css/palette.css" /><link rel="stylesheet" href="/llsm/css/codemirror.css" /><link rel="stylesheet" href="/llsm/css/kazari-style.css" /><link rel="stylesheet" href="/llsm/css/solarized-dark.css" /><link rel="stylesheet" href="/llsm/css/llsm.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-6"><a href="/llsm/" class="brand"><div class="icon-wrapper"><span>LLSM</span></div></a></div><div class="col-xs-6"><nav class="text-right"><ul class=""><li><a href="https://github.com/keithschulze/llsm"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="/llsm/docs/"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Lattice Light-Sheet Microscopy</h1><h2></h2><p class="text-center"><a href="https://github.com/keithschulze/llsm" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div><ul class="horizontalNav">                    </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><p><code class="highlighter-rouge">llsm</code> is a set of Scala libraries for working with Lattice Light-Sheet Microscopy (LLSM) data. Features include:</p>
+
+<ul>
+  <li>Read and parse LLSM metadata from raw LLSM data.</li>
+  <li>Read LLSM data.</li>
+  <li>Deskew LLSM volumes.</li>
+  <li>Output LLSM volumes as OME-TIFF or HDF5.</li>
+</ul>
+
+<p><code class="highlighter-rouge">llsm</code> is underpinned by Typelevel and ImageJ/Fiji community libraries including <code class="highlighter-rouge">cats</code>, <code class="highlighter-rouge">imglib2</code> and <code class="highlighter-rouge">scifio</code>.</p>
+
+<h1 id="getting-started">Getting Started</h1>
+<p><code class="highlighter-rouge">llsm</code> is divided into several sub-projects:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">core</code> processing libraries with limited dependencies (<code class="highlighter-rouge">imglib2</code>, <code class="highlighter-rouge">scifio</code>, <code class="highlighter-rouge">cats-core</code>).</li>
+  <li><code class="highlighter-rouge">api</code> a Free monad based API/DSL</li>
+  <li><code class="highlighter-rouge">ij</code> a set of plugins for ImageJ to accomplish some basic tasks.</li>
+</ul>
+
+<h1 id="note">Note</h1>
+<p><code class="highlighter-rouge">llsm</code> is currently in pre-release. You should expect some bugs.</p>
+
+<h1 id="license">License</h1>
+<p>MIT</p>
+
+<h1 id="acknowledgements">Acknowledgements</h1>
+<p>Development of <code class="highlighter-rouge">llsm</code> is supported by:</p>
+
+<ul>
+  <li><a href="http://www.ands.org.au/">Australian National Data Service (ANDS)</a></li>
+  <li><a href="https://nectar.org.au/">Nectar</a></li>
+</ul>
+
+<p>It forms part of the ANDS Trusted Lattice Light-Sheet Microscopy data project.</p>
+
+<div class="row">
+	<div class="col-xs-6 col-md-3">
+		<div class="logo_container">
+			<div class="logo">
+				<img src="https://www.monash.edu/__data/assets/git_bridge/0006/509343/deploy/mysource_files/monash-logo-mono.svg" />
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-md-3">
+		<div class="logo_container">
+			<div class="logo">
+			<img src="img/cvl.jpg" />
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-md-3">
+		<div class="logo_container">
+			<div class="logo">
+			<img src="http://www.ands.org.au/__data/assets/image/0013/602311/ands-logo-transparent-background.png" />
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-md-3">
+		<div class="logo_container">
+			<div class="logo">
+			<img src="https://nectar.org.au/wp-content/uploads/2015/10/nectardirectorate-logo.png" />
+			</div>
+		</div>
+	</div>
+</div>
+</div></div></section><section class="technologies"><div class="container"><div class="row"></div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>LLSM is designed and developed by <a href="" target="_blank">Keith Schulze</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/keithschulze/llsm"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6"><p>Website built with <a href="https://47deg.github.io/sbt-microsites/" target="_blank">Sbt-microsites</a> - © 2016 <a href="https://www.47deg.com/" target="_blank">47 Degrees</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/llsm/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script src="/llsm/js/kazari.js"></script><script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'solarized-dark')
+})
+    </script></script></body></html>
