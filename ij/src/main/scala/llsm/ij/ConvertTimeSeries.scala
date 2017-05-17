@@ -12,12 +12,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import cats.MonadError
 import cats.data.Coproduct
 import cats.implicits._
+import io.scif.img.cell.SCIFIOCellImgFactory
 import llsm.{NoInterpolation, NNInterpolation, LinearInterpolation, LanczosInterpolation, Programs}
 import llsm.algebras.{MetadataF, ImgReaderF, ImgWriterF, ProcessF, ProgressF}
 import llsm.fp.ParSeq.ops._
 import llsm.interpreters._
 import llsm.io.metadata.ConfigurableMetadata
 import llsm.ij.interpreters._
+import net.imglib2.img.ImgFactory
+import net.imglib2.img.array.ArrayImgFactory
+import net.imglib2.img.planar.PlanarImgFactory
+import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import org.scijava.{Context, ItemIO}
 import org.scijava.app.StatusService
 import org.scijava.command.Command
@@ -47,6 +52,11 @@ class LLSMConvertPlugin extends Command {
 
   @Parameter(label = "Incident objective angle")
   var objectiveAngle: Double = 31.8
+
+  @Parameter(label = "Img Container Type",
+    choices = Array("Array", "Planar", "Cell"),
+    required = false)
+  var container: String = "Cell"
 
   @Parameter(label = "Interpolation scheme",
              choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
@@ -91,10 +101,17 @@ class LLSMConvertPlugin extends Command {
         case _ => NoInterpolation
       })
 
+    val imgFactory: ImgFactory[UnsignedShortType] = container match {
+      case "Array"  => new ArrayImgFactory[UnsignedShortType]
+      case "Planar" => new PlanarImgFactory[UnsignedShortType]
+      case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType]
+      case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
+    }
+
     def compiler[M[_]: MonadError[?[_], Throwable]] =
                 llsmWriter[M](context) or
                     (processCompiler[M] or
-                      (ijImgReader[M](context, log) or
+                      (ijImgReader[M](context, imgFactory, log) or
                         (ijMetadataReader[M](config, log) or
                           ijProgress[M](status))))
 

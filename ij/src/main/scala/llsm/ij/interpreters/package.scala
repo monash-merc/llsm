@@ -6,6 +6,8 @@ import llsm.algebras.{ImgReaderF, LoggingAPI, LoggingF, MetadataF, ProgressAPI, 
 import llsm.fp._
 import llsm.interpreters._
 import llsm.io.metadata.ConfigurableMetadata
+import net.imglib2.img.ImgFactory
+import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import org.scijava.Context
 import org.scijava.app.StatusService
 import org.scijava.log.LogService
@@ -57,12 +59,18 @@ package object interpreters {
     }
 
 
-  def ijImgReader[M[_]](context: Context, log: LogService)(implicit M: MonadError[M, Throwable]): ImgReaderF ~> M =
+  def ijImgReader[M[_]](
+    context: Context,
+    factory: ImgFactory[UnsignedShortType],
+    log: LogService
+  )(implicit
+    M: MonadError[M, Throwable]
+  ): ImgReaderF ~> M =
     new (ImgReaderF ~> M) {
       def apply[A](fa: ImgReaderF[A]): M[A] =
         for {
           _ <- readerLogging(fa).unhalt.foldMap(ijLogging[M](log))
-          m <- scifioReader[M](context)(M)(fa)
+          m <- scifioReader[M](context, factory)(M)(fa)
         } yield m
     }
 }

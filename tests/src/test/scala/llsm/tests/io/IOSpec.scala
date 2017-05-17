@@ -10,6 +10,8 @@ import llsm.algebras.{Metadata, MetadataF, ImgReader, ImgReaderF, Process, Proce
 import llsm.interpreters._
 import llsm.io.metadata.MetadataSuite
 import net.imglib2.img.Img
+import net.imglib2.img.array.ArrayImgFactory
+import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import _root_.io.scif.SCIFIO
 
 import org.scalacheck.Gen
@@ -51,7 +53,7 @@ class IOSpec extends IOSuite {
       type MetaImg[A] = Coproduct[MetadataF, ImgReaderF, A]
       type App[A] = Coproduct[ProcessF, MetaImg, A]
 
-      val interpreter = processCompiler[Try] or (new MetadataSuite().metaMockCompiler[Try](channel*time, channel, time) or scifioReader[Try](new SCIFIO().getContext))
+      val interpreter = processCompiler[Try] or (new MetadataSuite().metaMockCompiler[Try](channel*time, channel, time) or scifioReader[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
 
       program[App](Paths.get(imgPath)).foldMap(interpreter) match {
         case Success(LLSMStack(img, meta)) => {

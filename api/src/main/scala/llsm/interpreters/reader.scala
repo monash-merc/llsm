@@ -7,6 +7,7 @@ import io.scif.img.ImgOpener
 import llsm.algebras.{ImgReaderAPI, ImgReaderF, LoggingAPI, LoggingF}
 import llsm.fp._
 import llsm.io.LLSMStack
+import net.imglib2.img.ImgFactory
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import org.scijava.Context
 
@@ -22,7 +23,8 @@ trait ImgReaderInterpreters {
    *  @tparam M return type that needs an instance of cats.MonadError
    */
   def scifioReader[M[_]](
-    context: Context
+    context: Context,
+    factory: ImgFactory[UnsignedShortType]
   )(implicit
     M: ApplicativeError[M, Throwable]
   ): ImgReaderF ~> M =
@@ -32,14 +34,13 @@ trait ImgReaderInterpreters {
           case ImgReaderAPI.ReadImg(path, meta, next) => {
             M.pure {
               val imgOpener = new ImgOpener(context)
-              val scifioConfig = new SCIFIOConfig().imgOpenerSetImgModes(SCIFIOConfig.ImgMode.CELL)
 
               next(
                 LLSMStack(
                   imgOpener.openImgs(
                     path.toString,
-                    new UnsignedShortType,
-                    scifioConfig).get(0),
+                    factory,
+                    new UnsignedShortType).get(0),
                   meta)
               )
             }

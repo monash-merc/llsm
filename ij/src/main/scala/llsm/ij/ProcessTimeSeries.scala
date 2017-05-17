@@ -14,6 +14,7 @@ import cats.data.Coproduct
 import cats.implicits._
 import ij.ImagePlus
 import ij.measure.Calibration
+import io.scif.img.cell.SCIFIOCellImgFactory
 import llsm.{Programs, NoInterpolation, NNInterpolation, LinearInterpolation, LanczosInterpolation}
 import llsm.fp.ParSeq.ops._
 import llsm.algebras.{MetadataF, ImgReaderF, ProcessF, ProgressF}
@@ -21,8 +22,13 @@ import llsm.interpreters._
 import llsm.io.LLSMImg
 import llsm.io.metadata.{AggregatedMeta, ConfigurableMetadata}
 import llsm.ij.interpreters._
-import net.imagej.axis.Axes
+import net.imagej.{Dataset, DatasetService}
+import net.imagej.axis.{Axes, CalibratedAxis}
+import net.imglib2.img.ImgFactory
+import net.imglib2.img.array.ArrayImgFactory
+import net.imglib2.img.planar.PlanarImgFactory
 import net.imglib2.img.display.imagej.ImageJFunctions
+import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import net.imglib2.view.Views
 import org.scijava.{Context, ItemIO}
 import org.scijava.app.StatusService
@@ -46,10 +52,18 @@ class DeskewTimeSeriesPlugin extends Command {
   @Parameter(label = "Incident objective angle")
   var objectiveAngle: Double = 31.8
 
+  @Parameter(label = "Img Container Type",
+    choices = Array("Array", "Planar", "Cell"),
+    required = false)
+  var container: String = "Cell"
+
   @Parameter(label = "Interpolation scheme",
     choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
     required = false)
   var interpolation: String = "None"
+
+  @Parameter
+  var ds: DatasetService = _
 
   @Parameter
   var ui: UIService = _
@@ -82,9 +96,16 @@ class DeskewTimeSeriesPlugin extends Command {
         case _ => NoInterpolation
       })
 
+    val imgFactory: ImgFactory[UnsignedShortType] = container match {
+      case "Array"  => new ArrayImgFactory[UnsignedShortType]
+      case "Planar" => new PlanarImgFactory[UnsignedShortType]
+      case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType]
+      case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
+    }
+
     def compiler[M[_]: MonadError[?[_], Throwable]] =
       processCompiler[M] or
-    (ijImgReader[M](context, log) or
+    (ijImgReader[M](context, imgFactory, log) or
       (ijMetadataReader[M](config, log) or
         ijProgress[M](status)))
 
@@ -104,32 +125,44 @@ class DeskewTimeSeriesPlugin extends Command {
 
           val imgDims = Array.ofDim[Long](img.numDimensions)
           img.dimensions(imgDims)
+          container match {
+            case "Cell" => {
+              val out: ImagePlus = cIndex match {
+                case Some(i) =>
+                  ImageJFunctions.wrap(Views.permute(img, i, 2),
+                    s"${imeta.getName}_deskewed")
+                  case None =>
+                    ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
+              }
+              val cal = new Calibration(out)
+              cal.setUnit("um")
+              cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
+              cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
+              cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
 
-          val out: ImagePlus = cIndex match {
-            case Some(i) =>
-              ImageJFunctions.wrap(Views.permute(img, i, 2),
-                s"${imeta.getName}_deskewed")
-              case None =>
-                ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
+              if (imeta.getAxisLength(Axes.TIME) > 1) {
+                cal.setTimeUnit("ms")
+                cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
+              }
+
+              out.setCalibration(cal)
+              out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
+                imeta.getAxisLength(Axes.Z).toInt,
+                imeta.getAxisLength(Axes.TIME).toInt)
+              ui.show(out)
+            }
+            case _ => {
+              val out: Dataset = ds.create(img)
+              val axes = imeta.getAxes
+              val ax = Array.ofDim[CalibratedAxis](axes.size)
+              axes.toArray(ax)
+              out.setAxes(ax)
+              out.getImgPlus().setName(s"${imeta.getName}_deskewed")
+              ui.show(out)
+            }
           }
-          val cal = new Calibration(out)
-          cal.setUnit("um")
-          cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
-          cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
-          cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
-
-          if (imeta.getAxisLength(Axes.TIME) > 1) {
-            cal.setTimeUnit("ms")
-            cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
-          }
-
-          out.setCalibration(cal)
-          out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
-            imeta.getAxisLength(Axes.Z).toInt,
-            imeta.getAxisLength(Axes.TIME).toInt)
-          ui.show(out)
         }
-              case Failure(e) => log.error(e)
+        case Failure(e) => log.error(e)
       }
     }
   }
