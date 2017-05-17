@@ -34,6 +34,10 @@ dataset.</p>
       <td style="text-align: left">Interval of the sample piezo stage for each Z slice</td>
     </tr>
     <tr>
+      <td>Img Container Type</td>
+      <td style="text-align: left"><code class="highlighter-rouge">imglib2</code> offers several Img container types. Each have different performance characteristics in terms of access rates and memory usage. By default the CellImg is used, which is conservative with memory usage but has some cost in performance. ArrayImg offer best access performance, but all image data is stored in memory</td>
+    </tr>
+    <tr>
       <td>Interpolation Scheme<sup>1</sup></td>
       <td style="text-align: left">Type of interpolation used for when shearing factor is not equivalent to the pixel size</td>
     </tr>
@@ -57,13 +61,14 @@ dataset.</p>
 
 <ol>
   <li>Run <code class="highlighter-rouge">Plugins → LLSM → Deskew Time Series</code></li>
-  <li>Enter input directory and deskewing parameters (Fig 2. and Table 2).</li>
+  <li>Select an input directory</li>
+  <li>Input deskewing parameters (Fig 2. and Table 2).</li>
   <li>Click OK.</li>
 </ol>
 
 <p><br /></p>
 
-<p><em>Table 2: Deskew Time Series Parameters</em></p>
+<p><em>Table 2: Deskew Parameters</em></p>
 
 <table>
   <thead>
@@ -82,11 +87,18 @@ dataset.</p>
       <td style="text-align: left">Angle between the stage and the illumination objective.</td>
     </tr>
     <tr>
+      <td>Img Container Type</td>
+      <td style="text-align: left"><code class="highlighter-rouge">imglib2</code> offers several Img container types. Each have different performance characteristics in terms of access rates and memory usage. By default the CellImg is used, which is conservative with memory usage but has some cost in performance. ArrayImg offer best access performance, but all image data is stored in memory</td>
+    </tr>
+    <tr>
       <td>Interpolation Scheme<sup>1</sup></td>
       <td style="text-align: left">Type of interpolation used for when shearing factor is not equivalent to the pixel size</td>
     </tr>
   </tbody>
 </table>
+
+<p><sup>1</sup>Further information about interpolation schemes can be found in
+<a href="deskew.html">Deskew Information</a></p>
 
 <p><br /></p>
 
@@ -101,8 +113,21 @@ dataset.</p>
 <p>Allows one to load, deskew and output an LLSM dataset as either an HDF5 or
 OME-TIFF.</p>
 
-<p><em>Documentation to follow…</em></p>
+<ol>
+  <li>Run <code class="highlighter-rouge">Plugings → LLSM → Convert Time Series</code></li>
+  <li>Select an input directory contain raw LLSM data (i.e., TIFF series +
+metadata file).</li>
+  <li>Select an output directory.</li>
+  <li>Input an output file name with either a <code class="highlighter-rouge">.h5</code> or <code class="highlighter-rouge">.ome.tif</code> extension.</li>
+  <li>Input deskewing parameters (Fig. 3 and Table 2).</li>
+  <li>Click OK.</li>
+</ol>
 
+<p><br /></p>
+
+<p><img src="../../img/convert.jpg" alt="Convert Time Series" class="img-responsive center-block" /></p>
+
+<p class="text-center">Figure 3: Convert Time Series Parameters GUI</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/llsm/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });
