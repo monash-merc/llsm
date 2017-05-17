@@ -2,7 +2,6 @@ package llsm.interpreters
 
 import cats.{ApplicativeError, ~>}
 import cats.free.Free
-import io.scif.config.SCIFIOConfig
 import io.scif.img.ImgOpener
 import llsm.algebras.{ImgReaderAPI, ImgReaderF, LoggingAPI, LoggingF}
 import llsm.fp._

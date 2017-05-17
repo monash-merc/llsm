@@ -79,7 +79,7 @@ class IOBenchmark extends IOContext {
     paths.traverse(p => ParSeq.liftSeq(processImg[F](p))).map(ImgUtils.aggregateImgs)
 
   def compiler[M[_]: MonadError[?[_], Throwable]] =
-    processCompiler[M] or (scifioReader[M](context) or basicMetadataReader[M](config(NNInterpolation)))
+    processCompiler[M] or (scifioReader[M](context, cf) or basicMetadataReader[M](config(NNInterpolation)))
 
   @Benchmark def ioTry: Try[LLSMImg] = processImgs[App](imgPaths).run(compiler[Try])
 
