@@ -49,8 +49,12 @@ lazy val commonSettings = List(
   },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   libraryDependencies ++= Seq(
-    "com.lihaoyi" % "ammonite" % "0.8.1" % "test" cross CrossVersion.full),
-  initialCommands in (Test, console) := """ammonite.Main().run()""",
+    "com.lihaoyi" % "ammonite" % "0.9.1" % "test" cross CrossVersion.full),
+  sourceGenerators in Test += Def.task {
+      val file = (sourceManaged in Test).value / "amm.scala"
+        IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
+          Seq(file)
+  }.taskValue,
   addCompilerPlugin(
     "org.spire-math" % "kind-projector" % "0.9.3" cross CrossVersion.binary)
 )
@@ -287,8 +291,8 @@ lazy val benchmark = project
       "io.scif"       %   "scifio"                  % "0.31.1",
       "io.scif"       %   "scifio-ome-xml"          % "0.14.2",
       "sc.fiji"       %   "bigdataviewer-core"      % "3.0.3",
-      "io.monix"      %%  "monix-eval"              % "2.2.2",
-      "io.monix"      %%  "monix-cats"              % "2.2.2"
+      "io.monix"      %%  "monix-eval"              % "2.3.0",
+      "io.monix"      %%  "monix-cats"              % "2.3.0"
     )
   )
 
