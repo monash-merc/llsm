@@ -27,36 +27,36 @@ section: "home"
 MIT
 
 # Acknowledgements
+
+`llsm` forms part of the [Australian National Data Service (ANDS)](http://www.ands.org.au/) Trusted Lattice Light-Sheet Microscopy data project. This project is a collaboration between:
+
+- [Monash University](https://www.monash.edu)
+- [University of New South Wales](https://www.unsw.edu.au)
+- [University of Queensland](https://www.uq.edu.au)
+
+
 Development of `llsm` is supported by:
 
-* [Australian National Data Service (ANDS)](http://www.ands.org.au/)
-* [Nectar](https://nectar.org.au/)
+- [Australian National Data Service (ANDS)](http://www.ands.org.au/)
+- [Nectar](https://nectar.org.au/)
 
-It forms part of the ANDS Trusted Lattice Light-Sheet Microscopy data project.
 
 <div class="row">
-	<div class="col-xs-6 col-md-3">
-		<div class="logo_container">
-			<div class="logo">
-				<img src="https://www.monash.edu/__data/assets/git_bridge/0006/509343/deploy/mysource_files/monash-logo-mono.svg" />
-			</div>
-		</div>
-	</div>
-	<div class="col-xs-6 col-md-3">
+	<div class="col-xs-6 col-md-4">
 		<div class="logo_container">
 			<div class="logo">
 			<img src="img/cvl.jpg" />
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-6 col-md-3">
+	<div class="col-xs-6 col-md-4">
 		<div class="logo_container">
 			<div class="logo">
 			<img src="http://www.ands.org.au/__data/assets/image/0013/602311/ands-logo-transparent-background.png" />
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-6 col-md-3">
+	<div class="col-xs-6 col-md-4">
 		<div class="logo_container">
 			<div class="logo">
 			<img src="https://nectar.org.au/wp-content/uploads/2015/10/nectardirectorate-logo.png" />
