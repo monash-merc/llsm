@@ -49,12 +49,21 @@ lazy val commonSettings = List(
   },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   libraryDependencies ++= Seq(
-    "com.lihaoyi" % "ammonite" % "0.9.1" % "test" cross CrossVersion.full),
+    "com.lihaoyi" % "ammonite" % "0.9.9" % "test" cross CrossVersion.full),
   sourceGenerators in Test += Def.task {
       val file = (sourceManaged in Test).value / "amm.scala"
         IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
-          Seq(file)
+        Seq(file)
   }.taskValue,
+  (fullClasspath in Test) ++= {
+    (updateClassifiers in Test).value
+      .configurations
+      .find(_.configuration == Test.name)
+      .get
+      .modules
+      .flatMap(_.artifacts)
+      .collect{case (a, f) if a.classifier == Some("sources") => f}
+  },
   addCompilerPlugin(
     "org.spire-math" % "kind-projector" % "0.9.3" cross CrossVersion.binary)
 )
@@ -252,9 +261,9 @@ lazy val ij = project
     assemblyJarName in assembly := s"llsm-ij_${scalaVersion.value}.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value
       .copy(includeScala = false),
-    run in Compile <<= Defaults.runTask(fullClasspath in Compile,
-                                        mainClass in (Compile, run),
-                                        runner in (Compile, run))
+    run in Compile := Defaults.runTask(fullClasspath in Compile,
+                                       mainClass in (Compile, run),
+                                       runner in (Compile, run)).evaluated
   )
 
 lazy val tests = project
