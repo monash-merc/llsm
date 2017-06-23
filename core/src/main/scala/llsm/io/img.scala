@@ -19,6 +19,11 @@ object LLSMStack {
   }
 }
 
+sealed trait ImgContainer
+case object ArrayContainer extends ImgContainer
+case object PlanarContainer extends ImgContainer
+case object CellContainer extends ImgContainer
+
 object ImgUtils {
 
   /** Generate a 5D image from a list of Imgs

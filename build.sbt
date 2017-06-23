@@ -202,10 +202,11 @@ lazy val llsm = project
   .disablePlugins(AssemblyPlugin)
   .settings(llsmSettings)
   .settings(noPublishSettings)
-  .aggregate(core, api, ij, tests, docs)
+  .aggregate(core, api, ij, cli, tests, docs)
   .dependsOn(core,
              api,
              ij,
+             cli,
              tests     % "compile;test-internal -> test",
              benchmark % "compile-internal;test-internal -> test")
 
@@ -215,6 +216,7 @@ lazy val core = project
   .settings(moduleName := "llsm-core")
   .settings(llsmSettings)
   .settings(
+    exportJars := true,
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % "3.2.1"         % "provided",
       "net.imglib2" % "imglib2-algorithm"     % "0.6.2"         % "provided",
@@ -230,6 +232,7 @@ lazy val api = project
   .settings(moduleName := "llsm-api")
   .settings(llsmSettings)
   .settings(
+    exportJars := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-free"            % "0.9.0",
       "net.imglib2"   % "imglib2"               % "3.2.1"         % "provided",
@@ -239,6 +242,32 @@ lazy val api = project
       "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
     )
   )
+
+lazy val cli = project
+  .in(file("cli"))
+  .disablePlugins(AssemblyPlugin)
+  .enablePlugins(JavaAppPackaging)
+  .dependsOn(core, api)
+  .settings(moduleName := "llsm-cli")
+  .settings(llsmSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.github.scopt"  %% "scopt"                % "3.6.0",
+      "net.imglib2"       % "imglib2"               % "3.2.1",
+      "net.imglib2"       % "imglib2-realtransform" % "2.0.0-beta-34",
+      "io.scif"           % "scifio"                % "0.31.1",
+      "io.scif"           % "scifio-ome-xml"        % "0.14.2",
+      "sc.fiji"           % "bigdataviewer-core"    % "3.0.3"
+      ),
+    mainClass in Compile := Some("llsm.cli.LLSMC")
+    // assemblyMergeStrategy in assembly := {
+    //   case PathList("META-INF", "json", xs @ _*) => MergeStrategy.filterDistinctLines
+    //   case x =>
+    //     val oldStrategy = (assemblyMergeStrategy in assembly).value
+    //     oldStrategy(x)
+    // }
+    )
+
 
 lazy val ij = project
   .in(file("ij"))
