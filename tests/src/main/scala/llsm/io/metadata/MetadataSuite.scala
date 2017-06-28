@@ -1,6 +1,7 @@
 package llsm.io.metadata
 
 import java.nio.file.{Path, Paths}
+import java.util.UUID
 
 import cats._
 import cats.implicits._
@@ -21,7 +22,7 @@ class MetadataSuite extends BaseSuite with MetadataImplicits {
     fa => Kleisli { _ =>
       fa match {
         case MetadataLow.ConfigurableMeta => M.pure(ConfigurableMetadata(0.1018, 0.1018, NoInterpolation))
-        case MetadataLow.ExtractFilenameMeta(path) => M.pure(FilenameMetadata("Test", s, c, 488, t.toLong * 200L, 0L))
+        case MetadataLow.ExtractFilenameMeta(path) => M.pure(FilenameMetadata(UUID.randomUUID, "Test", s, c, 488, t.toLong * 200L, 0L))
         case MetadataLow.ExtractTextMeta(path) => {
           val f: Path = Paths.get(
             getClass

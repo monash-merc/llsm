@@ -37,7 +37,7 @@ class MetadataAPISpec extends MetadataSuite {
         Metadata[M].readMetadata(path)
 
       program[MetadataF](Paths.get(imgPath)).foldMap(metaMockCompiler[Try](channel*time, channel, time)) match {
-        case Success(FileMetadata(FilenameMetadata(_, st, ch, _, _, _), wave, cam, _, _, img)) => {
+        case Success(FileMetadata(FilenameMetadata(_, _, st, ch, _, _, _), wave, cam, _, _, img)) => {
           img match {
             case Some(ImgMetadata(dims, _)) => {
               dims should equal (Array(w.toLong, h.toLong, z.toLong, c.toLong, t.toLong).filter(_ > 1L))

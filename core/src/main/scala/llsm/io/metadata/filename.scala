@@ -1,8 +1,13 @@
 package llsm.io.metadata
 
-case class FilenameMetadata(name: String,
-                            channel: Int,
-                            stack: Int,
-                            channelWavelength: Int,
-                            timeStamp: Long,
-                            absTimeStamp: Long)
+import java.util.UUID
+
+case class FilenameMetadata(
+    id: UUID,
+    name: String,
+    channel: Int,
+    stack: Int,
+    channelWavelength: Int,
+    timeStamp: Long,
+    absTimeStamp: Long
+)

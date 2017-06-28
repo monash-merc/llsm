@@ -20,7 +20,7 @@ import io.scif.config.SCIFIOConfig
 import io.scif.codec.CompressionType
 import io.scif.img.{ImgSaver, SCIFIOImgPlus}
 import llsm.Deskew
-import llsm.algebras.{ImgWriterAPI, ImgWriterF, LowWriterAPI, LowWriterF, WriteSCIFIO, WriteHDF5}
+import llsm.algebras.{ImgWriterAPI, ImgWriterF, LowWriterAPI, LowWriterF, WriteOMETIFF, WriteHDF5}
 import llsm.fp._
 import llsm.io.{LLSMImg, LLSMStack}
 import llsm.io.metadata.{AggregatedMeta, FileMetadata, MetadataUtils}
@@ -108,8 +108,9 @@ trait ImgWriterInterpreters {
           case ImgWriterAPI.WriteImg(path, img, next) =>
             if (path.toString.endsWith(".h5"))
               LowWriterAPI.writeHDF5(path, img).map(next)
-            else
-              LowWriterAPI.writeSCIFIO(path, img).map(next)
+            else if (path.toString.endsWith(".ome.tif"))
+              LowWriterAPI.writeOMETIFF(path, img).map(next)
+            else throw new Exception("Unsupported output format.")
         }
     }
 
@@ -118,7 +119,7 @@ trait ImgWriterInterpreters {
     new (LowWriterF ~> M) {
       def apply[B](fa: LowWriterF[B]): M[B] =
         fa match {
-          case WriteSCIFIO(path, LLSMImg(img, AggregatedMeta(meta))) => {
+          case WriteOMETIFF(path, LLSMImg(img, AggregatedMeta(meta))) => {
             M.catchNonFatal{
               val saver = new ImgSaver(context)
               val conf = new SCIFIOConfig().writerSetSequential(false)
@@ -144,9 +145,8 @@ trait ImgWriterInterpreters {
               val m = saver.saveImg(path.toString, new SCIFIOImgPlus[UnsignedShortType](imgPlus), 0, conf);
             }
           }
-          case WriteSCIFIO(path, LLSMStack(img, fm @ FileMetadata(file, wave, cam, sample, config, im))) =>
+          case WriteOMETIFF(path, LLSMStack(img, fm @ FileMetadata(file, wave, cam, sample, config, im))) =>
             M.catchNonFatal {
-
               val conf = new SCIFIOConfig()//.writerSetSequential(false)
                 .writerSetCompression(CompressionType.LZW.getCompression)
                 .imgSaverSetWriteRGB(false)
@@ -159,7 +159,7 @@ trait ImgWriterInterpreters {
               val format = scifio.format().getFormat(path.toString)
 
               val meta: Metadata = format.createMetadata
-              meta.add(MetadataUtils.populateImageMetadata(img, fm))
+              meta.add(MetadataUtils.populateImageMetadata(fm))
 
               val writer: Writer = format.createWriter()
               writer.setMetadata(meta)
@@ -183,7 +183,12 @@ trait ImgWriterInterpreters {
               val dims = Array.ofDim[Long](img.numDimensions)
               img.dimensions(dims)
               val size = new FinalDimensions(dims:_*)
-              val (units, vw, vh, vd) = ("um", config.xVoxelSize, config.yVoxelSize, Deskew.calcZInterval(wave.sPZTInterval, wave.zPZTInterval, sample.angle, config.xVoxelSize))
+              val (units, vw, vh, vd) = (
+                "um",
+                config.xVoxelSize,
+                config.yVoxelSize,
+                Deskew.calcZInterval(wave.sPZTInterval, wave.zPZTInterval, sample.angle, config.xVoxelSize)
+              )
               val voxelSize = new FinalVoxelDimensions(units, vw, vh, vd)
               val c: Int = wave.channels.size
               val t: Int = wave.nFrames

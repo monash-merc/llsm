@@ -14,7 +14,7 @@ import net.imglib2.`type`.numeric.integer.UnsignedShortType
 
 object MetadataUtils {
 
-    def populateImageMetadata(img: Img[UnsignedShortType], fm: FileMetadata): ImageMetadata = {
+  def populateImageMetadata(fm: FileMetadata): ImageMetadata = {
     val imeta: ImageMetadata = new DefaultImageMetadata
 
     val waveform: WaveformMetadata = fm.waveform
@@ -26,9 +26,9 @@ object MetadataUtils {
     val zAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Z, "um", Deskew.calcZInterval(waveform.sPZTInterval, waveform.zPZTInterval, sample.angle, fm.config.xVoxelSize))
 
     val axes: List[CalibratedAxis] = List(xAxis, yAxis, zAxis)
-
-    val dims: Array[Long] = Array.ofDim[Long](img.numDimensions)
-    img.dimensions(dims)
+    val imgWidth: Long = fm.camera.roi.right - fm.camera.roi.left + 1
+    val imgHeight: Long = fm.camera.roi.bottom - fm.camera.roi.top + 1
+    val dims: Array[Long] = Array[Long](imgWidth, imgHeight, fm.waveform.nSlices)
 
     imeta.populate(fm.filename.name,
                   axes.asJava,
@@ -62,7 +62,7 @@ object MetadataUtils {
          TreeSet.empty[Long])) {
         case ((n, c, s, w, t, ta),
               FileMetadata(
-                FilenameMetadata(_, channel, stack, wavelength, time, timeAbs),
+                FilenameMetadata(_, _, channel, stack, wavelength, time, timeAbs),
                 _,
                 _,
                 _,

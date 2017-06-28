@@ -29,8 +29,8 @@ object LLSMMeta extends MetadataImplicits with Ordering[LLSMMeta] {
   case class MetadataIOError(msg: String) extends MetadataError
 
   def compare(a: LLSMMeta, b: LLSMMeta): Int = (a, b) match {
-    case (FileMetadata(FilenameMetadata(_, ac, _, _, at, _), _, _, _, _, _),
-          FileMetadata(FilenameMetadata(_, bc, _, _, bt, _), _, _, _, _, _)) =>
+    case (FileMetadata(FilenameMetadata(_, _, ac, _, _, at, _), _, _, _, _, _),
+          FileMetadata(FilenameMetadata(_, _, bc, _, _, bt, _), _, _, _, _, _)) =>
       if (at == bt) ac.compare(bc)
       else at.compare(bt)
     case (am: AggregatedMeta, bm: AggregatedMeta) => 0

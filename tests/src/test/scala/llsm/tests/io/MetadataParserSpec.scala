@@ -1,5 +1,7 @@
 package llsm.io.metadata
 
+import java.util.UUID
+
 import org.scalatest.Matchers._
 import org.scalacheck.Gen
 import cats.syntax.either._
@@ -137,7 +139,8 @@ subROIs :	Unknown type
       "Resolution test 4_ch1_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
 
     Parser[FilenameMetadata](file) match {
-      case Right(FilenameMetadata(n, c, tidx, wl, ts, ats)) => {
+      case Right(FilenameMetadata(id, n, c, tidx, wl, ts, ats)) => {
+        assertResult(UUID.nameUUIDFromBytes(file.getBytes))(id)
         assertResult("Resolution test 4")(n)
         assertResult(1)(c)
         assertResult(1)(tidx)
@@ -160,7 +163,7 @@ subROIs :	Unknown type
       pfn should be('right)
       pfn should be(
         Either.right(
-          FilenameMetadata("Resolution test 4", c, s, 488, 7480L, 8884606L)))
+          FilenameMetadata(UUID.nameUUIDFromBytes(fn.getBytes), "Resolution test 4", c, s, 488, 7480L, 8884606L)))
     }
   }
   it should "parse any wavelength 0 <= wl <= 9999" in forAll(
@@ -174,7 +177,7 @@ subROIs :	Unknown type
       pfn should be('right)
       pfn should be(
         Either.right(
-          FilenameMetadata("Resolution test 4", 1, 1, w, 7480L, 8884606L)))
+          FilenameMetadata(UUID.nameUUIDFromBytes(fn.getBytes), "Resolution test 4", 1, 1, w, 7480L, 8884606L)))
     }
   }
   it should "fail when passed a malformed file name" in {

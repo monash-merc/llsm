@@ -1,5 +1,6 @@
 package llsm.io.metadata
 
+import java.util.UUID
 import scala.util.{Left, Failure, Right, Success, Try}
 
 import llsm.either._
@@ -31,7 +32,7 @@ trait ImplicitParsers {
                     s"Unable to parse channel number from file name: $s",
                     e))
             }
-            s <- Try(stack.substring(5).toInt) match {
+            st <- Try(stack.substring(5).toInt) match {
               case Success(st) => Right(st)
               case Failure(e) =>
                   Left(ParsingFailure(
@@ -58,7 +59,7 @@ trait ImplicitParsers {
                     s"Unable to parse absolute timestamp from file name: $s",
                     e))
             }
-          } yield FilenameMetadata(name, ch, s, w, t, tAbs)
+          } yield FilenameMetadata(UUID.nameUUIDFromBytes(s.getBytes), name, ch, st, w, t, tAbs)
         case _ =>
           Left(
             ParsingFailure(

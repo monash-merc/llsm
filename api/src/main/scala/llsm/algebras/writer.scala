@@ -5,10 +5,6 @@ import cats.free.{Free, Inject}
 
 import llsm.io.LLSMImgs
 
-/**
- * API we want to expose
- * writeImg[TIFF, ShortType](pth, img, meta)
- */
 trait ImgWriterAPI[F[_]] {
   def writeImg(path: Path, img: LLSMImgs): F[Unit]
 }
@@ -32,12 +28,12 @@ object ImgWriterAPI {
 }
 
 sealed trait LowWriterF[A]
-case class WriteSCIFIO(path: Path, img: LLSMImgs) extends LowWriterF[Unit]
+case class WriteOMETIFF(path: Path, img: LLSMImgs) extends LowWriterF[Unit]
 case class WriteHDF5(path: Path, img: LLSMImgs) extends LowWriterF[Unit]
 
 object LowWriterAPI {
-  def writeSCIFIO(path: Path, img: LLSMImgs): Free[LowWriterF, Unit] =
-    Free.liftF[LowWriterF, Unit](WriteSCIFIO(path, img))
+  def writeOMETIFF(path: Path, img: LLSMImgs): Free[LowWriterF, Unit] =
+    Free.liftF[LowWriterF, Unit](WriteOMETIFF(path, img))
   def writeHDF5(path: Path, img: LLSMImgs): Free[LowWriterF, Unit] =
     Free.liftF[LowWriterF, Unit](WriteHDF5(path, img))
 }
