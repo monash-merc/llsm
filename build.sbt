@@ -259,6 +259,7 @@ lazy val cli = project
       "io.scif"           % "scifio-ome-xml"        % "0.14.2",
       "sc.fiji"           % "bigdataviewer-core"    % "3.0.3"
       ),
+    name := "llsmc",
     mainClass in Compile := Some("llsm.cli.LLSMC")
     // assemblyMergeStrategy in assembly := {
     //   case PathList("META-INF", "json", xs @ _*) => MergeStrategy.filterDistinctLines
