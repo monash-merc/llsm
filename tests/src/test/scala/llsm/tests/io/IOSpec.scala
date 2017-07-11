@@ -43,7 +43,7 @@ class IOSpec extends IOSuite {
       val channel = r.nextInt(c)
       val time = r.nextInt(t)
 
-      def program[M[_]: Metadata: ImgReader: Process](path: Path): Free[M, LLSMStack] =
+      def program[M[_]: Metadata: ImgReader: Process](path: Path): Free[M, LLSMImg] =
           for {
             m <- Metadata[M].readMetadata(path)
             i <- ImgReader[M].readImg(path, m)
@@ -56,7 +56,7 @@ class IOSpec extends IOSuite {
       val interpreter = processCompiler[Try] or (new MetadataSuite().metaMockCompiler[Try](channel*time, channel, time) or scifioReader[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
 
       program[App](Paths.get(imgPath)).foldMap(interpreter) match {
-        case Success(LLSMStack(img, meta)) => {
+        case Success(LLSMImg(img, meta)) => {
           img shouldBe a [Img[_]]
           img.numDimensions should equal (5)
           val dims = Array.ofDim[Long](img.numDimensions)

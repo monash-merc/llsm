@@ -14,13 +14,29 @@ import cats.data.Coproduct
 import cats.implicits._
 import ij.ImagePlus
 import ij.measure.Calibration
+import io.scif.img.SCIFIOImgPlus
 import io.scif.img.cell.SCIFIOCellImgFactory
-import llsm.{Programs, NoInterpolation, NNInterpolation, LinearInterpolation, LanczosInterpolation}
+import llsm.{
+  Programs, 
+  NoInterpolation, 
+  NNInterpolation, 
+  LinearInterpolation, 
+  LanczosInterpolation
+}
 import llsm.fp.ParSeq.ops._
-import llsm.algebras.{MetadataF, ImgReaderF, ProcessF, ProgressF}
+import llsm.algebras.{
+  Metadata,
+  MetadataF,
+  ImgReader,
+  ImgReaderF,
+  Process,
+  ProcessF,
+  Progress,
+  ProgressF
+}
 import llsm.interpreters._
-import llsm.io.LLSMImg
-import llsm.io.metadata.{AggregatedMeta, ConfigurableMetadata}
+import llsm.fp._
+import llsm.io.metadata.ConfigurableMetadata
 import llsm.ij.interpreters._
 import net.imagej.{Dataset, DatasetService}
 import net.imagej.axis.{Axes, CalibratedAxis}
@@ -38,6 +54,9 @@ import org.scijava.ui.UIService
 import org.scijava.plugin.{Plugin, Parameter}
 
 
+/** ImageJ plugin for reading, processing and previewing raw LLSM
+  * datasets in ImageJ/Fiji.
+  */
 @Plugin(`type` = classOf[Command],
   headless = true,
   menuPath = "Plugins>LLSM>Deskew Time Series")
@@ -77,14 +96,23 @@ class DeskewTimeSeriesPlugin extends Command {
   @Parameter
   var context: Context = _
 
+  def processImgs[F[_]: Metadata: ImgReader: Process: Progress](
+      paths: List[Path]
+  ): ParSeq[F, SCIFIOImgPlus[UnsignedShortType]] =
+    paths.traverse(p => ParSeq.liftSeq(Programs.processImg[F](p)))
+      .map(lImgs => ImgUtils.aggregateImgs(lImgs))
+
   /**
    * Entry point to running a plugin.
    */
   override def run(): Unit = {
 
-    type App[A] = Coproduct[ProcessF,
-    Coproduct[ImgReaderF,
-    Coproduct[MetadataF, ProgressF, ?], ?], A]
+    type App[A] = 
+      Coproduct[ProcessF,
+        Coproduct[ImgReaderF,
+          Coproduct[MetadataF, ProgressF, ?],
+        ?],
+      A]
 
     val config = ConfigurableMetadata(
       pixelSize,
@@ -105,17 +133,18 @@ class DeskewTimeSeriesPlugin extends Command {
 
     def compiler[M[_]: MonadError[?[_], Throwable]] =
       processCompiler[M] or
-    (ijImgReader[M](context, imgFactory, log) or
-      (ijMetadataReader[M](config, log) or
-        ijProgress[M](status)))
+      (ijImgReader[M](context, imgFactory, log) or
+      (ijMetadataReader[M](config, context, log) or
+      ijProgress[M](status)))
 
     val imgPaths = Files.list(Paths.get(input.getPath))
       .collect(Collectors.toList[Path])
       .asScala.filter(_.toString.endsWith(".tif"))
 
-    Programs.processImgs[App](imgPaths.toList).run(compiler[Future]) onComplete {
+    processImgs[App](imgPaths.toList).run(compiler[Future]) onComplete {
       r => r match {
-        case Success(LLSMImg(img, AggregatedMeta(imeta))) => {
+        case Success(img) => {
+          val imeta = img.getImageMetadata
           val xIndex = imeta.getAxisIndex(Axes.X)
           val zIndex = imeta.getAxisIndex(Axes.Z)
           val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {

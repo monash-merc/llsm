@@ -2,8 +2,18 @@ package llsm.algebras
 
 import java.nio.file.Path
 
-import cats.free.{Free, FreeApplicative, Inject}
-import llsm.io.metadata.{ConfigurableMetadata, FilenameMetadata, ImgMetadata, FileMetadata, TextMetadata}
+import cats.free.{
+  Free,
+  FreeApplicative,
+  Inject
+}
+import llsm.io.metadata.{
+  ConfigurableMetadata,
+  FilenameMetadata,
+  ImgMetadata,
+  FileMetadata,
+  TextMetadata
+}
 
 trait MetadataAPI[F[_]] {
   def readMetadata(path: Path): F[FileMetadata]
@@ -30,6 +40,7 @@ object MetadataAPI {
       def writeMetadata(path: Path, metas: List[FileMetadata]): Free[G, Unit] =
         Free.inject[F, G](F.writeMetadata(path, metas))
     }
+  
 }
 
 sealed trait MetadataLowF[A]

@@ -1,22 +1,27 @@
 package llsm.io.metadata
 
-import java.lang.Math
-
 import scala.collection.JavaConverters._
 import scala.collection.immutable.TreeSet
 
 import io.scif.{ImageMetadata, DefaultImageMetadata}
 import io.scif.util.FormatTools
 import llsm.Deskew
+import llsm.io.LLSMImg
 import net.imagej.axis.{Axes, CalibratedAxis, DefaultLinearAxis}
-import net.imglib2.img.Img
-import net.imglib2.`type`.numeric.integer.UnsignedShortType
 
 object MetadataUtils {
 
-  def populateImageMetadata(fm: FileMetadata): ImageMetadata = {
+  /** Convert LLSMImg metadata to SCIFIO ImageMetadata
+   *
+   * Takes an LLSMImg and converts the metadata it into a default
+   * implementation of io.scif.ImageMetadata.
+   * @param imgs LLSMImg
+   * @return ImageMetadata
+   */
+  def createImageMetadata(img: LLSMImg): ImageMetadata = {
     val imeta: ImageMetadata = new DefaultImageMetadata
 
+    val fm: FileMetadata = img.meta
     val waveform: WaveformMetadata = fm.waveform
     val camera: CameraMetadata     = fm.camera
     val sample: SampleStage        = fm.sample
@@ -26,9 +31,8 @@ object MetadataUtils {
     val zAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Z, "um", Deskew.calcZInterval(waveform.sPZTInterval, waveform.zPZTInterval, sample.angle, fm.config.xVoxelSize))
 
     val axes: List[CalibratedAxis] = List(xAxis, yAxis, zAxis)
-    val imgWidth: Long = fm.camera.roi.right - fm.camera.roi.left + 1
-    val imgHeight: Long = fm.camera.roi.bottom - fm.camera.roi.top + 1
-    val dims: Array[Long] = Array[Long](imgWidth, imgHeight, fm.waveform.nSlices)
+    val dims: Array[Long] = Array.ofDim[Long](img.img.numDimensions)
+    img.img.dimensions(dims)
 
     imeta.populate(fm.filename.name,
                   axes.asJava,
@@ -43,45 +47,53 @@ object MetadataUtils {
     imeta
   }
 
-  /** Convert LLSM metadata to SCIFIO ImageMetadata
+  /** Convert List of LLSMImg metadata to SCIFIO ImageMetadata
    *
-   * Takes an LLSM metadata heirachy and compiles it into a default
+   * Takes list of LLSMImgs and converts the metadata it into a default
    * implementation of io.scif.ImageMetadata.
-   * @param metadata List of LLSM FileMetadata objects
+   * @param imgs List of LLSMImgs
    * @return ImageMetadata
    */
-  def convertMetadata(metadata: List[FileMetadata]): ImageMetadata = {
+  def createImageMetadata(imgs: List[LLSMImg]): ImageMetadata = {
     val meta = new DefaultImageMetadata
     val (name, channelIdxs, stackIdxs, wavelengths, times, timesAbs) =
-      metadata.foldLeft(
-        (metadata(0).filename.name,
+      imgs.foldLeft(
+        (imgs(0).meta.filename.name,
          TreeSet.empty[Int],
          TreeSet.empty[Int],
          TreeSet.empty[Int],
          TreeSet.empty[Long],
          TreeSet.empty[Long])) {
         case ((n, c, s, w, t, ta),
-              FileMetadata(
-                FilenameMetadata(_, _, channel, stack, wavelength, time, timeAbs),
-                _,
-                _,
-                _,
-                _,
-                _)) =>
+              LLSMImg(img, 
+                FileMetadata(
+                  FilenameMetadata(_, _, channel, stack, wavelength, time, timeAbs),
+                  _,
+                  _,
+                  _,
+                  _,
+                  _))) =>
           (n, c + channel, s + stack, w + wavelength, t + time, ta + timeAbs)
       }
-    val waveform: WaveformMetadata = metadata(0).waveform
-    val camera: CameraMetadata     = metadata(0).camera
-    val sample: SampleStage        = metadata(0).sample
 
-    val xAxis: CalibratedAxis = new DefaultLinearAxis(Axes.X, "um", 0.1018)
-    val yAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Y, "um", 0.1018)
+    val refImg = imgs.head
+    val waveform: WaveformMetadata    = refImg.meta.waveform
+    val camera: CameraMetadata        = refImg.meta.camera
+    val sample: SampleStage           = refImg.meta.sample
+    val config: ConfigurableMetadata  = refImg.meta.config
+
+    val xAxis: CalibratedAxis = new DefaultLinearAxis(Axes.X, "um", config.xVoxelSize)
+    val yAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Y, "um", config.yVoxelSize)
 
     // TODO: This is ugly baby
     val axes: List[CalibratedAxis] = List(xAxis, yAxis) ++
         (if (waveform.nSlices > 1) {
-         val so: Double         = waveform.sPZTInterval
-         val zVoxelSize: Double = Math.sin(Math.toRadians(sample.angle)) * so + waveform.zPZTInterval
+         val zVoxelSize: Double = Deskew.calcZInterval(
+           waveform.sPZTInterval,
+           waveform.zPZTInterval,
+           sample.angle,
+           config.xVoxelSize
+         )
          List(new DefaultLinearAxis(Axes.Z, "um", zVoxelSize))
        } else Nil) ++
         (if (channelIdxs.size > 1) {
@@ -94,18 +106,14 @@ object MetadataUtils {
          List(new DefaultLinearAxis(Axes.TIME, "ms", avInterval))
        } else Nil)
 
-    val roi: CameraMetadata.ROI = camera.roi
-    val xLength: Long           = roi.right - roi.left + 1
-    val yLength: Long           = roi.bottom - roi.top + 1
-    val dims: List[Long] = List(xLength, yLength) ++
-        (if (waveform.nSlices > 1)
-           List(waveform.nSlices)
-         else Nil) ++
+    val stackDim = Array.ofDim[Long](refImg.img.numDimensions)
+    refImg.img.dimensions(stackDim)
+    val dims: Array[Long] = stackDim ++ 
         (if (channelIdxs.size > 1)
-           List(channelIdxs.size.toLong)
+           Array(channelIdxs.size.toLong)
          else Nil) ++
         (if (times.size > 1)
-           List(times.size.toLong)
+           Array(times.size.toLong)
          else Nil)
 
     meta.populate(name,

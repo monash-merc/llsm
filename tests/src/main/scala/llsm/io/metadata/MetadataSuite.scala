@@ -29,9 +29,9 @@ class MetadataSuite extends BaseSuite with MetadataImplicits {
               .toURI
               .getPath)
 
-          val meta = LLSMMeta.readMetadataFromTxtFile(f)
+          val meta = FileMetadata.readMetadataFromTxtFile(f)
           meta.leftMap {
-            case LLSMMeta.MetadataIOError(msg) => new Throwable(msg)
+            case FileMetadata.MetadataIOError(msg) => new Throwable(msg)
           } match {
             case Right(m) => M.pure(m)
             case Left(e) => M.raiseError(e)

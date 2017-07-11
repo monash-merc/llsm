@@ -5,7 +5,7 @@ import cats.free.Free
 import io.scif.img.ImgOpener
 import llsm.algebras.{ImgReaderAPI, ImgReaderF, LoggingAPI, LoggingF}
 import llsm.fp._
-import llsm.io.LLSMStack
+import llsm.io.LLSMImg
 import net.imglib2.img.ImgFactory
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import org.scijava.Context
@@ -35,7 +35,7 @@ trait ImgReaderInterpreters {
               val imgOpener = new ImgOpener(context)
 
               next(
-                LLSMStack(
+                LLSMImg(
                   imgOpener.openImgs(
                     path.toString,
                     factory,

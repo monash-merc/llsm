@@ -17,7 +17,7 @@ import llsm.algebras.{ImgReader, ImgReaderF, Metadata, MetadataF, Process, Proce
 import llsm.fp.ParSeq
 import llsm.fp.ParSeq.ops._
 import llsm.interpreters._
-import llsm.io.{LLSMImg, LLSMStack, ImgUtils}
+import llsm.io.LLSMImg
 import llsm.io.metadata.ConfigurableMetadata
 import monix.eval.Task
 import monix.cats._
@@ -52,7 +52,7 @@ class IOBenchmark extends IOContext {
 
   def processImg[F[_]: Metadata: ImgReader: Process](
       path: Path
-  ): Free[F, LLSMStack] =
+  ): Free[F, LLSMImg] =
     for {
       m   <- Metadata[F].readMetadata(path)
       img <- ImgReader[F].readImg(path, m)
@@ -67,27 +67,24 @@ class IOBenchmark extends IOContext {
 
   def processStacks[F[_]: Metadata: ImgReader: Process](
       paths: List[Path]
-  ): Free[F, LLSMImg] =
-    for {
-      ls  <- paths.traverse(p => processImg[F](p))
-      img <- Process[F].aggregateImgs(ls)
-    } yield img
+  ): Free[F, List[LLSMImg]] =
+    paths.traverse(p => processImg[F](p))
 
   def processImgs[F[_]: Metadata: ImgReader: Process](
       paths: List[Path]
-  ): ParSeq[F, LLSMImg] =
-    paths.traverse(p => ParSeq.liftSeq(processImg[F](p))).map(ImgUtils.aggregateImgs)
+  ): ParSeq[F, List[LLSMImg]] =
+    paths.traverse(p => ParSeq.liftSeq(processImg[F](p)))
 
   def compiler[M[_]: MonadError[?[_], Throwable]] =
-    processCompiler[M] or (scifioReader[M](context, cf) or basicMetadataReader[M](config(NNInterpolation)))
+    processCompiler[M] or (scifioReader[M](context, cf) or basicMetadataReader[M](config(NNInterpolation), context))
 
-  @Benchmark def ioTry: Try[LLSMImg] = processImgs[App](imgPaths).run(compiler[Try])
+  @Benchmark def ioTry: Try[List[LLSMImg]] = processImgs[App](imgPaths).run(compiler[Try])
 
-  @Benchmark def ioEither: Either[Throwable, LLSMImg] = processImgs[App](imgPaths).run(compiler[Either[Throwable, ?]])
+  @Benchmark def ioEither: Either[Throwable, List[LLSMImg]] = processImgs[App](imgPaths).run(compiler[Either[Throwable, ?]])
 
-  @Benchmark def ioFuture: LLSMImg = Await.result(processImgs[App](imgPaths).run(compiler[Future]), 1.minutes)
+  @Benchmark def ioFuture: List[LLSMImg] = Await.result(processImgs[App](imgPaths).run(compiler[Future]), 1.minutes)
 
-  @Benchmark def ioTask: LLSMImg = {
+  @Benchmark def ioTask: List[LLSMImg] = {
     import monix.execution.Scheduler.Implicits.global
     Await.result(processImgs[App](imgPaths).run(compiler[Task]).runAsync, 1.minutes)
   }

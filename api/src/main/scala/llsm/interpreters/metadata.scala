@@ -1,11 +1,7 @@
 package llsm.interpreters
 
-import java.nio.file.{
-  Files,
-  Path,
-  Paths
- }
- import java.util.UUID
+import java.nio.file.Files
+import scala.collection.JavaConverters._
 
 import cats._
 import cats.free.Free
@@ -13,9 +9,6 @@ import cats.implicits._
 import cats.arrow.FunctionK
 import cats.data.Kleisli
 import cats.free.FreeApplicative
-import io.scif.DefaultMetadata
-import io.scif.ome.OMEMetadata
-import io.scif.ome.translators.{DefaultOMETranslator}
 import llsm.algebras.{
   LoggingAPI,
   LoggingF,
@@ -29,15 +22,11 @@ import llsm.io.metadata.{
   ConfigurableMetadata,
   FilenameMetadata,
   FileMetadata,
-  LLSMMeta,
-  MetadataUtils,
   Parser,
   ParsingFailure
  }
 import llsm.io.metadata.implicits._
 import org.scijava.Context
-import ome.xml.meta.OMEXMLMetadata
-import scala.collection.JavaConverters._
 
 trait MetadataInterpreters {
 
@@ -82,9 +71,9 @@ trait MetadataInterpreters {
           val parent = path.getParent
           Files.list(parent).iterator.asScala
             .find(_.toString.endsWith(".txt")) match {
-              case Some(p) => LLSMMeta.readMetadataFromTxtFile(p) match {
+              case Some(p) => FileMetadata.readMetadataFromTxtFile(p) match {
                 case Right(m) => m
-                case Left(LLSMMeta.MetadataIOError(msg)) => throw new Exception(msg)
+                case Left(FileMetadata.MetadataIOError(msg)) => throw new Exception(msg)
               }
               case None => throw new Exception("FileMetadata file not found")
             }
@@ -97,22 +86,6 @@ trait MetadataInterpreters {
         }
         case MetadataLow.WriteMetadata(path, metas) =>
           M.catchNonFatal {
-            val outPath: Path =
-              Paths.get(s"${path.toString.substring(path.toString.size - 4, path.toString.size)}.companion.ome")
-
-            val uuids: List[UUID] = metas.map(m => m.filename.id)
-
-            val scifioImgMeta = new DefaultMetadata(List(MetadataUtils.convertMetadata(metas)).asJava)
-
-            val omeTranslator = new DefaultOMETranslator
-
-            val ome = new OMEMetadata(context)
-
-            omeTranslator.translate(scifioImgMeta, ome)
-
-            val omexml: OMEXMLMetadata = ome.getRoot
-
-
           }
       }
     }

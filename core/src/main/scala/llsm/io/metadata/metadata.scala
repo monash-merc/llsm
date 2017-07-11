@@ -8,9 +8,8 @@ import scala.collection.JavaConverters._
 import scala.io.Source
 import scala.util.{Try, Success, Failure, Right, Left}
 
-import io.scif.{ImageMetadata, SCIFIO}
+import io.scif.SCIFIO
 
-sealed trait LLSMMeta
 case class FileMetadata(
     filename: FilenameMetadata,
     waveform: WaveformMetadata,
@@ -18,23 +17,17 @@ case class FileMetadata(
     sample: SampleStage,
     config: ConfigurableMetadata,
     image: Option[ImgMetadata] = None)
-  extends LLSMMeta
-case class AggregatedMeta(meta: ImageMetadata) extends LLSMMeta
 
-object LLSMMeta extends MetadataImplicits with Ordering[LLSMMeta] {
+object FileMetadata extends MetadataImplicits with Ordering[FileMetadata] {
 
   sealed abstract class MetadataError
   case class MetadataIOError(msg: String) extends MetadataError
 
-  def compare(a: LLSMMeta, b: LLSMMeta): Int = (a, b) match {
+  def compare(a: FileMetadata, b: FileMetadata): Int = (a, b) match {
     case (FileMetadata(FilenameMetadata(_, _, ac, _, _, at, _), _, _, _, _, _),
           FileMetadata(FilenameMetadata(_, _, bc, _, _, bt, _), _, _, _, _, _)) =>
       if (at == bt) ac.compare(bc)
       else at.compare(bt)
-    case (am: AggregatedMeta, bm: AggregatedMeta) => 0
-    case (am: FileMetadata, bm: AggregatedMeta) => -1
-    case (am: AggregatedMeta, bm: FileMetadata) => 1
-
   }
 
   def extractMetadata(dir: Path, config: ConfigurableMetadata): Either[MetadataError, List[FileMetadata]] = {
