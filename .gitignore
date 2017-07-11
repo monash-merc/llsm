@@ -36,6 +36,9 @@ project/plugins/project/
 .ensime_cache/
 .ensime
 
+# Java
+.classpath
+
 
 ### Vim ###
 # swap
