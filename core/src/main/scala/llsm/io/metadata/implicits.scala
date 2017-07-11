@@ -3,11 +3,11 @@ package llsm.io.metadata
 import java.util.UUID
 import scala.util.{Left, Failure, Right, Success, Try}
 
-import llsm.either._
-import llsm.list._
+import llsm.EitherImplicits
+import llsm.ListImplicits
 
 
-trait ImplicitParsers {
+trait ImplicitParsers extends EitherImplicits with ListImplicits {
 
   implicit val sampleStageParser = new Parser[SampleStage] {
     def apply(s: String): Parser.Result[SampleStage] =

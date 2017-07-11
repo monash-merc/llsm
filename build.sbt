@@ -308,8 +308,7 @@ lazy val benchmark = project
 def scalaVersionFlags(version: String): List[String] =
   CrossVersion.partialVersion(version) match {
     case Some((2, 11)) => List("-Ywarn-unused-import")
-    case Some((2, 12)) => List("-Ypartial-unification")
-    // case Some((2, 12)) => List("-Ypartial-unification", "-Ywarn-unused-import")
+    case Some((2, 12)) => List("-Ypartial-unification", "-Ywarn-unused-import")
     case _             => List.empty
   }
 

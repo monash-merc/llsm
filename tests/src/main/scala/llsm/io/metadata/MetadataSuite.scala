@@ -4,7 +4,6 @@ import java.nio.file.{Path, Paths}
 import java.util.UUID
 
 import cats._
-import cats.implicits._
 import cats.arrow.FunctionK
 import cats.data.Kleisli
 import llsm.{BaseSuite, NoInterpolation}

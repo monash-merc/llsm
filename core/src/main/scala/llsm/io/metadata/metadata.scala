@@ -9,8 +9,6 @@ import scala.io.Source
 import scala.util.{Try, Success, Failure, Right, Left}
 
 import io.scif.{ImageMetadata, SCIFIO}
-import llsm.either._
-import llsm.list._
 
 sealed trait LLSMMeta
 case class FileMetadata(
