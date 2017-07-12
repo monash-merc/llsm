@@ -4,7 +4,6 @@ import java.util.UUID
 
 import org.scalatest.Matchers._
 import org.scalacheck.Gen
-import cats.syntax.either._
 
 class MetadataParserSpec extends MetadataSuite {
 
