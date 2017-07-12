@@ -7,6 +7,8 @@ import java.nio.file.{
 }
 import java.util.UUID
 import scala.collection.JavaConverters._
+import scala.xml._
+import scala.xml.transform._
 
 import io.scif.{ ImageMetadata, SCIFIO }
 import io.scif.img.SCIFIOImgPlus
@@ -86,36 +88,59 @@ object ImgUtils {
     omeService.populateMetadata(omexml, 0, companionName, MetadataUtils.createImageMetadata(imgs))
     omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
     
-    imgs.foreach {
-      case LLSMImg(_, FileMetadata(file, wave, _, _, _, _)) => {
-        omexml.setTiffDataFirstC(
-          new NonNegativeInteger(file.channel),
-          0,
-          file.channel * wave.nFrames + file.stack
-        )
-        omexml.setTiffDataFirstT(
-          new NonNegativeInteger(file.stack),
-          0,
-          file.channel * wave.nFrames + file.stack
-        )
-        omexml.setTiffDataPlaneCount(
-          new NonNegativeInteger(wave.nSlices.toInt),
-          0,
-          file.channel * wave.nFrames + file.stack
-        )
-        omexml.setUUIDFileName(
-          file.name,
-          0,
-          file.channel * wave.nFrames + file.stack
-        )
-        omexml.setUUIDValue(
-          file.id.toString,
-          0,
-          file.channel * wave.nFrames + file.stack
-        )
+    val omeString: Option[String] = outExt match {
+      case ".ome.tif" => {
+        imgs.foreach {
+          case LLSMImg(_, FileMetadata(file, wave, _, _, _, _)) => {
+            omexml.setTiffDataFirstC(
+              new NonNegativeInteger(file.channel),
+              0,
+              file.channel * wave.nFrames + file.stack
+            )
+            omexml.setTiffDataFirstT(
+              new NonNegativeInteger(file.stack),
+              0,
+              file.channel * wave.nFrames + file.stack
+            )
+            omexml.setTiffDataPlaneCount(
+              new NonNegativeInteger(wave.nSlices.toInt),
+              0,
+              file.channel * wave.nFrames + file.stack
+            )
+            omexml.setUUIDFileName(
+              file.name,
+              0,
+              file.channel * wave.nFrames + file.stack
+            )
+            omexml.setUUIDValue(
+              file.id.toString,
+              0,
+              file.channel * wave.nFrames + file.stack
+           
+            )
+          }
+        }
+        Some(omexml.dumpXML)
+      }
+      case _ => {
+        val rewriteTransform = new RewriteRule {
+          override def transform(n: Node): Seq[Node] = n match {
+            case e @ Elem(prefix, "Pixels", att, scope, child @ _*) =>
+              Elem(prefix, "Pixels", att, scope, false, child ++ <MetadataOnly/> : _*)
+            case other => other
+          }
+        }
+        new RuleTransformer(rewriteTransform).transform(XML.loadString(omexml.dumpXML)).headOption.map(x => x.toString)
       }
     }
     
-    val output = Files.write(Paths.get(outPath.toString, companionName), omexml.dumpXML().getBytes)
+    omeString match {
+      case Some(ome) => {
+        Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
+        ()
+      }
+      case None => ()
+    }
+    
   }
 }
