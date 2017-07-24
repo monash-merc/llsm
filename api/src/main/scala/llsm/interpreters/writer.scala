@@ -33,8 +33,8 @@ import llsm.algebras.{
   ImgWriterAPI,
   ImgWriterF,
   LowWriterAPI,
-  LowWriterF, 
-  WriteOMETIFF, 
+  LowWriterF,
+  WriteOMETIFF,
   WriteHDF5
 }
 import llsm.formats.OMETIFFCustom
@@ -135,34 +135,16 @@ trait ImgWriterInterpreters {
               val omexmlService: OMEXMLService = scifio.getContext().getService(classOf[OMEXMLService])
               val format = scifio.format().getFormatFromClass(classOf[TIFFFormat])
 
-              // omeMeta.add(MetadataUtils.populateImageMetadata(fm))
-              // omeMeta.populateImageMetadata()
               val omexml = omexmlService.createOMEXMLMetadata
-              // omeService.populateMetadata(omexml, 0, outputName, MetadataUtils.populateImageMetadata(limg))
               omexml.setUUID(file.id.toString)
               omexml.setBinaryOnlyMetadataFile(s"${name}.companion.ome")
               omexml.setBinaryOnlyUUID(UUID.nameUUIDFromBytes(name.getBytes).toString)
 
-              println(omexml.dumpXML)
-
-              //val omeMeta: OMEMetadata = new OMEMetadata(context, omexml)
-              //omeMeta.populateImageMetadata()
 
               // Create ImageMetadata
               val imeta = MetadataUtils.createImageMetadata(limg)
               val meta = new TIFFFormat.Metadata()
-              // meta.add(imeta)
-              // meta.setOmeMeta(omeMeta)
-              // meta.populateImageMetadata()
-              // scifio.translator().translate(omeMeta, meta, false)
               scifio.translator().translate(new DefaultMetadata(List(imeta).asJava), meta, false)
-              //meta.add(imeta)
-              //meta.populateImageMetadata
-              // meta.setImageDescription(omexml.dumpXML)
-              
-              // val meta = format.createMetadata()
-              // scifio.translator().translate(omeMeta, meta, false)
-              // println(meta.get(0).getAxesLengths().mkString(","))
 
               val writer = new OMETIFFCustom.Writer()
               writer.setContext(context)
@@ -173,11 +155,7 @@ trait ImgWriterInterpreters {
               val aTypes = meta.get(0).getAxes.asScala.map(a => a.`type`)
               val cals = meta.get(0).getAxes.asScala.map(a => a.calibratedValue(1))
 
-              println(aTypes.mkString(", "))
-              println(cals.mkString(", "))
-
               val imgPlus = new SCIFIOImgPlus(img, outputName)
-              //imgPlus.setImageMetadata(imeta)
 
               val saver = new ImgSaver(context)
 

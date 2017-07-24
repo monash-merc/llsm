@@ -67,8 +67,8 @@ object ImgUtils {
   }
 
   /** Writes a companion OME metadata file for a List of processed LLSM Images.
-   *  
-   * Takes a list of processed [[llsm.io.LLSMImg]]s and builds an OMEXML data 
+   *
+   * Takes a list of processed [[llsm.io.LLSMImg]]s and builds an OMEXML data
    * structure that describes the entire dataset.
    * @param path Path to the output file
    * @param imgs List of processed LLSMImgs
@@ -87,7 +87,7 @@ object ImgUtils {
     val omexml = omexmlService.createOMEXMLMetadata
     omeService.populateMetadata(omexml, 0, companionName, MetadataUtils.createImageMetadata(imgs))
     omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
-    
+
     val omeString: Option[String] = outExt match {
       case ".ome.tif" => {
         imgs.foreach {
@@ -116,7 +116,7 @@ object ImgUtils {
               file.id.toString,
               0,
               file.channel * wave.nFrames + file.stack
-           
+
             )
           }
         }
@@ -133,7 +133,7 @@ object ImgUtils {
         new RuleTransformer(rewriteTransform).transform(XML.loadString(omexml.dumpXML)).headOption.map(x => x.toString)
       }
     }
-    
+
     omeString match {
       case Some(ome) => {
         Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
@@ -141,6 +141,6 @@ object ImgUtils {
       }
       case None => ()
     }
-    
+
   }
 }
