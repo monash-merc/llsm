@@ -9,6 +9,18 @@ addCommandAlias(
   ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 
 /**
+ * Common dep versions
+ */
+lazy val imglib2Version     = "4.2.1"
+lazy val imglib2RTVersion   = "2.0.0-beta-37"
+lazy val scifioVersion      = "0.32.0"
+lazy val scifioOMEVersion   = "0.14.3"
+lazy val bdvCoreVersion     = "4.1.0"
+lazy val imagejVersion      = "2.0.0-rc-61"
+lazy val ijLegacyVersion    = "0.25.0"
+lazy val ijScalaVersion     = "0.2.1"
+
+/**
   * Settings
   */
 val disabledReplOptions = Set("-Ywarn-unused-import")
@@ -49,11 +61,11 @@ lazy val commonSettings = List(
   },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   libraryDependencies ++= Seq(
-    "com.lihaoyi" % "ammonite" % "0.9.9" % "test" cross CrossVersion.full),
+    "com.lihaoyi" % "ammonite" % "1.0.0" % "test" cross CrossVersion.full),
   sourceGenerators in Test += Def.task {
       val file = (sourceManaged in Test).value / "amm.scala"
-        IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
-        Seq(file)
+      IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
+      Seq(file)
   }.taskValue,
   (fullClasspath in Test) ++= {
     (updateClassifiers in Test).value
@@ -65,7 +77,7 @@ lazy val commonSettings = List(
       .collect{case (a, f) if a.classifier == Some("sources") => f}
   },
   addCompilerPlugin(
-    "org.spire-math" % "kind-projector" % "0.9.3" cross CrossVersion.binary)
+    "org.spire-math" % "kind-projector" % "0.9.4" cross CrossVersion.binary)
 )
 
 lazy val publishSettings = List(
@@ -193,8 +205,10 @@ lazy val docs = project
   .settings(noPublishSettings)
   .settings(unidocSettings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(
-    Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
+  .settings(
+    scalacOptions in Tut ~= (_.filterNot(
+    Set("-Ywarn-unused-import", "-Ywarn-dead-code")))
+  )
   .dependsOn(core, api)
 
 lazy val llsm = project
@@ -216,10 +230,10 @@ lazy val core = project
   .settings(llsmSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2" % "imglib2"               % "3.2.1"         % "provided",
-      "net.imglib2" % "imglib2-algorithm"     % "0.6.2"         % "provided",
-      "net.imglib2" % "imglib2-realtransform" % "2.0.0-beta-34" % "provided",
-      "io.scif"     % "scifio"                % "0.31.1"        % "provided"
+      "net.imglib2" % "imglib2"               % imglib2Version    % "provided",
+      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "provided",
+      "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "provided",
+      "io.scif"     % "scifio"                % scifioVersion     % "provided"
     ) ++ coreVersionDeps(scalaVersion.value)
   )
 
@@ -232,11 +246,11 @@ lazy val api = project
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-free"            % "0.9.0",
-      "net.imglib2"   % "imglib2"               % "3.2.1"         % "provided",
-      "net.imglib2"   % "imglib2-realtransform" % "2.0.0-beta-34" % "provided",
-      "io.scif"       % "scifio"                % "0.31.1"        % "provided",
-      "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
-      "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
+      "net.imglib2"   % "imglib2"               % imglib2Version    % "provided",
+      "net.imglib2"   % "imglib2-realtransform" % imglib2RTVersion  % "provided",
+      "io.scif"       % "scifio"                % scifioVersion     % "provided",
+      "io.scif"       % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
+      "sc.fiji"       % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
     )
   )
 
@@ -248,11 +262,11 @@ lazy val ij = project
   .settings(ijPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.scif"       % "scifio-ome-xml"        % "0.14.2"        % "provided",
-      "net.imagej"    % "imagej"                % "2.0.0-rc-59"   % "provided",
-      "net.imagej"    % "imagej-legacy"         % "0.23.5"        % "provided",
-      "org.scijava"   % "scripting-scala"       % "0.2.0"         % "provided",
-      "sc.fiji"       % "bigdataviewer-core"    % "3.0.3"         % "provided"
+      "io.scif"       % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
+      "net.imagej"    % "imagej"                % imagejVersion     % "provided",
+      "net.imagej"    % "imagej-legacy"         % ijLegacyVersion   % "provided",
+      "org.scijava"   % "scripting-scala"       % ijScalaVersion    % "provided",
+      "sc.fiji"       % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
     ),
     mainClass in (Compile, run) := Some("net.imagej.Main"),
     fork in run := true,
@@ -277,11 +291,11 @@ lazy val tests = project
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck"           % "1.13.4",
       "org.scalatest"  %% "scalatest"            % "3.0.1",
-      "net.imglib2"    % "imglib2"               % "3.2.1",
-      "net.imglib2"    % "imglib2-realtransform" % "2.0.0-beta-34",
-      "io.scif"        % "scifio"                % "0.31.1",
-      "io.scif"        % "scifio-ome-xml"        % "0.14.2",
-      "sc.fiji"        % "bigdataviewer-core"    % "3.0.3"
+      "net.imglib2"    % "imglib2"               % imglib2Version,
+      "net.imglib2"    % "imglib2-realtransform" % imglib2RTVersion,
+      "io.scif"        % "scifio"                % scifioVersion,
+      "io.scif"        % "scifio-ome-xml"        % scifioOMEVersion,
+      "sc.fiji"        % "bigdataviewer-core"    % bdvCoreVersion
     )
   )
 
@@ -294,12 +308,12 @@ lazy val benchmark = project
   .dependsOn(core, api)
   .settings(
     libraryDependencies ++= Seq(
-      "net.imglib2"   %   "imglib2"                 % "3.2.1",
-      "net.imglib2"   %   "imglib2-realtransform"   % "2.0.0-beta-34",
-      "net.imagej"    %   "imagej"                  % "2.0.0-rc-59",
-      "io.scif"       %   "scifio"                  % "0.31.1",
-      "io.scif"       %   "scifio-ome-xml"          % "0.14.2",
-      "sc.fiji"       %   "bigdataviewer-core"      % "3.0.3",
+      "net.imglib2"   %   "imglib2"                 % imglib2Version,
+      "net.imglib2"   %   "imglib2-realtransform"   % imglib2RTVersion,
+      "net.imagej"    %   "imagej"                  % imagejVersion,
+      "io.scif"       %   "scifio"                  % scifioVersion,
+      "io.scif"       %   "scifio-ome-xml"          % scifioOMEVersion,
+      "sc.fiji"       %   "bigdataviewer-core"      % bdvCoreVersion,
       "io.monix"      %%  "monix-eval"              % "2.3.0",
       "io.monix"      %%  "monix-cats"              % "2.3.0"
     )
