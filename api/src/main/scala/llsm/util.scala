@@ -1,4 +1,4 @@
-package llsm.ij
+package llsm
 
 import java.nio.file.{
   Files,
@@ -10,9 +10,9 @@ import scala.collection.JavaConverters._
 import scala.xml._
 import scala.xml.transform._
 
-import io.scif.{ ImageMetadata, SCIFIO }
-import io.scif.img.SCIFIOImgPlus
-import io.scif.ome.services.{ OMEMetadataService, OMEXMLService }
+import _root_.io.scif.{ ImageMetadata, SCIFIO }
+import _root_.io.scif.img.SCIFIOImgPlus
+import _root_.io.scif.ome.services.{ OMEMetadataService, OMEXMLService }
 import llsm.io.LLSMImg
 import llsm.io.metadata.{FileMetadata, MetadataUtils}
 import llsm.interpreters.WriterUtils
@@ -89,7 +89,7 @@ object ImgUtils {
     omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
 
     val omeString: Option[String] = outExt match {
-      case ".ome.tif" => {
+      case "ome.tif" => {
         imgs.foreach {
           case LLSMImg(_, FileMetadata(file, wave, _, _, _, _)) => {
             omexml.setTiffDataFirstC(

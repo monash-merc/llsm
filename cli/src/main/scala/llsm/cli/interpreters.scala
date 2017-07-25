@@ -53,7 +53,8 @@ object Interpreters {
 
 
   def cliMetadataReader[M[_]](
-    config: ConfigurableMetadata
+    config: ConfigurableMetadata,
+    context: Context
   )(implicit
     M: MonadError[M, Throwable]
   ): MetadataF ~> M =
@@ -61,7 +62,7 @@ object Interpreters {
       def apply[A](fa: MetadataF[A]): M[A] =
         for {
           _ <- metadataLogging(fa).unhalt.foldMap(consoleLogging[M])
-          m <- basicMetadataReader[M](config)(M)(fa)
+          m <- basicMetadataReader[M](config, context)(M)(fa)
         } yield m
     }
 

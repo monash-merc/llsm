@@ -14,22 +14,23 @@ import cats.data.Coproduct
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
 import llsm.{
-  NoInterpolation, 
-  NNInterpolation, 
-  LinearInterpolation, 
-  LanczosInterpolation, 
-  Programs
+  NoInterpolation,
+  NNInterpolation,
+  LinearInterpolation,
+  LanczosInterpolation,
+  Programs,
+  ImgUtils
 }
 import llsm.algebras.{
   Metadata,
   MetadataF,
   ImgReader,
   ImgReaderF,
-  ImgWriter, 
+  ImgWriter,
   ImgWriterF,
-  Process, 
+  Process,
   ProcessF,
-  Progress, 
+  Progress,
   ProgressF
 }
 import llsm.fp.ParSeq
@@ -118,12 +119,12 @@ class LLSMConvertPlugin extends Command {
   override def run(): Unit = if (validName) {
 
     type App[A] =
-      Coproduct[ImgWriterF, 
-        Coproduct[ProcessF, 
-          Coproduct[ImgReaderF, 
-            Coproduct[MetadataF, ProgressF, ?], 
-          ?], 
-        ?], 
+      Coproduct[ImgWriterF,
+        Coproduct[ProcessF,
+          Coproduct[ImgReaderF,
+            Coproduct[MetadataF, ProgressF, ?],
+          ?],
+        ?],
       A]
 
     val config = ConfigurableMetadata(

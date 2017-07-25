@@ -17,11 +17,12 @@ import ij.measure.Calibration
 import io.scif.img.SCIFIOImgPlus
 import io.scif.img.cell.SCIFIOCellImgFactory
 import llsm.{
-  Programs, 
-  NoInterpolation, 
-  NNInterpolation, 
-  LinearInterpolation, 
-  LanczosInterpolation
+  Programs,
+  NoInterpolation,
+  NNInterpolation,
+  LinearInterpolation,
+  LanczosInterpolation,
+  ImgUtils
 }
 import llsm.fp.ParSeq.ops._
 import llsm.algebras.{
@@ -107,7 +108,7 @@ class DeskewTimeSeriesPlugin extends Command {
    */
   override def run(): Unit = {
 
-    type App[A] = 
+    type App[A] =
       Coproduct[ProcessF,
         Coproduct[ImgReaderF,
           Coproduct[MetadataF, ProgressF, ?],

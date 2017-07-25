@@ -248,12 +248,13 @@ lazy val api = project
   .settings(
     exportJars := true,
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-free"            % "0.9.0",
-      "net.imglib2"   % "imglib2"               % imglib2Version    % "provided",
-      "net.imglib2"   % "imglib2-realtransform" % imglib2RTVersion  % "provided",
-      "io.scif"       % "scifio"                % scifioVersion     % "provided",
-      "io.scif"       % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
-      "sc.fiji"       % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
+      "org.scala-lang.modules"  %% "scala-xml"            % "1.0.6",
+      "org.typelevel"           %% "cats-free"            % "0.9.0",
+      "net.imglib2"             % "imglib2"               % imglib2Version    % "provided",
+      "net.imglib2"             % "imglib2-realtransform" % imglib2RTVersion  % "provided",
+      "io.scif"                 % "scifio"                % scifioVersion     % "provided",
+      "io.scif"                 % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
+      "sc.fiji"                 % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
     )
   )
 

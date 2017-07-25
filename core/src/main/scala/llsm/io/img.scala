@@ -11,3 +11,10 @@ object LLSMImg {
     override def compare(x: LLSMImg, y: LLSMImg): Int = FileMetadata.compare(x.meta, y.meta)
   }
 }
+
+sealed trait ImgContainer
+case object CellContainer   extends ImgContainer
+case object PlanarContainer extends ImgContainer
+case object ArrayContainer  extends ImgContainer
+
+object ImgContainer {}

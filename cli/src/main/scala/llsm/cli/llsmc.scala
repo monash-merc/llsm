@@ -19,16 +19,23 @@ import llsm.{
   NNInterpolation,
   LinearInterpolation,
   LanczosInterpolation,
-  Programs
+  Programs,
+  ImgUtils
 }
 import llsm.algebras.{
+  Metadata,
   MetadataF,
+  ImgReader,
   ImgReaderF,
+  ImgWriter,
   ImgWriterF,
+  Process,
   ProcessF,
+  Progress,
   ProgressF
 }
 import llsm.cli.Interpreters._
+import llsm.fp.ParSeq
 import llsm.fp.ParSeq.ops._
 import llsm.interpreters._
 import llsm.io.{
@@ -183,12 +190,12 @@ object LLSMC extends App {
                 llsmWriter[M](context) or
                     (processCompiler[M] or
                       (cliImgReader[M](context, imgFactory) or
-                        (cliMetadataReader[M](conf) or
+                        (cliMetadataReader[M](conf, context) or
                           consoleProgress[M])))
 
-      val program = Programs.convertImgsP[App](fl, config.output)
+      val prog = program[App](fl, config.output, context)
 
-      val outputF: Try[List[Unit]] => Unit =
+      val outputF: Try[Unit] => Unit =
         result => result match {
           case Success(_) => {
             println("Successfully converted images")
@@ -198,11 +205,19 @@ object LLSMC extends App {
         }
 
       if (config.parallel) {
-        program.run(compiler[Future]) onComplete outputF
+        prog.run(compiler[Future]) onComplete outputF
       } else {
-        outputF(program.run(compiler[Try]))
+        outputF(prog.run(compiler[Try]))
       }
     }
     case None =>
   }
+
+  def program[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](
+    paths: List[Path],
+    outputPath: Path,
+    context: Context
+  ): ParSeq[F, Unit] =
+    Programs.convertImgsP[F](paths, outputPath)
+      .map(lImg => ImgUtils.writeOMEMetadata(outputPath, lImg, context))
 }
