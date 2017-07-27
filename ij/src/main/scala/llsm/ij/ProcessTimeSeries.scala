@@ -67,10 +67,7 @@ class DeskewTimeSeriesPlugin extends Command {
   var input: File = _
 
   @Parameter(label = "X/Y voxel size (um)", required = true)
-  var pixelSize: Double = 0.1018
-
-  @Parameter(label = "Incident objective angle")
-  var objectiveAngle: Double = 31.8
+  var pixelSize: Double = 0.104
 
   @Parameter(label = "Img Container Type",
     choices = Array("Array", "Planar", "Cell"),

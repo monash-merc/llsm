@@ -69,9 +69,6 @@ class LLSMConvertPlugin extends Command {
   @Parameter(label = "X/Y voxel size (um)", required = true)
   var pixelSize: Double = 0.104
 
-  @Parameter(label = "Incident objective angle")
-  var objectiveAngle: Double = 31.5
-
   @Parameter(label = "Img Container Type",
     choices = Array("Array", "Planar", "Cell"),
     persist = false,
