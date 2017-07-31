@@ -1,5 +1,6 @@
 package llsm.ij
 
+import java.awt.Frame
 import java.io.File
 import java.nio.file.{Files, Path, Paths}
 import java.util.stream.Collectors
@@ -13,6 +14,7 @@ import cats.MonadError
 import cats.data.Coproduct
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
+import ij.gui.YesNoCancelDialog
 import llsm.{
   NoInterpolation,
   NNInterpolation,
@@ -97,76 +99,107 @@ class LLSMConvertPlugin extends Command {
   @Parameter
   var context: Context = _
 
-  def validateName(): Unit = {
-    validName =
-      if (outputFileName.endsWith(".h5") || outputFileName.endsWith(".ome.tif"))
-        true
-      else false
+  sealed trait ValidConfig
+  case object ConfigSuccess extends ValidConfig
+  case class ConfigFailure(msg: String) extends ValidConfig
+
+  object ValidConfig {
+    def success(): ValidConfig = ConfigSuccess
+    def fail(msg: String): ValidConfig = ConfigFailure(msg)
   }
+
+  def validateConfig(): ValidConfig =
+    if (!outputFileName.endsWith(".h5") && !outputFileName.endsWith(".ome.tif"))
+      ValidConfig.fail("Invalid output type. Only .h5 and .ome.tif are supported")
+    else if (WriterUtils.outputExists(Paths.get(output.getPath, outputFileName))) {
+      val c = new YesNoCancelDialog(
+        new Frame,
+        "Output file/files exist",
+        "The output file/files you specified already exist. Do you want to continue and overwrite them?"
+      )
+      val cancel = c.cancelPressed
+      val proceed = c.yesPressed
+      if (cancel)
+        ValidConfig.fail("Outputs exist. Action cancelled.")
+      else if(!proceed)
+        ValidConfig.fail("Outputs exist. User specified not to proceed.")
+      else ValidConfig.success
+    }
+    else ValidConfig.success
 
   def program[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](
     paths: List[Path],
     outputPath: Path,
     context: Context
   ): ParSeq[F, Unit] =
-    Programs.convertImgsP[F](paths, outputPath).map(lImg => ImgUtils.writeOMEMetadata(outputPath, lImg, context))
+    Programs.convertImgsP[F](paths, outputPath)
+      .map(lImg => ImgUtils.writeOMEMetadata(outputPath, lImg, context))
   /**
     * Entry point to running a plugin.
     */
-  override def run(): Unit = if (validName) {
-
-    type App[A] =
-      Coproduct[ImgWriterF,
-        Coproduct[ProcessF,
-          Coproduct[ImgReaderF,
-            Coproduct[MetadataF, ProgressF, ?],
+  override def run(): Unit = validateConfig match {
+    case ConfigSuccess => {
+      type App[A] =
+        Coproduct[ImgWriterF,
+          Coproduct[ProcessF,
+            Coproduct[ImgReaderF,
+              Coproduct[MetadataF, ProgressF, ?],
+            ?],
           ?],
-        ?],
-      A]
+        A]
 
-    val config = ConfigurableMetadata(
-      pixelSize,
-      pixelSize,
-      interpolation match {
-        case "Nearest Neighbour" => NNInterpolation
-        case "Linear" => LinearInterpolation
-        case "Lancsoz" => LanczosInterpolation
-        case _ => NoInterpolation
-      })
+      val config = ConfigurableMetadata(
+        pixelSize,
+        pixelSize,
+        interpolation match {
+          case "Nearest Neighbour"  => NNInterpolation
+          case "Linear"             => LinearInterpolation
+          case "Lancsoz"            => LanczosInterpolation
+          case "None"               => NoInterpolation
+          case _                    => throw new Exception("Unknown Interpolation type. Please submit a bug report.")
+        })
 
-    val imgFactory: ImgFactory[UnsignedShortType] = container match {
-      case "Array"  => new ArrayImgFactory[UnsignedShortType]
-      case "Planar" => new PlanarImgFactory[UnsignedShortType]
-      case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType]
-      case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
-    }
-
-    def compiler[M[_]: MonadError[?[_], Throwable]] =
-                llsmWriter[M](context) or
-                    (processCompiler[M] or
-                      (ijImgReader[M](context, imgFactory, log) or
-                        (ijMetadataReader[M](config, context, log) or
-                          ijProgress[M](status))))
-
-    val imgPaths = Files.list(Paths.get(input.getPath))
-      .collect(Collectors.toList[Path])
-      .asScala.filter(_.toString.endsWith(".tif"))
-
-    val p = program[App](imgPaths.toList, Paths.get(output.getPath, outputFileName), context)
-
-    val outputF: Try[Unit] => Unit = result => result match {
-      case Success(_) => {
-        log.info("Successfully converted images")
+      val imgFactory: ImgFactory[UnsignedShortType] = container match {
+        case "Array"  => new ArrayImgFactory[UnsignedShortType]
+        case "Planar" => new PlanarImgFactory[UnsignedShortType]
+        case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType]
+        case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
       }
-      case Failure(e) => log.error(e)
-    }
 
-    if (parallel) {
-      p.run(compiler[Future]) onComplete outputF
-    } else {
-      outputF(p.run(compiler[Try]))
+      // Create a compiler for our program that combines interpreters for
+      // reading metadata, reading data, deskewing, writing processed data and
+      // reporting progress to ImageJ.
+      def compiler[M[_]: MonadError[?[_], Throwable]] =
+                  llsmWriter[M](context) or
+                      (processCompiler[M] or
+                        (ijImgReader[M](context, imgFactory, log) or
+                          (ijMetadataReader[M](config, context, log) or
+                            ijProgress[M](status))))
+
+      // Get a list of TIFF images from the input path.
+      val imgPaths = Files.list(Paths.get(input.getPath))
+        .collect(Collectors.toList[Path])
+        .asScala.filter(_.toString.endsWith(".tif"))
+
+      // Create a program for processing our images. This will be executed via
+      // the compiler.
+      val p = program[App](imgPaths.toList, Paths.get(output.getPath, outputFileName), context)
+
+      val outputF: Try[Unit] => Unit = result => result match {
+        case Success(_) => {
+          log.info("Successfully converted images")
+        }
+        case Failure(e) => log.error(e)
+      }
+
+      // If user specifies parallel then run program with Future effects type,
+      // otherwise use Try
+      if (parallel) {
+        p.run(compiler[Future]) onComplete outputF
+      } else {
+        outputF(p.run(compiler[Try]))
+      }
     }
-  } else {
-    log.error("Invalid output type. Only .h5 and .ome.tif are supported")
+    case ConfigFailure(m) => log.error(m)
   }
 }
