@@ -12,10 +12,11 @@ import scala.xml.transform._
 
 import _root_.io.scif.{ ImageMetadata, SCIFIO }
 import _root_.io.scif.img.SCIFIOImgPlus
-import _root_.io.scif.ome.services.{ OMEMetadataService, OMEXMLService }
+import _root_.io.scif.ome.services.OMEMetadataService
 import llsm.io.LLSMImg
 import llsm.io.metadata.{FileMetadata, MetadataUtils}
 import llsm.interpreters.WriterUtils
+import loci.formats.ome.OMEXMLMetadataImpl
 import net.imglib2.RandomAccessibleInterval
 import net.imglib2.img.{Img, ImgView}
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
@@ -82,9 +83,8 @@ object ImgUtils {
 
     val scifio: SCIFIO = new SCIFIO(context)
     val omeService = context.getService(classOf[OMEMetadataService])
-    val omexmlService = context.getService(classOf[OMEXMLService])
 
-    val omexml = omexmlService.createOMEXMLMetadata
+    val omexml = new OMEXMLMetadataImpl()
     omeService.populateMetadata(omexml, 0, companionName, MetadataUtils.createImageMetadata(imgs))
     omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
 

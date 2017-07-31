@@ -1,8 +1,15 @@
 package llsm.interpreters
 
 import java.lang.{Integer, Math}
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{
+  Files,
+  FileSystems,
+  Path,
+  Paths
+}
 import java.util.{ ArrayList, UUID }
+import java.util.stream.Collectors
+
 import scala.collection.JavaConverters._
 
 import bdv.export.{ProposeMipmaps, ProgressWriterConsole}
@@ -27,7 +34,7 @@ import io.scif.config.SCIFIOConfig
 import io.scif.codec.CompressionType
 import io.scif.img.{ImgSaver, SCIFIOImgPlus}
 import io.scif.formats.TIFFFormat
-import io.scif.ome.services.{ OMEMetadataService, OMEXMLService }
+import io.scif.ome.services.OMEMetadataService
 import llsm.Deskew
 import llsm.algebras.{
   ImgWriterAPI,
@@ -44,6 +51,7 @@ import llsm.io.metadata.{
   FileMetadata,
   MetadataUtils
 }
+import loci.formats.ome.OMEXMLMetadataImpl
 import mpicbg.spim.data.generic.sequence.BasicViewSetup
 import mpicbg.spim.data.registration.{ViewRegistration, ViewRegistrations}
 import mpicbg.spim.data.sequence.{
@@ -121,7 +129,7 @@ trait ImgWriterInterpreters {
         fa match {
           case WriteOMETIFF(path, limg @ LLSMImg(img, fm @ FileMetadata(file, wave, cam, sample, config, im))) =>
             M.catchNonFatal {
-              val conf = new SCIFIOConfig()//.writerSetSequential(false)
+              val conf = new SCIFIOConfig()
                 .writerSetCompression(CompressionType.LZW.getCompression)
                 .imgSaverSetWriteRGB(false)
 
@@ -132,10 +140,9 @@ trait ImgWriterInterpreters {
               val scifio = new SCIFIO(context)
 
               val omeService: OMEMetadataService = scifio.getContext().getService(classOf[OMEMetadataService])
-              val omexmlService: OMEXMLService = scifio.getContext().getService(classOf[OMEXMLService])
               val format = scifio.format().getFormatFromClass(classOf[TIFFFormat])
 
-              val omexml = omexmlService.createOMEXMLMetadata
+              val omexml = new OMEXMLMetadataImpl()
               omexml.setUUID(file.id.toString)
               omexml.setBinaryOnlyMetadataFile(s"${name}.companion.ome")
               omexml.setBinaryOnlyUUID(UUID.nameUUIDFromBytes(name.getBytes).toString)
@@ -238,6 +245,16 @@ object WriterUtils {
 
       (name.substring(0, sepIndex), name.substring(sepIndex + 1, name.length))
     }
+  }
+
+  def outputExists(outputPath: Path): Boolean = {
+    val parent: Path = outputPath.getParent
+    val (name, ext) = splitExtension(outputPath.toString)
+    val matcher = FileSystems.getDefault().getPathMatcher(s"glob:$name*")
+    Files.list(parent)
+      .collect(Collectors.toList[Path])
+      .asScala
+      .exists(matcher.matches(_))
   }
 
   def createHDF5(path: Path): Unit = synchronized {

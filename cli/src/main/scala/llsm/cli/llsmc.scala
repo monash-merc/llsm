@@ -1,6 +1,10 @@
 package llsm.cli
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{
+  Files,
+  Path,
+  Paths
+}
 import java.util.stream.Collectors
 
 import scala.collection.JavaConverters._
@@ -34,6 +38,7 @@ import llsm.algebras.{
   Progress,
   ProgressF
 }
+import llsm.interpreters.WriterUtils
 import llsm.cli.Interpreters._
 import llsm.fp.ParSeq
 import llsm.fp.ParSeq.ops._
@@ -59,7 +64,9 @@ case class Config(
     interpolation: InterpolationMethod = NoInterpolation,
     container: ImgContainer = CellContainer,
     single: Boolean = false,
-    parallel: Boolean = false)
+    overwrite: Boolean = false,
+    parallel: Boolean = false,
+    debug: Boolean = false)
 
 object Config {
 
@@ -90,6 +97,7 @@ object Config {
 
 object LLSMC extends App {
   import Config._
+
   val parser = new scopt.OptionParser[Config]("llsmc") {
     head("llsm convert", "0.3.0")
 
@@ -121,10 +129,19 @@ object LLSMC extends App {
       .action( (x, c) => c.copy(container = x) )
       .text("Img backing container. Options are \"Cell\" (default), \"Array\" or \"Planar\"")
 
+    opt[Unit]("overwrite")
+      .action( (_, c) => c.copy(overwrite = true))
+      .text("Overwrite outputs if they already exist")
+
     opt[Unit]("parallel")
       .action( (_, c) => c.copy(parallel = true) )
       .hidden()
       .text("Enables experimental parallel processing.")
+
+    opt[Unit]("debug")
+      .action( (_, c) => c.copy(debug = true) )
+      .hidden()
+      .text("Enable debug logging")
 
     // opt[Double]("zPiezoStep")
     //   .action( (z, c) => c.copy(zPiezoStep = Some(z)) )
@@ -148,13 +165,25 @@ object LLSMC extends App {
       .text("Process only a single stack. This is useful for HPC environments.")
 
     checkConfig( c =>
-        if (c.single && Files.isDirectory(c.input))
-          failure("--input must be a path to a LLSM stack file.")
-        else if (!c.single && !Files.isDirectory(c.input))
-          failure("--input must be a path to a directory containing a LLSM dataset")
-        else if (c.single && !c.output.toString.endsWith(".ome.tif"))
-          failure("Only OME-TIFF (.ome.tif) output format is supported for converting single files")
-        else success )
+        if (c.single) {
+          if (Files.isDirectory(c.input))
+            failure("--input must be a path to a LLSM stack file.")
+          else if (!c.output.toString.endsWith(".ome.tif"))
+            failure("Only OME-TIFF (.ome.tif) output format is supported for converting single files")
+          else if (!Files.exists(c.output.getParent()))
+            failure("Parent path for the output doesn't exist i.e., please create the directories leading to the output image.")
+          else if (!Files.exists(c.output) && !c.overwrite)
+            failure("Output file already exists. Please include the --overwrite flag if you want to overwrite the exisiting file.")
+          else success
+        } else {
+          if (!Files.isDirectory(c.input))
+            failure("--input must be a path to a directory containing a LLSM dataset")
+          else if (!Files.exists(c.output.getParent()))
+            failure("Parent path for the output doesn't exist i.e., please create the directories leading to the output image.")
+          else if (WriterUtils.outputExists(c.output) && !c.overwrite)
+            failure("Output file/files already exist. Please include the --overwrite flag if you want to overwrite the exisiting file/files.")
+          else success
+        })
   }
 
   parser.parse(args, Config()) match {
@@ -189,8 +218,8 @@ object LLSMC extends App {
       def compiler[M[_]: MonadError[?[_], Throwable]] =
                 llsmWriter[M](context) or
                     (processCompiler[M] or
-                      (cliImgReader[M](context, imgFactory) or
-                        (cliMetadataReader[M](conf, context) or
+                      (cliImgReader[M](context, imgFactory, config.debug) or
+                        (cliMetadataReader[M](conf, context, config.debug) or
                           consoleProgress[M])))
 
       val prog = program[App](fl, config.output, context)
