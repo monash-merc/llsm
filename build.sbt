@@ -305,7 +305,7 @@ lazy val ij = project
     test in assembly := {},
     assemblyJarName in assembly := s"llsm-ij_${scalaVersion.value}.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value
-      .copy(includeScala = false),
+      .copy(includeScala = false, cacheOutput = false),
     run in Compile := Defaults.runTask(fullClasspath in Compile,
                                        mainClass in (Compile, run),
                                        runner in (Compile, run)).evaluated
