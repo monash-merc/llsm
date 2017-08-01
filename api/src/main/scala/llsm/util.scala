@@ -69,7 +69,7 @@ object ImgUtils {
 
   /** Writes a companion OME metadata file for a List of processed LLSM Images.
    *
-   * Takes a list of processed [[llsm.io.LLSMImg]]s and builds an OMEXML data
+   * Takes a list of processed LLSMImgs and builds an OMEXML data
    * structure that describes the entire dataset.
    * @param path Path to the output file
    * @param imgs List of processed LLSMImgs

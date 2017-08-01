@@ -81,15 +81,17 @@ lazy val commonSettings = List(
 )
 
 lazy val publishSettings = List(
+  publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))),
+  // publishTo := {
+  //   val nexus = "https://oss.sonatype.org/"
+  //   if (isSnapshot.value)
+  //     Some("snapshots" at nexus + "content/repositories/snapshots")
+  //   else
+  //     Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  // },
   publishMavenStyle := true,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
   publishArtifact in Test := false,
+  useGpg := true,
   homepage := Some(url("https://github.com/keithschulze/llsm")),
   pomIncludeRepository := Function.const(false),
   pomExtra := (
@@ -101,7 +103,7 @@ lazy val publishSettings = List(
       <developer>
         <id>keithschulze</id>
         <name>Keith Schulze</name>
-        <url>http://keithschulze.com</url>
+        <url>https://platforms.monash.edu/mmi/</url>
       </developer>
     </developers>
   ),
@@ -118,22 +120,7 @@ lazy val publishSettings = List(
     ReleaseStep(action = Command.process("publishSigned", _)),
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-    pushChanges
-  )
-)
-
-lazy val ijPublishSettings = List(
-  releaseProcess := List[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    ReleaseStep(action = Command.process("ij/assembly", _)),
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    setNextVersion,
-    commitNextVersion,
+    // ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
     pushChanges
   )
 )
@@ -149,7 +136,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val llsmSettings = buildSettings ++ commonSettings ++ noPublishSettings ++ scoverageSettings
+lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val docMappingsApiDir =
   settingKey[String]("Subdirectory in site target directory for API docs")
@@ -265,6 +252,7 @@ lazy val cli = project
   .dependsOn(core, api)
   .settings(moduleName := "llsm-cli")
   .settings(llsmSettings)
+  .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
       "com.github.scopt"  %% "scopt"                % "3.6.0",
@@ -276,13 +264,7 @@ lazy val cli = project
       ),
     name := "llsmc",
     mainClass in Compile := Some("llsm.cli.LLSMC")
-    // assemblyMergeStrategy in assembly := {
-    //   case PathList("META-INF", "json", xs @ _*) => MergeStrategy.filterDistinctLines
-    //   case x =>
-    //     val oldStrategy = (assemblyMergeStrategy in assembly).value
-    //     oldStrategy(x)
-    // }
-    )
+  )
 
 
 lazy val ij = project
@@ -290,7 +272,7 @@ lazy val ij = project
   .dependsOn(core, api)
   .settings(moduleName := "llsm-ij")
   .settings(llsmSettings)
-  .settings(ijPublishSettings)
+  .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
       "io.scif"       % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
