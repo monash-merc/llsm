@@ -1,5 +1,10 @@
 package llsm.ij
 
+import bdv.util.{
+  AxisOrder,
+  Bdv,
+  BdvFunctions
+}
 import cats._
 import cats.free.Free
 import cats.implicits._
@@ -143,7 +148,33 @@ package object interpreters {
           )
           M.pure(out.show())
         }
-        case ShowBDV(imgs@_) => ???
+        case ShowBDV(img) => {
+          val imeta = img.getImageMetadata
+
+          val axisOrder = if (imeta.getAxisLength(Axes.CHANNEL) > 1 &&
+            imeta.getAxisLength(Axes.TIME) > 1) {
+              AxisOrder.XYZCT
+            } else if (imeta.getAxisLength(Axes.CHANNEL) > 1) {
+              AxisOrder.XYZC
+            } else if (imeta.getAxisLength(Axes.TIME) > 1) {
+              AxisOrder.XYZT
+            } else {
+              AxisOrder.XYZ
+            }
+
+          val bdvOpts = Bdv.options()
+            .sourceTransform(
+              imeta.getAxis(Axes.X).calibratedValue(1),
+              imeta.getAxis(Axes.Y).calibratedValue(1),
+              imeta.getAxis(Axes.Z).calibratedValue(1)
+            )
+            .axisOrder(axisOrder)
+
+          M.pure{
+            BdvFunctions.show(img, s"${imeta.getName}_deskewed", bdvOpts)
+            ()
+          }
+        }
       }
     }
 

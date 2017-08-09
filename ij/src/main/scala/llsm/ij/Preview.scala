@@ -72,6 +72,10 @@ class PreviewPlugin extends Command {
     required = false)
   var interpolation: String = "None"
 
+  @Parameter(label = "Preview in BigDataViewer",
+    persist = false)
+  var bdv: Boolean = false
+
   @Parameter
   var ds: DatasetService = _
 
@@ -136,7 +140,7 @@ class PreviewPlugin extends Command {
     }
 
     def compiler[M[_]: MonadError[?[_], Throwable]] =
-      ijVis[M](HyperStack) or
+      ijVis[M](if (bdv) BigDataViewer else HyperStack) or
       (processCompiler[M] or
       (ijImgReader[M](context, imgFactory, log) or
       (ijMetadataReader[M](config, log) or

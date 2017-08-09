@@ -308,11 +308,13 @@ lazy val ij = project
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "io.scif"       % "scifio-ome-xml"        % scifioOMEVersion  % "provided",
-      "net.imagej"    % "imagej"                % imagejVersion     % "provided",
-      "net.imagej"    % "imagej-legacy"         % ijLegacyVersion   % "provided",
-      "org.scijava"   % "scripting-scala"       % ijScalaVersion    % "provided",
-      "sc.fiji"       % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
+      "io.scif"       % "scifio-ome-xml"            % scifioOMEVersion  % "provided",
+      "net.imagej"    % "imagej"                    % imagejVersion     % "provided",
+      "net.imagej"    % "imagej-legacy"             % ijLegacyVersion   % "provided",
+      "org.scijava"   % "scripting-scala"           % ijScalaVersion    % "provided",
+      "net.imglib2"   % "imglib2-ui"                % "2.0.0-beta-33"   % "provided",
+      "sc.fiji"       % "bigdataviewer-core"        % bdvCoreVersion    % "provided",
+      "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-5"    % "provided"
     ),
     scalacOptions ~= (_ filterNot(_ == "-Xcheckinit")), // disable checkinit because ImageJ does a lot of runtime injection
     mainClass in (Compile, run) := Some("net.imagej.Main"),
