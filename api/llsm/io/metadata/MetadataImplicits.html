@@ -126,12 +126,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm.io">io</a></dd></dl></div>
     </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="class" href="AggregatedMeta.html" title=""></a>
-                        <a href="AggregatedMeta.html" title="">
-                          AggregatedMeta
-                        </a>
-                      </li><li class="current-entities indented3">
                         <a class="object" href="CameraMetadata$.html" title=""></a>
                         <a class="class" href="CameraMetadata.html" title=""></a>
                         <a href="CameraMetadata.html" title="">
@@ -144,7 +138,7 @@
                           ConfigurableMetadata
                         </a>
                       </li><li class="current-entities indented3">
-                        <span class="separator"></span>
+                        <a class="object" href="FileMetadata$.html" title=""></a>
                         <a class="class" href="FileMetadata.html" title=""></a>
                         <a href="FileMetadata.html" title="">
                           FileMetadata
@@ -166,12 +160,6 @@
                         <a class="trait" href="ImplicitParsers.html" title=""></a>
                         <a href="ImplicitParsers.html" title="">
                           ImplicitParsers
-                        </a>
-                      </li><li class="current-entities indented3">
-                        <a class="object" href="LLSMMeta$.html" title=""></a>
-                        <a class="trait" href="LLSMMeta.html" title=""></a>
-                        <a href="LLSMMeta.html" title="">
-                          LLSMMeta
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -249,16 +237,16 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/core/src/main/scala/llsm/io/metadata/implicits.scala" target="_blank">implicits.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/core/src/main/scala/llsm/io/metadata/implicits.scala" target="_blank">implicits.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="ImplicitParsers.html" class="extype" name="llsm.io.metadata.ImplicitParsers">ImplicitParsers</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ImplicitParsers.html" class="extype" name="llsm.io.metadata.ImplicitParsers">ImplicitParsers</a>, <a href="../../ListImplicits.html" class="extype" name="llsm.ListImplicits">ListImplicits</a>, <a href="../../EitherImplicits.html" class="extype" name="llsm.EitherImplicits">EitherImplicits</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="LLSMMeta$.html" class="extype" name="llsm.io.metadata.LLSMMeta">LLSMMeta</a>, <a href="package$$implicits$.html" class="extype" name="llsm.io.metadata.implicits">implicits</a></div>
+            <div class="subClasses hiddenContent"><a href="FileMetadata$.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>, <a href="package$$implicits$.html" class="extype" name="llsm.io.metadata.implicits">implicits</a></div>
           </div></div>
         
 
@@ -284,7 +272,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="llsm.io.metadata.MetadataImplicits"><span>MetadataImplicits</span></li><li class="in" name="llsm.io.metadata.ImplicitParsers"><span>ImplicitParsers</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="llsm.io.metadata.MetadataImplicits"><span>MetadataImplicits</span></li><li class="in" name="llsm.io.metadata.ImplicitParsers"><span>ImplicitParsers</span></li><li class="in" name="llsm.ListImplicits"><span>ListImplicits</span></li><li class="in" name="llsm.EitherImplicits"><span>EitherImplicits</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -627,6 +615,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ImplicitParsers.html" class="extype" name="llsm.io.metadata.ImplicitParsers">ImplicitParsers</a></dd></dl></div>
+    </li><li name="llsm.ListImplicits#sequenceListEither" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sequenceListEither[A,E](l:List[Either[E,A]]):Either[E,List[A]]"></a><a id="sequenceListEither[A,E](List[Either[E,A]]):Either[E,List[A]]"></a>
+      <span class="permalink">
+      <a href="../../../llsm/io/metadata/MetadataImplicits.html#sequenceListEither[A,E](l:List[Either[E,A]]):Either[E,List[A]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequenceListEither</span><span class="tparams">[<span name="A">A</span>, <span name="E">E</span>]</span><span class="params">(<span name="l">l: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Either">Either</span>[<span class="extype" name="llsm.ListImplicits.sequenceListEither.E">E</span>, <span class="extype" name="llsm.ListImplicits.sequenceListEither.A">A</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="llsm.ListImplicits.sequenceListEither.E">E</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="llsm.ListImplicits.sequenceListEither.A">A</span>]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../ListImplicits.html" class="extype" name="llsm.ListImplicits">ListImplicits</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -849,6 +853,10 @@
         <div id="inheritedMembers">
         <div class="parent" name="llsm.io.metadata.ImplicitParsers">
               <h3>Inherited from <a href="ImplicitParsers.html" class="extype" name="llsm.io.metadata.ImplicitParsers">ImplicitParsers</a></h3>
+            </div><div class="parent" name="llsm.ListImplicits">
+              <h3>Inherited from <a href="../../ListImplicits.html" class="extype" name="llsm.ListImplicits">ListImplicits</a></h3>
+            </div><div class="parent" name="llsm.EitherImplicits">
+              <h3>Inherited from <a href="../../EitherImplicits.html" class="extype" name="llsm.EitherImplicits">EitherImplicits</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -124,12 +124,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm.io">io</a></dd></dl></div>
     </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="class" href="AggregatedMeta.html" title=""></a>
-                        <a href="AggregatedMeta.html" title="">
-                          AggregatedMeta
-                        </a>
-                      </li><li class="current-entities indented3">
                         <a class="object" href="CameraMetadata$.html" title=""></a>
                         <a class="class" href="CameraMetadata.html" title=""></a>
                         <a href="CameraMetadata.html" title="">
@@ -142,7 +136,7 @@
                           ConfigurableMetadata
                         </a>
                       </li><li class="current-entities indented3">
-                        <span class="separator"></span>
+                        <a class="object" href="FileMetadata$.html" title=""></a>
                         <a class="class" href="FileMetadata.html" title=""></a>
                         <a href="FileMetadata.html" title="">
                           FileMetadata
@@ -164,12 +158,6 @@
                         <a class="trait" href="ImplicitParsers.html" title=""></a>
                         <a href="ImplicitParsers.html" title="">
                           ImplicitParsers
-                        </a>
-                      </li><li class="current-entities indented3">
-                        <a class="object" href="LLSMMeta$.html" title=""></a>
-                        <a class="trait" href="LLSMMeta.html" title=""></a>
-                        <a href="LLSMMeta.html" title="">
-                          LLSMMeta
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -247,7 +235,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/core/src/main/scala/llsm/io/metadata/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/core/src/main/scala/llsm/io/metadata/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -299,25 +287,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="llsm.io.metadata.AggregatedMeta" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AggregatedMetaextendsLLSMMetawithProductwithSerializable"></a><a id="AggregatedMeta:AggregatedMeta"></a>
-      <span class="permalink">
-      <a href="../../../llsm/io/metadata/index.html#AggregatedMetaextendsLLSMMetawithProductwithSerializable" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="AggregatedMeta.html">
-              <span class="name">AggregatedMeta</span>
-            </a><span class="params">(<span name="meta">meta: <span class="extype" name="io.scif.ImageMetadata">ImageMetadata</span></span>)</span><span class="result"> extends <a href="LLSMMeta.html" class="extype" name="llsm.io.metadata.LLSMMeta">LLSMMeta</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      
-      
-    </li><li name="llsm.io.metadata.CameraMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="llsm.io.metadata.CameraMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CameraMetadataextendsProductwithSerializable"></a><a id="CameraMetadata:CameraMetadata"></a>
       <span class="permalink">
       <a href="../../../llsm/io/metadata/index.html#CameraMetadataextendsProductwithSerializable" title="Permalink">
@@ -354,9 +324,9 @@
       
       
     </li><li name="llsm.io.metadata.FileMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FileMetadataextendsLLSMMetawithProductwithSerializable"></a><a id="FileMetadata:FileMetadata"></a>
+      <a id="FileMetadataextendsProductwithSerializable"></a><a id="FileMetadata:FileMetadata"></a>
       <span class="permalink">
-      <a href="../../../llsm/io/metadata/index.html#FileMetadataextendsLLSMMetawithProductwithSerializable" title="Permalink">
+      <a href="../../../llsm/io/metadata/index.html#FileMetadataextendsProductwithSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -367,7 +337,7 @@
       <span class="symbol">
         <a title="" href="FileMetadata.html">
               <span class="name">FileMetadata</span>
-            </a><span class="params">(<span name="filename">filename: <a href="FilenameMetadata.html" class="extype" name="llsm.io.metadata.FilenameMetadata">FilenameMetadata</a></span>, <span name="waveform">waveform: <a href="WaveformMetadata.html" class="extype" name="llsm.io.metadata.WaveformMetadata">WaveformMetadata</a></span>, <span name="camera">camera: <a href="CameraMetadata.html" class="extype" name="llsm.io.metadata.CameraMetadata">CameraMetadata</a></span>, <span name="sample">sample: <a href="SampleStage.html" class="extype" name="llsm.io.metadata.SampleStage">SampleStage</a></span>, <span name="config">config: <a href="ConfigurableMetadata.html" class="extype" name="llsm.io.metadata.ConfigurableMetadata">ConfigurableMetadata</a></span>, <span name="image">image: <span class="extype" name="scala.Option">Option</span>[<a href="ImgMetadata.html" class="extype" name="llsm.io.metadata.ImgMetadata">ImgMetadata</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="LLSMMeta.html" class="extype" name="llsm.io.metadata.LLSMMeta">LLSMMeta</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+            </a><span class="params">(<span name="filename">filename: <a href="FilenameMetadata.html" class="extype" name="llsm.io.metadata.FilenameMetadata">FilenameMetadata</a></span>, <span name="waveform">waveform: <a href="WaveformMetadata.html" class="extype" name="llsm.io.metadata.WaveformMetadata">WaveformMetadata</a></span>, <span name="camera">camera: <a href="CameraMetadata.html" class="extype" name="llsm.io.metadata.CameraMetadata">CameraMetadata</a></span>, <span name="sample">sample: <a href="SampleStage.html" class="extype" name="llsm.io.metadata.SampleStage">SampleStage</a></span>, <span name="config">config: <a href="ConfigurableMetadata.html" class="extype" name="llsm.io.metadata.ConfigurableMetadata">ConfigurableMetadata</a></span>, <span name="image">image: <span class="extype" name="scala.Option">Option</span>[<a href="ImgMetadata.html" class="extype" name="llsm.io.metadata.ImgMetadata">ImgMetadata</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       
@@ -385,7 +355,7 @@
       <span class="symbol">
         <a title="" href="FilenameMetadata.html">
               <span class="name">FilenameMetadata</span>
-            </a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+            </a><span class="params">(<span name="id">id: <span class="extype" name="java.util.UUID">UUID</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       
@@ -408,9 +378,9 @@
       
       
     </li><li name="llsm.io.metadata.ImplicitParsers" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ImplicitParsersextendsAnyRef"></a><a id="ImplicitParsers:ImplicitParsers"></a>
+      <a id="ImplicitParsersextendsEitherImplicitswithListImplicits"></a><a id="ImplicitParsers:ImplicitParsers"></a>
       <span class="permalink">
-      <a href="../../../llsm/io/metadata/index.html#ImplicitParsersextendsAnyRef" title="Permalink">
+      <a href="../../../llsm/io/metadata/index.html#ImplicitParsersextendsEitherImplicitswithListImplicits" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -421,25 +391,7 @@
       <span class="symbol">
         <a title="" href="ImplicitParsers.html">
               <span class="name">ImplicitParsers</span>
-            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      
-      
-    </li><li name="llsm.io.metadata.LLSMMeta" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="LLSMMetaextendsAnyRef"></a><a id="LLSMMeta:LLSMMeta"></a>
-      <span class="permalink">
-      <a href="../../../llsm/io/metadata/index.html#LLSMMetaextendsAnyRef" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="LLSMMeta.html">
-              <span class="name">LLSMMeta</span>
-            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+            </a><span class="result"> extends <a href="../../EitherImplicits.html" class="extype" name="llsm.EitherImplicits">EitherImplicits</a> with <a href="../../ListImplicits.html" class="extype" name="llsm.ListImplicits">ListImplicits</a></span>
       </span>
       
       
@@ -577,10 +529,10 @@
       </span>
       
       
-    </li><li name="llsm.io.metadata.LLSMMeta" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LLSMMeta"></a><a id="LLSMMeta:LLSMMeta"></a>
+    </li><li name="llsm.io.metadata.FileMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FileMetadata"></a><a id="FileMetadata:FileMetadata"></a>
       <span class="permalink">
-      <a href="../../../llsm/io/metadata/index.html#LLSMMeta" title="Permalink">
+      <a href="../../../llsm/io/metadata/index.html#FileMetadata" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -589,9 +541,9 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="LLSMMeta$.html">
-              <span class="name">LLSMMeta</span>
-            </a><span class="result"> extends <a href="MetadataImplicits.html" class="extype" name="llsm.io.metadata.MetadataImplicits">MetadataImplicits</a> with <span class="extype" name="scala.Ordering">Ordering</span>[<a href="LLSMMeta.html" class="extype" name="llsm.io.metadata.LLSMMeta">LLSMMeta</a>]</span>
+        <a title="" href="FileMetadata$.html">
+              <span class="name">FileMetadata</span>
+            </a><span class="result"> extends <a href="MetadataImplicits.html" class="extype" name="llsm.io.metadata.MetadataImplicits">MetadataImplicits</a> with <span class="extype" name="scala.Ordering">Ordering</span>[<a href="FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>
       </span>
       
       

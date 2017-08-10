@@ -163,12 +163,8 @@
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ImgWriterAPI$.html" title=""></a>
-                        <a class="trait" href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-"></a>
-                        <a href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-">
+                        <a class="trait" href="ImgWriterAPI.html" title=""></a>
+                        <a href="ImgWriterAPI.html" title="">
                           ImgWriterAPI
                         </a>
                       </li><li class="current-entities indented2">
@@ -281,9 +277,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="WriteSCIFIO.html" title=""></a>
-                        <a href="WriteSCIFIO.html" title="">
-                          WriteSCIFIO
+                        <a class="class" href="WriteOMETIFF.html" title=""></a>
+                        <a href="WriteOMETIFF.html" title="">
+                          WriteOMETIFF
                         </a>
                       </li>
               </ul>
@@ -315,7 +311,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/process.scala" target="_blank">process.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/process.scala" target="_blank">process.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -369,10 +365,10 @@ writeImg[TIFF, ShortType](pth, img, meta)
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="llsm.algebras.ProcessAPI#aggregateImgs" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="aggregateImgs(imgs:List[llsm.io.LLSMStack]):F[llsm.io.LLSMImg]"></a><a id="aggregateImgs(List[LLSMStack]):F[LLSMImg]"></a>
+              <ol><li name="llsm.algebras.ProcessAPI#deskewImg" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="deskewImg(img:llsm.io.LLSMImg,shearDim:Int,refDim:Int,shearFactor:Double,interpolation:llsm.InterpolationMethod):F[llsm.io.LLSMImg]"></a><a id="deskewImg(LLSMImg,Int,Int,Double,InterpolationMethod):F[LLSMImg]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ProcessAPI.html#aggregateImgs(imgs:List[llsm.io.LLSMStack]):F[llsm.io.LLSMImg]" title="Permalink">
+      <a href="../../llsm/algebras/ProcessAPI.html#deskewImg(img:llsm.io.LLSMImg,shearDim:Int,refDim:Int,shearFactor:Double,interpolation:llsm.InterpolationMethod):F[llsm.io.LLSMImg]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -381,39 +377,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">aggregateImgs</span><span class="params">(<span name="imgs">imgs: <span class="extype" name="scala.List">List</span>[<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>]</span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ProcessAPI.F">F</span>[<a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.algebras.ProcessAPI#deconvolve" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="deconvolve(img:llsm.io.LLSMStack,psf:llsm.io.LLSMStack,maxIterations:Int):F[llsm.io.LLSMStack]"></a><a id="deconvolve(LLSMStack,LLSMStack,Int):F[LLSMStack]"></a>
-      <span class="permalink">
-      <a href="../../llsm/algebras/ProcessAPI.html#deconvolve(img:llsm.io.LLSMStack,psf:llsm.io.LLSMStack,maxIterations:Int):F[llsm.io.LLSMStack]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">deconvolve</span><span class="params">(<span name="img">img: <a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a></span>, <span name="psf">psf: <a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a></span>, <span name="maxIterations">maxIterations: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ProcessAPI.F">F</span>[<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.algebras.ProcessAPI#deskewImg" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="deskewImg(img:llsm.io.LLSMStack,shearDim:Int,refDim:Int,shearFactor:Double,interpolation:llsm.InterpolationMethod):F[llsm.io.LLSMStack]"></a><a id="deskewImg(LLSMStack,Int,Int,Double,InterpolationMethod):F[LLSMStack]"></a>
-      <span class="permalink">
-      <a href="../../llsm/algebras/ProcessAPI.html#deskewImg(img:llsm.io.LLSMStack,shearDim:Int,refDim:Int,shearFactor:Double,interpolation:llsm.InterpolationMethod):F[llsm.io.LLSMStack]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">deskewImg</span><span class="params">(<span name="img">img: <a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a></span>, <span name="shearDim">shearDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="refDim">refDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="shearFactor">shearFactor: <span class="extype" name="scala.Double">Double</span></span>, <span name="interpolation">interpolation: <a href="../InterpolationMethod.html" class="extype" name="llsm.InterpolationMethod">InterpolationMethod</a></span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ProcessAPI.F">F</span>[<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>]</span>
+        <span class="name">deskewImg</span><span class="params">(<span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>, <span name="shearDim">shearDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="refDim">refDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="shearFactor">shearFactor: <span class="extype" name="scala.Double">Double</span></span>, <span name="interpolation">interpolation: <a href="../InterpolationMethod.html" class="extype" name="llsm.InterpolationMethod">InterpolationMethod</a></span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ProcessAPI.F">F</span>[<a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
       </span>
       
       

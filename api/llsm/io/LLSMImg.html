@@ -127,27 +127,33 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="llsm.io">io</a></dd></dl></div>
     </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="object" href="ImgUtils$.html" title=""></a>
-                        <a href="ImgUtils$.html" title="">
-                          ImgUtils
+                        <a class="object" href="ArrayContainer$.html" title=""></a>
+                        <a href="ArrayContainer$.html" title="">
+                          ArrayContainer
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
+                        <a class="object" href="CellContainer$.html" title=""></a>
+                        <a href="CellContainer$.html" title="">
+                          CellContainer
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="ImgContainer$.html" title=""></a>
+                        <a class="trait" href="ImgContainer.html" title=""></a>
+                        <a href="ImgContainer.html" title="">
+                          ImgContainer
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="LLSMImg$.html" title=""></a>
                         <a class="class" href="" title=""></a>
                         <a href="" title="">
                           LLSMImg
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="trait" href="LLSMImgs.html" title=""></a>
-                        <a href="LLSMImgs.html" title="">
-                          LLSMImgs
-                        </a>
-                      </li><li class="current-entities indented2">
-                        <a class="object" href="LLSMStack$.html" title=""></a>
-                        <a class="class" href="LLSMStack.html" title=""></a>
-                        <a href="LLSMStack.html" title="">
-                          LLSMStack
+                        <a class="object" href="PlanarContainer$.html" title=""></a>
+                        <a href="PlanarContainer$.html" title="">
+                          PlanarContainer
                         </a>
                       </li>
               </ul>
@@ -156,14 +162,16 @@
           <div id="content">
             <body class="class type">
       <div id="definition">
-        <div class="big-circle class">c</div>
+        <a href="LLSMImg$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="llsm">llsm</a>.<a href="index.html" class="extype" name="llsm.io">io</a></p>
-        <h1>LLSMImg<span class="permalink">
+        <h1><a href="LLSMImg$.html" title="See companion object">LLSMImg</a><span class="permalink">
       <a href="../../llsm/io/LLSMImg.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="LLSMImg$.html" title="See companion object">object LLSMImg</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -172,16 +180,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">LLSMImg</span><span class="params">(<span name="img">img: <span class="extype" name="net.imglib2.img.Img">Img</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>, <span name="meta">meta: <a href="metadata/AggregatedMeta.html" class="extype" name="llsm.io.metadata.AggregatedMeta">AggregatedMeta</a></span>)</span><span class="result"> extends <a href="LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">LLSMImg</span><span class="params">(<span name="img">img: <span class="extype" name="net.imglib2.img.Img">Img</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>, <span name="meta">meta: <a href="metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/core/src/main/scala/llsm/io/img.scala" target="_blank">img.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/core/src/main/scala/llsm/io/img.scala" target="_blank">img.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -207,7 +215,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="llsm.io.LLSMImg"><span>LLSMImg</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="llsm.io.LLSMImgs"><span>LLSMImgs</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="llsm.io.LLSMImg"><span>LLSMImg</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -228,9 +236,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.io.LLSMImg#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],meta:llsm.io.metadata.AggregatedMeta):llsm.io.LLSMImg"></a><a id="&lt;init&gt;:LLSMImg"></a>
+      <a id="&lt;init&gt;(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],meta:llsm.io.metadata.FileMetadata):llsm.io.LLSMImg"></a><a id="&lt;init&gt;:LLSMImg"></a>
       <span class="permalink">
-      <a href="../../llsm/io/LLSMImg.html#&lt;init&gt;(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],meta:llsm.io.metadata.AggregatedMeta):llsm.io.LLSMImg" title="Permalink">
+      <a href="../../llsm/io/LLSMImg.html#&lt;init&gt;(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],meta:llsm.io.metadata.FileMetadata):llsm.io.LLSMImg" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -239,7 +247,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LLSMImg</span><span class="params">(<span name="img">img: <span class="extype" name="net.imglib2.img.Img">Img</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>, <span name="meta">meta: <a href="metadata/AggregatedMeta.html" class="extype" name="llsm.io.metadata.AggregatedMeta">AggregatedMeta</a></span>)</span>
+        <span class="name">LLSMImg</span><span class="params">(<span name="img">img: <span class="extype" name="net.imglib2.img.Img">Img</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>, <span name="meta">meta: <a href="metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>)</span>
       </span>
       
       
@@ -426,9 +434,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="llsm.io.LLSMImg#meta" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="meta:llsm.io.metadata.AggregatedMeta"></a><a id="meta:AggregatedMeta"></a>
+      <a id="meta:llsm.io.metadata.FileMetadata"></a><a id="meta:FileMetadata"></a>
       <span class="permalink">
-      <a href="../../llsm/io/LLSMImg.html#meta:llsm.io.metadata.AggregatedMeta" title="Permalink">
+      <a href="../../llsm/io/LLSMImg.html#meta:llsm.io.metadata.FileMetadata" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -437,7 +445,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">meta</span><span class="result">: <a href="metadata/AggregatedMeta.html" class="extype" name="llsm.io.metadata.AggregatedMeta">AggregatedMeta</a></span>
+        <span class="name">meta</span><span class="result">: <a href="metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>
       </span>
       
       
@@ -589,8 +597,6 @@
               <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="llsm.io.LLSMImgs">
-              <h3>Inherited from <a href="LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -163,12 +163,8 @@
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ImgWriterAPI$.html" title=""></a>
-                        <a class="trait" href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-"></a>
-                        <a href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-">
+                        <a class="trait" href="ImgWriterAPI.html" title=""></a>
+                        <a href="ImgWriterAPI.html" title="">
                           ImgWriterAPI
                         </a>
                       </li><li class="current-entities indented2">
@@ -281,9 +277,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="WriteSCIFIO.html" title=""></a>
-                        <a href="WriteSCIFIO.html" title="">
-                          WriteSCIFIO
+                        <a class="class" href="WriteOMETIFF.html" title=""></a>
+                        <a href="WriteOMETIFF.html" title="">
+                          WriteOMETIFF
                         </a>
                       </li>
               </ul>
@@ -308,16 +304,16 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>)</span><span class="result"> extends <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">WriteHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span><span class="result"> extends <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<span class="extype" name="scala.Unit">Unit</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -364,9 +360,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.algebras.WriteHDF5#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImgs):llsm.algebras.WriteHDF5"></a><a id="&lt;init&gt;:WriteHDF5"></a>
+      <a id="&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImg):llsm.algebras.WriteHDF5"></a><a id="&lt;init&gt;:WriteHDF5"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/WriteHDF5.html#&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImgs):llsm.algebras.WriteHDF5" title="Permalink">
+      <a href="../../llsm/algebras/WriteHDF5.html#&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImg):llsm.algebras.WriteHDF5" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -375,7 +371,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>)</span>
+        <span class="name">WriteHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span>
       </span>
       
       
@@ -530,9 +526,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="llsm.algebras.WriteHDF5#img" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="img:llsm.io.LLSMImgs"></a><a id="img:LLSMImgs"></a>
+      <a id="img:llsm.io.LLSMImg"></a><a id="img:LLSMImg"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/WriteHDF5.html#img:llsm.io.LLSMImgs" title="Permalink">
+      <a href="../../llsm/algebras/WriteHDF5.html#img:llsm.io.LLSMImg" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -541,7 +537,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">img</span><span class="result">: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>
+        <span class="name">img</span><span class="result">: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>
       </span>
       
       
@@ -726,7 +722,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="llsm.algebras.LowWriterF">
-              <h3>Inherited from <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<span class="extype" name="scala.Unit">Unit</span>]</h3>
+              <h3>Inherited from <a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

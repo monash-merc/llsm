@@ -160,12 +160,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteMetadata</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span></span>)</span><span class="result"> extends <a href="MetadataF.html" class="extype" name="llsm.algebras.MetadataF">MetadataF</a>[<span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">WriteMetadata</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="metas">metas: <span class="extype" name="scala.List">List</span>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span></span>)</span><span class="result"> extends <a href="MetadataF.html" class="extype" name="llsm.algebras.MetadataF">MetadataF</a>[<span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/metadata.scala" target="_blank">metadata.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/metadata.scala" target="_blank">metadata.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -216,9 +216,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.algebras.MetadataAPI.WriteMetadata#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:Unit=&gt;A):llsm.algebras.MetadataAPI.WriteMetadata[A]"></a><a id="&lt;init&gt;:WriteMetadata[A]"></a>
+      <a id="&lt;init&gt;(path:java.nio.file.Path,metas:List[llsm.io.metadata.FileMetadata],next:Unit=&gt;A):llsm.algebras.MetadataAPI.WriteMetadata[A]"></a><a id="&lt;init&gt;:WriteMetadata[A]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/MetadataAPI$$WriteMetadata.html#&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:Unit=&gt;A):llsm.algebras.MetadataAPI.WriteMetadata[A]" title="Permalink">
+      <a href="../../llsm/algebras/MetadataAPI$$WriteMetadata.html#&lt;init&gt;(path:java.nio.file.Path,metas:List[llsm.io.metadata.FileMetadata],next:Unit=&gt;A):llsm.algebras.MetadataAPI.WriteMetadata[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -227,7 +227,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteMetadata</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span></span>)</span>
+        <span class="name">WriteMetadata</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="metas">metas: <span class="extype" name="scala.List">List</span>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.MetadataAPI.WriteMetadata.A">A</span></span>)</span>
       </span>
       
       
@@ -397,10 +397,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="llsm.algebras.MetadataAPI.WriteMetadata#meta" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="meta:llsm.io.metadata.FileMetadata"></a><a id="meta:FileMetadata"></a>
+    </li><li name="llsm.algebras.MetadataAPI.WriteMetadata#metas" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="metas:List[llsm.io.metadata.FileMetadata]"></a><a id="metas:List[FileMetadata]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/MetadataAPI$$WriteMetadata.html#meta:llsm.io.metadata.FileMetadata" title="Permalink">
+      <a href="../../llsm/algebras/MetadataAPI$$WriteMetadata.html#metas:List[llsm.io.metadata.FileMetadata]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,7 +409,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">meta</span><span class="result">: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>
+        <span class="name">metas</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>
       </span>
       
       

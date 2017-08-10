@@ -126,12 +126,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm.io">io</a></dd></dl></div>
     </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="class" href="AggregatedMeta.html" title=""></a>
-                        <a href="AggregatedMeta.html" title="">
-                          AggregatedMeta
-                        </a>
-                      </li><li class="current-entities indented3">
                         <a class="object" href="CameraMetadata$.html" title=""></a>
                         <a class="class" href="CameraMetadata.html" title=""></a>
                         <a href="CameraMetadata.html" title="">
@@ -144,7 +138,7 @@
                           ConfigurableMetadata
                         </a>
                       </li><li class="current-entities indented3">
-                        <span class="separator"></span>
+                        <a class="object" href="FileMetadata$.html" title=""></a>
                         <a class="class" href="FileMetadata.html" title=""></a>
                         <a href="FileMetadata.html" title="">
                           FileMetadata
@@ -166,12 +160,6 @@
                         <a class="trait" href="ImplicitParsers.html" title=""></a>
                         <a href="ImplicitParsers.html" title="">
                           ImplicitParsers
-                        </a>
-                      </li><li class="current-entities indented3">
-                        <a class="object" href="LLSMMeta$.html" title=""></a>
-                        <a class="trait" href="LLSMMeta.html" title=""></a>
-                        <a href="LLSMMeta.html" title="">
-                          LLSMMeta
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -244,12 +232,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">FilenameMetadata</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">FilenameMetadata</span><span class="params">(<span name="id">id: <span class="extype" name="java.util.UUID">UUID</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/core/src/main/scala/llsm/io/metadata/filename.scala" target="_blank">filename.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/core/src/main/scala/llsm/io/metadata/filename.scala" target="_blank">filename.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -300,9 +288,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.io.metadata.FilenameMetadata#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(name:String,channel:Int,stack:Int,channelWavelength:Int,timeStamp:Long,absTimeStamp:Long):llsm.io.metadata.FilenameMetadata"></a><a id="&lt;init&gt;:FilenameMetadata"></a>
+      <a id="&lt;init&gt;(id:java.util.UUID,name:String,channel:Int,stack:Int,channelWavelength:Int,timeStamp:Long,absTimeStamp:Long):llsm.io.metadata.FilenameMetadata"></a><a id="&lt;init&gt;:FilenameMetadata"></a>
       <span class="permalink">
-      <a href="../../../llsm/io/metadata/FilenameMetadata.html#&lt;init&gt;(name:String,channel:Int,stack:Int,channelWavelength:Int,timeStamp:Long,absTimeStamp:Long):llsm.io.metadata.FilenameMetadata" title="Permalink">
+      <a href="../../../llsm/io/metadata/FilenameMetadata.html#&lt;init&gt;(id:java.util.UUID,name:String,channel:Int,stack:Int,channelWavelength:Int,timeStamp:Long,absTimeStamp:Long):llsm.io.metadata.FilenameMetadata" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -311,7 +299,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FilenameMetadata</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="name">FilenameMetadata</span><span class="params">(<span name="id">id: <span class="extype" name="java.util.UUID">UUID</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="channel">channel: <span class="extype" name="scala.Int">Int</span></span>, <span name="stack">stack: <span class="extype" name="scala.Int">Int</span></span>, <span name="channelWavelength">channelWavelength: <span class="extype" name="scala.Int">Int</span></span>, <span name="timeStamp">timeStamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="absTimeStamp">absTimeStamp: <span class="extype" name="scala.Long">Long</span></span>)</span>
       </span>
       
       
@@ -513,6 +501,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="llsm.io.metadata.FilenameMetadata#id" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="id:java.util.UUID"></a><a id="id:UUID"></a>
+      <span class="permalink">
+      <a href="../../../llsm/io/metadata/FilenameMetadata.html#id:java.util.UUID" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">id</span><span class="result">: <span class="extype" name="java.util.UUID">UUID</span></span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">

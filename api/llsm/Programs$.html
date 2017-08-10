@@ -107,6 +107,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="llsm">llsm</a></dd></dl></div>
+    </li><li name="llsm.formats" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formats"></a><a id="formats:formats"></a>
+      <span class="permalink">
+      <a href="../llsm/index.html#formats" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="formats/index.html">
+              <span class="name">formats</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="llsm">llsm</a></dd></dl></div>
     </li><li name="llsm.fp" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fp"></a><a id="fp:fp"></a>
       <span class="permalink">
@@ -169,6 +187,18 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
+                        <a class="trait" href="EitherImplicits.html" title=""></a>
+                        <a href="EitherImplicits.html" title="">
+                          EitherImplicits
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="ImgUtils$.html" title=""></a>
+                        <a href="ImgUtils$.html" title="">
+                          ImgUtils
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
                         <a class="trait" href="InterpolationMethod.html" title=""></a>
                         <a href="InterpolationMethod.html" title="">
                           InterpolationMethod
@@ -193,6 +223,12 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
+                        <a class="trait" href="ListImplicits.html" title=""></a>
+                        <a href="ListImplicits.html" title="">
+                          ListImplicits
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
                         <a class="object" href="NNInterpolation$.html" title=""></a>
                         <a href="NNInterpolation$.html" title="">
                           NNInterpolation
@@ -212,18 +248,6 @@ and a raw metadata file."></a>
 Starting point is typically a directory containing LLSM image stacks
 and a raw metadata file.">
                           Programs
-                        </a>
-                      </li><li class="current-entities indented1">
-                        <span class="separator"></span>
-                        <a class="object" href="package$$either$.html" title=""></a>
-                        <a href="package$$either$.html" title="">
-                          either
-                        </a>
-                      </li><li class="current-entities indented1">
-                        <span class="separator"></span>
-                        <a class="object" href="package$$list$.html" title=""></a>
-                        <a href="package$$list$.html" title="">
-                          list
                         </a>
                       </li>
               </ul>
@@ -258,7 +282,7 @@ Starting point is typically a directory containing LLSM image stacks
 and a raw metadata file.
  img_dir <u> readFileNameMeta </u> ImageMetadata
          \_ readWaveformMeta _/
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/program.scala" target="_blank">program.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/program.scala" target="_blank">program.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -402,9 +426,9 @@ and a raw metadata file.
               
         </dd></dl></div>
     </li><li name="llsm.Programs#convertImg" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="convertImg[F[_]](path:java.nio.file.Path,outputPath:java.nio.file.Path)(implicitevidence$18:llsm.algebras.Metadata[F],implicitevidence$19:llsm.algebras.ImgReader[F],implicitevidence$20:llsm.algebras.ImgWriter[F],implicitevidence$21:llsm.algebras.Process[F],implicitevidence$22:llsm.algebras.Progress[F]):cats.free.Free[F,Unit]"></a><a id="convertImg[F[_]](Path,Path)(Metadata[F],ImgReader[F],ImgWriter[F],Process[F],Progress[F]):Free[F,Unit]"></a>
+      <a id="convertImg[F[_]](path:java.nio.file.Path,outputPath:java.nio.file.Path)(implicitevidence$5:llsm.algebras.Metadata[F],implicitevidence$6:llsm.algebras.ImgReader[F],implicitevidence$7:llsm.algebras.ImgWriter[F],implicitevidence$8:llsm.algebras.Process[F],implicitevidence$9:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]"></a><a id="convertImg[F[_]](Path,Path)(Metadata[F],ImgReader[F],ImgWriter[F],Process[F],Progress[F]):Free[F,LLSMImg]"></a>
       <span class="permalink">
-      <a href="../llsm/Programs$.html#convertImg[F[_]](path:java.nio.file.Path,outputPath:java.nio.file.Path)(implicitevidence$18:llsm.algebras.Metadata[F],implicitevidence$19:llsm.algebras.ImgReader[F],implicitevidence$20:llsm.algebras.ImgWriter[F],implicitevidence$21:llsm.algebras.Process[F],implicitevidence$22:llsm.algebras.Progress[F]):cats.free.Free[F,Unit]" title="Permalink">
+      <a href="../llsm/Programs$.html#convertImg[F[_]](path:java.nio.file.Path,outputPath:java.nio.file.Path)(implicitevidence$5:llsm.algebras.Metadata[F],implicitevidence$6:llsm.algebras.ImgReader[F],implicitevidence$7:llsm.algebras.ImgWriter[F],implicitevidence$8:llsm.algebras.Process[F],implicitevidence$9:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -413,14 +437,14 @@ and a raw metadata file.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertImg</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">convertImg</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.convertImg.F">F</span>, <a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
       </span>
       
       
     </li><li name="llsm.Programs#convertImgs" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="convertImgs[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$23:llsm.algebras.Metadata[F],implicitevidence$24:llsm.algebras.ImgReader[F],implicitevidence$25:llsm.algebras.Process[F],implicitevidence$26:llsm.algebras.Progress[F],implicitevidence$27:llsm.algebras.ImgWriter[F]):cats.free.Free[F,List[Unit]]"></a><a id="convertImgs[F[_]](List[Path],Path)(Metadata[F],ImgReader[F],Process[F],Progress[F],ImgWriter[F]):Free[F,List[Unit]]"></a>
+      <a id="convertImgs[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$10:llsm.algebras.Metadata[F],implicitevidence$11:llsm.algebras.ImgReader[F],implicitevidence$12:llsm.algebras.Process[F],implicitevidence$13:llsm.algebras.Progress[F],implicitevidence$14:llsm.algebras.ImgWriter[F]):cats.free.Free[F,List[llsm.io.LLSMImg]]"></a><a id="convertImgs[F[_]](List[Path],Path)(Metadata[F],ImgReader[F],Process[F],Progress[F],ImgWriter[F]):Free[F,List[LLSMImg]]"></a>
       <span class="permalink">
-      <a href="../llsm/Programs$.html#convertImgs[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$23:llsm.algebras.Metadata[F],implicitevidence$24:llsm.algebras.ImgReader[F],implicitevidence$25:llsm.algebras.Process[F],implicitevidence$26:llsm.algebras.Progress[F],implicitevidence$27:llsm.algebras.ImgWriter[F]):cats.free.Free[F,List[Unit]]" title="Permalink">
+      <a href="../llsm/Programs$.html#convertImgs[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$10:llsm.algebras.Metadata[F],implicitevidence$11:llsm.algebras.ImgReader[F],implicitevidence$12:llsm.algebras.Process[F],implicitevidence$13:llsm.algebras.Progress[F],implicitevidence$14:llsm.algebras.ImgWriter[F]):cats.free.Free[F,List[llsm.io.LLSMImg]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -429,14 +453,14 @@ and a raw metadata file.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertImgs</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Unit">Unit</span>]]</span>
+        <span class="name">convertImgs</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.convertImgs.F">F</span>, <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]]</span>
       </span>
       
       
     </li><li name="llsm.Programs#convertImgsP" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="convertImgsP[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$28:llsm.algebras.Metadata[F],implicitevidence$29:llsm.algebras.ImgReader[F],implicitevidence$30:llsm.algebras.Process[F],implicitevidence$31:llsm.algebras.Progress[F],implicitevidence$32:llsm.algebras.ImgWriter[F]):llsm.fp.ParSeq[F,List[Unit]]"></a><a id="convertImgsP[F[_]](List[Path],Path)(Metadata[F],ImgReader[F],Process[F],Progress[F],ImgWriter[F]):ParSeq[F,List[Unit]]"></a>
+      <a id="convertImgsP[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$15:llsm.algebras.Metadata[F],implicitevidence$16:llsm.algebras.ImgReader[F],implicitevidence$17:llsm.algebras.Process[F],implicitevidence$18:llsm.algebras.Progress[F],implicitevidence$19:llsm.algebras.ImgWriter[F]):llsm.fp.ParSeq[F,List[llsm.io.LLSMImg]]"></a><a id="convertImgsP[F[_]](List[Path],Path)(Metadata[F],ImgReader[F],Process[F],Progress[F],ImgWriter[F]):ParSeq[F,List[LLSMImg]]"></a>
       <span class="permalink">
-      <a href="../llsm/Programs$.html#convertImgsP[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$28:llsm.algebras.Metadata[F],implicitevidence$29:llsm.algebras.ImgReader[F],implicitevidence$30:llsm.algebras.Process[F],implicitevidence$31:llsm.algebras.Progress[F],implicitevidence$32:llsm.algebras.ImgWriter[F]):llsm.fp.ParSeq[F,List[Unit]]" title="Permalink">
+      <a href="../llsm/Programs$.html#convertImgsP[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$15:llsm.algebras.Metadata[F],implicitevidence$16:llsm.algebras.ImgReader[F],implicitevidence$17:llsm.algebras.Process[F],implicitevidence$18:llsm.algebras.Progress[F],implicitevidence$19:llsm.algebras.ImgWriter[F]):llsm.fp.ParSeq[F,List[llsm.io.LLSMImg]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -445,23 +469,7 @@ and a raw metadata file.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertImgsP</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>)</span><span class="result">: <a href="fp/index.html#ParSeq[F[_],A]=cats.free.FreeApplicative[[β$2$]cats.free.Free[F,β$2$],A]" class="extmbr" name="llsm.fp.ParSeq">ParSeq</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Unit">Unit</span>]]</span>
-      </span>
-      
-      
-    </li><li name="llsm.Programs#convertStacks" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="convertStacks[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$13:llsm.algebras.Metadata[F],implicitevidence$14:llsm.algebras.ImgReader[F],implicitevidence$15:llsm.algebras.Process[F],implicitevidence$16:llsm.algebras.Progress[F],implicitevidence$17:llsm.algebras.ImgWriter[F]):cats.free.Free[F,Unit]"></a><a id="convertStacks[F[_]](List[Path],Path)(Metadata[F],ImgReader[F],Process[F],Progress[F],ImgWriter[F]):Free[F,Unit]"></a>
-      <span class="permalink">
-      <a href="../llsm/Programs$.html#convertStacks[F[_]](paths:List[java.nio.file.Path],outputPath:java.nio.file.Path)(implicitevidence$13:llsm.algebras.Metadata[F],implicitevidence$14:llsm.algebras.ImgReader[F],implicitevidence$15:llsm.algebras.Process[F],implicitevidence$16:llsm.algebras.Progress[F],implicitevidence$17:llsm.algebras.ImgWriter[F]):cats.free.Free[F,Unit]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">convertStacks</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.convertStacks.F">F</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">convertImgsP</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="outputPath">outputPath: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>, <span name="arg4">arg4: <a href="algebras/index.html#ImgWriter[G[_]]=cats.free.Inject[llsm.algebras.ImgWriterF,G]" class="extmbr" name="llsm.algebras.ImgWriter">ImgWriter</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>]</span>)</span><span class="result">: <a href="fp/index.html#ParSeq[F[_],A]=cats.free.FreeApplicative[[β$4$]cats.free.Free[F,β$4$],A]" class="extmbr" name="llsm.fp.ParSeq">ParSeq</a>[<span class="extype" name="llsm.Programs.convertImgsP.F">F</span>, <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]]</span>
       </span>
       
       
@@ -616,9 +624,9 @@ and a raw metadata file.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="llsm.Programs#processImg" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="processImg[F[_]](path:java.nio.file.Path)(implicitevidence$1:llsm.algebras.Metadata[F],implicitevidence$2:llsm.algebras.ImgReader[F],implicitevidence$3:llsm.algebras.Process[F],implicitevidence$4:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMStack]"></a><a id="processImg[F[_]](Path)(Metadata[F],ImgReader[F],Process[F],Progress[F]):Free[F,LLSMStack]"></a>
+      <a id="processImg[F[_]](path:java.nio.file.Path)(implicitevidence$1:llsm.algebras.Metadata[F],implicitevidence$2:llsm.algebras.ImgReader[F],implicitevidence$3:llsm.algebras.Process[F],implicitevidence$4:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]"></a><a id="processImg[F[_]](Path)(Metadata[F],ImgReader[F],Process[F],Progress[F]):Free[F,LLSMImg]"></a>
       <span class="permalink">
-      <a href="../llsm/Programs$.html#processImg[F[_]](path:java.nio.file.Path)(implicitevidence$1:llsm.algebras.Metadata[F],implicitevidence$2:llsm.algebras.ImgReader[F],implicitevidence$3:llsm.algebras.Process[F],implicitevidence$4:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMStack]" title="Permalink">
+      <a href="../llsm/Programs$.html#processImg[F[_]](path:java.nio.file.Path)(implicitevidence$1:llsm.algebras.Metadata[F],implicitevidence$2:llsm.algebras.ImgReader[F],implicitevidence$3:llsm.algebras.Process[F],implicitevidence$4:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -627,39 +635,7 @@ and a raw metadata file.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">processImg</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.processImg.F">F</span>, <a href="io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.Programs#processImgs" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="processImgs[F[_]](paths:List[java.nio.file.Path])(implicitevidence$5:llsm.algebras.Metadata[F],implicitevidence$6:llsm.algebras.ImgReader[F],implicitevidence$7:llsm.algebras.Process[F],implicitevidence$8:llsm.algebras.Progress[F]):llsm.fp.ParSeq[F,llsm.io.LLSMImg]"></a><a id="processImgs[F[_]](List[Path])(Metadata[F],ImgReader[F],Process[F],Progress[F]):ParSeq[F,LLSMImg]"></a>
-      <span class="permalink">
-      <a href="../llsm/Programs$.html#processImgs[F[_]](paths:List[java.nio.file.Path])(implicitevidence$5:llsm.algebras.Metadata[F],implicitevidence$6:llsm.algebras.ImgReader[F],implicitevidence$7:llsm.algebras.Process[F],implicitevidence$8:llsm.algebras.Progress[F]):llsm.fp.ParSeq[F,llsm.io.LLSMImg]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">processImgs</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.processImgs.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.processImgs.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.processImgs.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.processImgs.F">F</span>]</span>)</span><span class="result">: <a href="fp/index.html#ParSeq[F[_],A]=cats.free.FreeApplicative[[β$2$]cats.free.Free[F,β$2$],A]" class="extmbr" name="llsm.fp.ParSeq">ParSeq</a>[<span class="extype" name="llsm.Programs.processImgs.F">F</span>, <a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.Programs#processStacks" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="processStacks[F[_]](paths:List[java.nio.file.Path])(implicitevidence$9:llsm.algebras.Metadata[F],implicitevidence$10:llsm.algebras.ImgReader[F],implicitevidence$11:llsm.algebras.Process[F],implicitevidence$12:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]"></a><a id="processStacks[F[_]](List[Path])(Metadata[F],ImgReader[F],Process[F],Progress[F]):Free[F,LLSMImg]"></a>
-      <span class="permalink">
-      <a href="../llsm/Programs$.html#processStacks[F[_]](paths:List[java.nio.file.Path])(implicitevidence$9:llsm.algebras.Metadata[F],implicitevidence$10:llsm.algebras.ImgReader[F],implicitevidence$11:llsm.algebras.Process[F],implicitevidence$12:llsm.algebras.Progress[F]):cats.free.Free[F,llsm.io.LLSMImg]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">processStacks</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="paths">paths: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.processStacks.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.processStacks.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.processStacks.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.processStacks.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.processStacks.F">F</span>, <a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
+        <span class="name">processImg</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="algebras/index.html#Metadata[G[_]]=cats.free.Inject[llsm.algebras.MetadataF,G]" class="extmbr" name="llsm.algebras.Metadata">Metadata</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg1">arg1: <a href="algebras/index.html#ImgReader[G[_]]=cats.free.Inject[llsm.algebras.ImgReaderF,G]" class="extmbr" name="llsm.algebras.ImgReader">ImgReader</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg2">arg2: <a href="algebras/index.html#Process[G[_]]=cats.free.Inject[llsm.algebras.ProcessF,G]" class="extmbr" name="llsm.algebras.Process">Process</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>, <span name="arg3">arg3: <a href="algebras/index.html#Progress[G[_]]=cats.free.Inject[llsm.algebras.ProgressF,G]" class="extmbr" name="llsm.algebras.Progress">Progress</a>[<span class="extype" name="llsm.Programs.processImg.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.Programs.processImg.F">F</span>, <a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>
       </span>
       
       

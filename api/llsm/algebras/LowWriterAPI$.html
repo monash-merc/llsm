@@ -163,12 +163,8 @@
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ImgWriterAPI$.html" title=""></a>
-                        <a class="trait" href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-"></a>
-                        <a href="ImgWriterAPI.html" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-">
+                        <a class="trait" href="ImgWriterAPI.html" title=""></a>
+                        <a href="ImgWriterAPI.html" title="">
                           ImgWriterAPI
                         </a>
                       </li><li class="current-entities indented2">
@@ -281,9 +277,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="WriteSCIFIO.html" title=""></a>
-                        <a href="WriteSCIFIO.html" title="">
-                          WriteSCIFIO
+                        <a class="class" href="WriteOMETIFF.html" title=""></a>
+                        <a href="WriteOMETIFF.html" title="">
+                          WriteOMETIFF
                         </a>
                       </li>
               </ul>
@@ -313,7 +309,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -705,9 +701,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
               
         </dd></dl></div>
     </li><li name="llsm.algebras.LowWriterAPI#writeHDF5" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="writeHDF5(path:java.nio.file.Path,img:llsm.io.LLSMImgs):cats.free.Free[llsm.algebras.LowWriterF,Unit]"></a><a id="writeHDF5(Path,LLSMImgs):Free[LowWriterF,Unit]"></a>
+      <a id="writeHDF5(path:java.nio.file.Path,img:llsm.io.LLSMImg):cats.free.Free[llsm.algebras.LowWriterF,llsm.io.metadata.FileMetadata]"></a><a id="writeHDF5(Path,LLSMImg):Free[LowWriterF,FileMetadata]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/LowWriterAPI$.html#writeHDF5(path:java.nio.file.Path,img:llsm.io.LLSMImgs):cats.free.Free[llsm.algebras.LowWriterF,Unit]" title="Permalink">
+      <a href="../../llsm/algebras/LowWriterAPI$.html#writeHDF5(path:java.nio.file.Path,img:llsm.io.LLSMImg):cats.free.Free[llsm.algebras.LowWriterF,llsm.io.metadata.FileMetadata]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -716,14 +712,14 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">writeHDF5</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>
       </span>
       
       
-    </li><li name="llsm.algebras.LowWriterAPI#writeSCIFIO" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="writeSCIFIO(path:java.nio.file.Path,img:llsm.io.LLSMImgs):cats.free.Free[llsm.algebras.LowWriterF,Unit]"></a><a id="writeSCIFIO(Path,LLSMImgs):Free[LowWriterF,Unit]"></a>
+    </li><li name="llsm.algebras.LowWriterAPI#writeOMETIFF" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writeOMETIFF(path:java.nio.file.Path,img:llsm.io.LLSMImg):cats.free.Free[llsm.algebras.LowWriterF,llsm.io.metadata.FileMetadata]"></a><a id="writeOMETIFF(Path,LLSMImg):Free[LowWriterF,FileMetadata]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/LowWriterAPI$.html#writeSCIFIO(path:java.nio.file.Path,img:llsm.io.LLSMImgs):cats.free.Free[llsm.algebras.LowWriterF,Unit]" title="Permalink">
+      <a href="../../llsm/algebras/LowWriterAPI$.html#writeOMETIFF(path:java.nio.file.Path,img:llsm.io.LLSMImg):cats.free.Free[llsm.algebras.LowWriterF,llsm.io.metadata.FileMetadata]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -732,7 +728,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeSCIFIO</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">writeOMETIFF</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span><span class="result">: <span class="extype" name="cats.free.Free">Free</span>[<a href="LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>
       </span>
       
       

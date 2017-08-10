@@ -163,12 +163,8 @@
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="ImgWriterAPI$.html" title=""></a>
-                        <a class="trait" href="" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-"></a>
-                        <a href="" title="API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-">
+                        <a class="trait" href="" title=""></a>
+                        <a href="" title="">
                           ImgWriterAPI
                         </a>
                       </li><li class="current-entities indented2">
@@ -281,9 +277,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
                         </a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="WriteSCIFIO.html" title=""></a>
-                        <a href="WriteSCIFIO.html" title="">
-                          WriteSCIFIO
+                        <a class="class" href="WriteOMETIFF.html" title=""></a>
+                        <a href="WriteOMETIFF.html" title="">
+                          WriteOMETIFF
                         </a>
                       </li>
               </ul>
@@ -315,9 +311,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>API we want to expose
-writeImg[TIFF, ShortType](pth, img, meta)
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -372,9 +366,9 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="llsm.algebras.ImgWriterAPI#writeImg" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="writeImg(path:java.nio.file.Path,img:llsm.io.LLSMImgs):F[Unit]"></a><a id="writeImg(Path,LLSMImgs):F[Unit]"></a>
+      <a id="writeImg(path:java.nio.file.Path,img:llsm.io.LLSMImg):F[llsm.io.metadata.FileMetadata]"></a><a id="writeImg(Path,LLSMImg):F[FileMetadata]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgWriterAPI.html#writeImg(path:java.nio.file.Path,img:llsm.io.LLSMImgs):F[Unit]" title="Permalink">
+      <a href="../../llsm/algebras/ImgWriterAPI.html#writeImg(path:java.nio.file.Path,img:llsm.io.LLSMImg):F[llsm.io.metadata.FileMetadata]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -383,7 +377,7 @@ writeImg[TIFF, ShortType](pth, img, meta)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ImgWriterAPI.F">F</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">writeImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span><span class="result">: <span class="extype" name="llsm.algebras.ImgWriterAPI.F">F</span>[<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>
       </span>
       
       

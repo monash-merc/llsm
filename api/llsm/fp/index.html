@@ -107,6 +107,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm">llsm</a></dd></dl></div>
+    </li><li name="llsm.formats" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formats"></a><a id="formats:formats"></a>
+      <span class="permalink">
+      <a href="../llsm/index.html#formats" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../formats/index.html">
+              <span class="name">formats</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm">llsm</a></dd></dl></div>
     </li><li name="llsm.fp" visbl="pub" class="indented2 current" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fp"></a><a id="fp:fp"></a>
       <span class="permalink">
@@ -134,6 +152,18 @@
                         <a class="object" href="package$$ParSeq$.html" title=""></a>
                         <a href="package$$ParSeq$.html" title="">
                           ParSeq
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$SeqPar$.html" title=""></a>
+                        <a href="package$$SeqPar$.html" title="">
+                          SeqPar
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="package$$SeqParSeq$.html" title=""></a>
+                        <a href="package$$SeqParSeq$.html" title="">
+                          SeqParSeq
                         </a>
                       </li><li name="llsm.interpreters" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="interpreters"></a><a id="interpreters:interpreters"></a>
@@ -199,7 +229,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/fp/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/fp/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -317,10 +347,10 @@
       </span>
       
       
-    </li><li name="llsm.fp.ParSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ParSeq[F[_],A]=cats.free.FreeApplicative[[β$2$]cats.free.Free[F,β$2$],A]"></a><a id="ParSeq[F[_],A]:ParSeq[F,A]"></a>
+    </li><li name="llsm.fp.ParInterpreter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParInterpreter[F[_],G[_]]=cats.~&gt;[[β$2$]cats.free.FreeApplicative[F,β$2$],G]"></a><a id="ParInterpreter[F[_],G[_]]:ParInterpreter[F,G]"></a>
       <span class="permalink">
-      <a href="../../llsm/fp/index.html#ParSeq[F[_],A]=cats.free.FreeApplicative[[β$2$]cats.free.Free[F,β$2$],A]" title="Permalink">
+      <a href="../../llsm/fp/index.html#ParInterpreter[F[_],G[_]]=cats.~&gt;[[β$2$]cats.free.FreeApplicative[F,β$2$],G]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -329,7 +359,71 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ParSeq</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[[β$2$]<span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.fp.ParSeq.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>], <span class="extype" name="llsm.fp.ParSeq.A">A</span>]</span>
+        <span class="name">ParInterpreter</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[β$2$]<span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.ParInterpreter.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>], <span class="extype" name="llsm.fp.ParInterpreter.G">G</span>]</span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.ParOptimiser" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParOptimiser[F[_],G[_]]=llsm.fp.package.ParInterpreter[F,[β$3$]cats.free.Free[[β$9$]cats.free.FreeApplicative[G,β$9$],β$3$]]"></a><a id="ParOptimiser[F[_],G[_]]:ParOptimiser[F,G]"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#ParOptimiser[F[_],G[_]]=llsm.fp.package.ParInterpreter[F,[β$3$]cats.free.Free[[β$9$]cats.free.FreeApplicative[G,β$9$],β$3$]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ParOptimiser</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="G">G<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result alias"> = <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[β$2$]<span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.ParOptimiser.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$2$">β$2$</span>], [β$3$]<span class="extype" name="cats.free.Free">Free</span>[[β$9$]<span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.ParOptimiser.G">G</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$9$">β$9$</span>], <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$3$">β$3$</span>]]</span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.ParSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParSeq[F[_],A]=cats.free.FreeApplicative[[β$4$]cats.free.Free[F,β$4$],A]"></a><a id="ParSeq[F[_],A]:ParSeq[F,A]"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#ParSeq[F[_],A]=cats.free.FreeApplicative[[β$4$]cats.free.Free[F,β$4$],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ParSeq</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[[β$4$]<span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.fp.ParSeq.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$4$">β$4$</span>], <span class="extype" name="llsm.fp.ParSeq.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.SeqPar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]"></a><a id="SeqPar[F[_],A]:SeqPar[F,A]"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SeqPar</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.free.Free">Free</span>[[β$9$]<span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.SeqPar.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$9$">β$9$</span>], <span class="extype" name="llsm.fp.SeqPar.A">A</span>]</span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.SeqParSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SeqParSeq[F[_],A]=cats.free.Free[[β$15$]cats.free.FreeApplicative[[β$14$]cats.free.Free[F,β$14$],β$15$],A]"></a><a id="SeqParSeq[F[_],A]:SeqParSeq[F,A]"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#SeqParSeq[F[_],A]=cats.free.Free[[β$15$]cats.free.FreeApplicative[[β$14$]cats.free.Free[F,β$14$],β$15$],A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SeqParSeq</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.free.Free">Free</span>[[β$15$]<span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[[β$14$]<span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.fp.SeqParSeq.F">F</span>, <span class="extype" name="llsm.fp.&lt;refinement&gt;.&lt;refinement&gt;.Λ$.β$14$">β$14$</span>], <span class="extype" name="llsm.fp.&lt;refinement&gt;.Λ$.β$15$">β$15$</span>], <span class="extype" name="llsm.fp.SeqParSeq.A">A</span>]</span>
       </span>
       
       
@@ -374,9 +468,9 @@
               <h3>Value Members</h3>
               <ol>
                 <li name="llsm.fp#haltFunctor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="haltFunctor[F[_]]:cats.Functor[[β$7$]F[Unit]]"></a><a id="haltFunctor[F[_]]:Functor[[β$7$]F[Unit]]"></a>
+      <a id="haltFunctor[F[_]]:cats.Functor[[β$23$]F[Unit]]"></a><a id="haltFunctor[F[_]]:Functor[[β$23$]F[Unit]]"></a>
       <span class="permalink">
-      <a href="../../llsm/fp/index.html#haltFunctor[F[_]]:cats.Functor[[β$7$]F[Unit]]" title="Permalink">
+      <a href="../../llsm/fp/index.html#haltFunctor[F[_]]:cats.Functor[[β$23$]F[Unit]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -385,7 +479,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">haltFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.Functor">Functor</span>[[β$7$]<span class="extype" name="llsm.fp.haltFunctor.F">F</span>[<span class="extype" name="scala.Unit">Unit</span>]]</span>
+        <span class="name">haltFunctor</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <span class="extype" name="cats.Functor">Functor</span>[[β$23$]<span class="extype" name="llsm.fp.haltFunctor.F">F</span>[<span class="extype" name="scala.Unit">Unit</span>]]</span>
       </span>
       
       
@@ -403,6 +497,42 @@
       <span class="symbol">
         <a title="" href="package$$ParSeq$.html">
               <span class="name">ParSeq</span>
+            </a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.SeqPar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SeqPar"></a><a id="SeqPar:SeqPar"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#SeqPar" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="package$$SeqPar$.html">
+              <span class="name">SeqPar</span>
+            </a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="llsm.fp.SeqParSeq" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SeqParSeq"></a><a id="SeqParSeq:SeqParSeq"></a>
+      <span class="permalink">
+      <a href="../../llsm/fp/index.html#SeqParSeq" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="package$$SeqParSeq$.html">
+              <span class="name">SeqParSeq</span>
             </a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       

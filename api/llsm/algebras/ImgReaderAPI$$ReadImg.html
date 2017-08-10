@@ -154,12 +154,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ReadImg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>)</span><span class="result"> extends <a href="ImgReaderF.html" class="extype" name="llsm.algebras.ImgReaderF">ImgReaderF</a>[<span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ReadImg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>)</span><span class="result"> extends <a href="ImgReaderF.html" class="extype" name="llsm.algebras.ImgReaderF">ImgReaderF</a>[<span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/reader.scala" target="_blank">reader.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/reader.scala" target="_blank">reader.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -210,9 +210,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.algebras.ImgReaderAPI.ReadImg#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:llsm.io.LLSMStack=&gt;A):llsm.algebras.ImgReaderAPI.ReadImg[A]"></a><a id="&lt;init&gt;:ReadImg[A]"></a>
+      <a id="&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:llsm.io.LLSMImg=&gt;A):llsm.algebras.ImgReaderAPI.ReadImg[A]"></a><a id="&lt;init&gt;:ReadImg[A]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgReaderAPI$$ReadImg.html#&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:llsm.io.LLSMStack=&gt;A):llsm.algebras.ImgReaderAPI.ReadImg[A]" title="Permalink">
+      <a href="../../llsm/algebras/ImgReaderAPI$$ReadImg.html#&lt;init&gt;(path:java.nio.file.Path,meta:llsm.io.metadata.FileMetadata,next:llsm.io.LLSMImg=&gt;A):llsm.algebras.ImgReaderAPI.ReadImg[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -221,7 +221,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ReadImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>)</span>
+        <span class="name">ReadImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="meta">meta: <a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>, <span name="next">next: (<a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>)</span>
       </span>
       
       
@@ -424,9 +424,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="llsm.algebras.ImgReaderAPI.ReadImg#next" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="next:llsm.io.LLSMStack=&gt;A"></a><a id="next:(LLSMStack)⇒A"></a>
+      <a id="next:llsm.io.LLSMImg=&gt;A"></a><a id="next:(LLSMImg)⇒A"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgReaderAPI$$ReadImg.html#next:llsm.io.LLSMStack=&gt;A" title="Permalink">
+      <a href="../../llsm/algebras/ImgReaderAPI$$ReadImg.html#next:llsm.io.LLSMImg=&gt;A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -435,7 +435,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">next</span><span class="result">: (<a href="../io/LLSMStack.html" class="extype" name="llsm.io.LLSMStack">LLSMStack</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>
+        <span class="name">next</span><span class="result">: (<a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>) ⇒ <span class="extype" name="llsm.algebras.ImgReaderAPI.ReadImg.A">A</span></span>
       </span>
       
       

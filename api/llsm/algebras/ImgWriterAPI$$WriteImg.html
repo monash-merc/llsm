@@ -154,12 +154,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteImg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>)</span><span class="result"> extends <a href="ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>[<span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">WriteImg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>, <span name="next">next: (<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>)</span><span class="result"> extends <a href="ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>[<span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/api/src/main/scala/llsm/algebras/writer.scala" target="_blank">writer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -210,9 +210,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="llsm.algebras.ImgWriterAPI.WriteImg#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImgs,next:Unit=&gt;A):llsm.algebras.ImgWriterAPI.WriteImg[A]"></a><a id="&lt;init&gt;:WriteImg[A]"></a>
+      <a id="&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImg,next:llsm.io.metadata.FileMetadata=&gt;A):llsm.algebras.ImgWriterAPI.WriteImg[A]"></a><a id="&lt;init&gt;:WriteImg[A]"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImgs,next:Unit=&gt;A):llsm.algebras.ImgWriterAPI.WriteImg[A]" title="Permalink">
+      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#&lt;init&gt;(path:java.nio.file.Path,img:llsm.io.LLSMImg,next:llsm.io.metadata.FileMetadata=&gt;A):llsm.algebras.ImgWriterAPI.WriteImg[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -221,7 +221,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WriteImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>, <span name="next">next: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>)</span>
+        <span class="name">WriteImg</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="img">img: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>, <span name="next">next: (<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>)</span>
       </span>
       
       
@@ -376,9 +376,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="llsm.algebras.ImgWriterAPI.WriteImg#img" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="img:llsm.io.LLSMImgs"></a><a id="img:LLSMImgs"></a>
+      <a id="img:llsm.io.LLSMImg"></a><a id="img:LLSMImg"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#img:llsm.io.LLSMImgs" title="Permalink">
+      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#img:llsm.io.LLSMImg" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -387,7 +387,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">img</span><span class="result">: <a href="../io/LLSMImgs.html" class="extype" name="llsm.io.LLSMImgs">LLSMImgs</a></span>
+        <span class="name">img</span><span class="result">: <a href="../io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>
       </span>
       
       
@@ -424,9 +424,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="llsm.algebras.ImgWriterAPI.WriteImg#next" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="next:Unit=&gt;A"></a><a id="next:(Unit)⇒A"></a>
+      <a id="next:llsm.io.metadata.FileMetadata=&gt;A"></a><a id="next:(FileMetadata)⇒A"></a>
       <span class="permalink">
-      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#next:Unit=&gt;A" title="Permalink">
+      <a href="../../llsm/algebras/ImgWriterAPI$$WriteImg.html#next:llsm.io.metadata.FileMetadata=&gt;A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -435,7 +435,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">next</span><span class="result">: (<span class="extype" name="scala.Unit">Unit</span>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>
+        <span class="name">next</span><span class="result">: (<a href="../io/metadata/FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>) ⇒ <span class="extype" name="llsm.algebras.ImgWriterAPI.WriteImg.A">A</span></span>
       </span>
       
       

@@ -126,12 +126,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="llsm.io">io</a></dd></dl></div>
     </li><li class="current-entities indented3">
-                        <span class="separator"></span>
-                        <a class="class" href="AggregatedMeta.html" title=""></a>
-                        <a href="AggregatedMeta.html" title="">
-                          AggregatedMeta
-                        </a>
-                      </li><li class="current-entities indented3">
                         <a class="object" href="CameraMetadata$.html" title=""></a>
                         <a class="class" href="CameraMetadata.html" title=""></a>
                         <a href="CameraMetadata.html" title="">
@@ -144,7 +138,7 @@
                           ConfigurableMetadata
                         </a>
                       </li><li class="current-entities indented3">
-                        <span class="separator"></span>
+                        <a class="object" href="FileMetadata$.html" title=""></a>
                         <a class="class" href="FileMetadata.html" title=""></a>
                         <a href="FileMetadata.html" title="">
                           FileMetadata
@@ -166,12 +160,6 @@
                         <a class="trait" href="ImplicitParsers.html" title=""></a>
                         <a href="ImplicitParsers.html" title="">
                           ImplicitParsers
-                        </a>
-                      </li><li class="current-entities indented3">
-                        <a class="object" href="LLSMMeta$.html" title=""></a>
-                        <a class="trait" href="LLSMMeta.html" title=""></a>
-                        <a href="LLSMMeta.html" title="">
-                          LLSMMeta
                         </a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
@@ -249,7 +237,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/keithschulze/llsm/tree/master/core/src/main/scala/llsm/io/metadata/util.scala" target="_blank">util.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/monash-merc/llsm/tree/master/core/src/main/scala/llsm/io/metadata/util.scala" target="_blank">util.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -392,10 +380,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="llsm.io.metadata.MetadataUtils#convertMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="convertMetadata(metadata:List[llsm.io.metadata.FileMetadata]):io.scif.ImageMetadata"></a><a id="convertMetadata(List[FileMetadata]):ImageMetadata"></a>
+    </li><li name="llsm.io.metadata.MetadataUtils#createImageMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createImageMetadata(imgs:List[llsm.io.LLSMImg]):io.scif.ImageMetadata"></a><a id="createImageMetadata(List[LLSMImg]):ImageMetadata"></a>
       <span class="permalink">
-      <a href="../../../llsm/io/metadata/MetadataUtils$.html#convertMetadata(metadata:List[llsm.io.metadata.FileMetadata]):io.scif.ImageMetadata" title="Permalink">
+      <a href="../../../llsm/io/metadata/MetadataUtils$.html#createImageMetadata(imgs:List[llsm.io.LLSMImg]):io.scif.ImageMetadata" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -404,11 +392,28 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertMetadata</span><span class="params">(<span name="metadata">metadata: <span class="extype" name="scala.List">List</span>[<a href="FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a>]</span>)</span><span class="result">: <span class="extype" name="io.scif.ImageMetadata">ImageMetadata</span></span>
+        <span class="name">createImageMetadata</span><span class="params">(<span name="imgs">imgs: <span class="extype" name="scala.List">List</span>[<a href="../LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>)</span><span class="result">: <span class="extype" name="io.scif.ImageMetadata">ImageMetadata</span></span>
       </span>
       
-      <p class="shortcomment cmt">Convert LLSM metadata to SCIFIO ImageMetadata</p><div class="fullcomment"><div class="comment cmt"><p>Convert LLSM metadata to SCIFIO ImageMetadata</p><p>Takes an LLSM metadata heirachy and compiles it into a default
-implementation of io.scif.ImageMetadata.</p></div><dl class="paramcmts block"><dt class="param">metadata</dt><dd class="cmt"><p>List of LLSM FileMetadata objects</p></dd><dt>returns</dt><dd class="cmt"><p>ImageMetadata</p></dd></dl></div>
+      <p class="shortcomment cmt">Convert List of LLSMImg metadata to SCIFIO ImageMetadata</p><div class="fullcomment"><div class="comment cmt"><p>Convert List of LLSMImg metadata to SCIFIO ImageMetadata</p><p>Takes list of LLSMImgs and converts the metadata it into a default
+implementation of io.scif.ImageMetadata.</p></div><dl class="paramcmts block"><dt class="param">imgs</dt><dd class="cmt"><p>List of LLSMImgs</p></dd><dt>returns</dt><dd class="cmt"><p>ImageMetadata</p></dd></dl></div>
+    </li><li name="llsm.io.metadata.MetadataUtils#createImageMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createImageMetadata(img:llsm.io.LLSMImg):io.scif.ImageMetadata"></a><a id="createImageMetadata(LLSMImg):ImageMetadata"></a>
+      <span class="permalink">
+      <a href="../../../llsm/io/metadata/MetadataUtils$.html#createImageMetadata(img:llsm.io.LLSMImg):io.scif.ImageMetadata" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createImageMetadata</span><span class="params">(<span name="img">img: <a href="../LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a></span>)</span><span class="result">: <span class="extype" name="io.scif.ImageMetadata">ImageMetadata</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Convert LLSMImg metadata to SCIFIO ImageMetadata</p><div class="fullcomment"><div class="comment cmt"><p>Convert LLSMImg metadata to SCIFIO ImageMetadata</p><p>Takes an LLSMImg and converts the metadata it into a default
+implementation of io.scif.ImageMetadata.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>ImageMetadata</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -559,22 +564,6 @@ implementation of io.scif.ImageMetadata.</p></div><dl class="paramcmts block"><d
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="llsm.io.metadata.MetadataUtils#populateImageMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="populateImageMetadata(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],fm:llsm.io.metadata.FileMetadata):io.scif.ImageMetadata"></a><a id="populateImageMetadata(Img[UnsignedShortType],FileMetadata):ImageMetadata"></a>
-      <span class="permalink">
-      <a href="../../../llsm/io/metadata/MetadataUtils$.html#populateImageMetadata(img:net.imglib2.img.Img[net.imglib2.type.numeric.integer.UnsignedShortType],fm:llsm.io.metadata.FileMetadata):io.scif.ImageMetadata" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">populateImageMetadata</span><span class="params">(<span name="img">img: <span class="extype" name="net.imglib2.img.Img">Img</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>, <span name="fm">fm: <a href="FileMetadata.html" class="extype" name="llsm.io.metadata.FileMetadata">FileMetadata</a></span>)</span><span class="result">: <span class="extype" name="io.scif.ImageMetadata">ImageMetadata</span></span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
