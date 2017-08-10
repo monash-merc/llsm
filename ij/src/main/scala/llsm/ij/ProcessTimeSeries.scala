@@ -5,9 +5,7 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.stream.Collectors
 
 import scala.collection.JavaConverters._
-import scala.util.{Success, Failure}
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Try, Success, Failure}
 
 import cats.MonadError
 import cats.data.Coproduct
@@ -39,8 +37,8 @@ import llsm.interpreters._
 import llsm.fp._
 import llsm.io.metadata.ConfigurableMetadata
 import llsm.ij.interpreters._
-import net.imagej.{Dataset, DatasetService}
-import net.imagej.axis.{Axes, CalibratedAxis}
+import net.imagej.DatasetService
+import net.imagej.axis.Axes
 import net.imglib2.img.ImgFactory
 import net.imglib2.img.array.ArrayImgFactory
 import net.imglib2.img.planar.PlanarImgFactory
@@ -139,58 +137,43 @@ class DeskewTimeSeriesPlugin extends Command {
       .collect(Collectors.toList[Path])
       .asScala.filter(_.toString.endsWith(".tif"))
 
-    processImgs[App](imgPaths.toList).run(compiler[Future]) onComplete {
-      r => r match {
-        case Success(img) => {
-          val imeta = img.getImageMetadata
-          val xIndex = imeta.getAxisIndex(Axes.X)
-          val zIndex = imeta.getAxisIndex(Axes.Z)
-          val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
-            case -1     => None
-            case i: Int => Some(i)
-          }
-
-          val imgDims = Array.ofDim[Long](img.numDimensions)
-          img.dimensions(imgDims)
-          container match {
-            case "Cell" => {
-              val out: ImagePlus = cIndex match {
-                case Some(i) =>
-                  ImageJFunctions.wrap(Views.permute(img, i, 2),
-                    s"${imeta.getName}_deskewed")
-                  case None =>
-                    ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
-              }
-              val cal = new Calibration(out)
-              cal.setUnit("um")
-              cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
-              cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
-              cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
-
-              if (imeta.getAxisLength(Axes.TIME) > 1) {
-                cal.setTimeUnit("ms")
-                cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
-              }
-
-              out.setCalibration(cal)
-              out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
-                imeta.getAxisLength(Axes.Z).toInt,
-                imeta.getAxisLength(Axes.TIME).toInt)
-              ui.show(out)
-            }
-            case _ => {
-              val out: Dataset = ds.create(img)
-              val axes = imeta.getAxes
-              val ax = Array.ofDim[CalibratedAxis](axes.size)
-              axes.toArray(ax)
-              out.setAxes(ax)
-              out.getImgPlus().setName(s"${imeta.getName}_deskewed")
-              ui.show(out)
-            }
-          }
+    processImgs[App](imgPaths.toList).run(compiler[Try]) match {
+      case Success(img) => {
+        val imeta = img.getImageMetadata
+        val xIndex = imeta.getAxisIndex(Axes.X)
+        val zIndex = imeta.getAxisIndex(Axes.Z)
+        val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
+          case -1     => None
+          case i: Int => Some(i)
         }
-        case Failure(e) => log.error(e)
+
+        val imgDims = Array.ofDim[Long](img.numDimensions)
+        img.dimensions(imgDims)
+        val out: ImagePlus = cIndex match {
+          case Some(i) =>
+            ImageJFunctions.wrap(Views.permute(img, i, 2),
+              s"${imeta.getName}_deskewed")
+            case None =>
+              ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
+        }
+        val cal = new Calibration(out)
+        cal.setUnit("um")
+        cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
+        cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
+        cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
+
+        if (imeta.getAxisLength(Axes.TIME) > 1) {
+          cal.setTimeUnit("ms")
+          cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
+        }
+
+        out.setCalibration(cal)
+        out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
+          imeta.getAxisLength(Axes.Z).toInt,
+          imeta.getAxisLength(Axes.TIME).toInt)
+        ui.show(out)
       }
+      case Failure(e) => log.error(e)
     }
   }
 }
