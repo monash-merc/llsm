@@ -2,6 +2,8 @@ package llsm.interpreters
 
 import cats.{ApplicativeError, ~>}
 import cats.free.Free
+import io.scif.SCIFIO
+import io.scif.config.SCIFIOConfig
 import io.scif.img.ImgOpener
 import llsm.algebras.{ImgReaderAPI, ImgReaderF, LoggingAPI, LoggingF}
 import llsm.fp._
@@ -33,13 +35,17 @@ trait ImgReaderInterpreters {
           case ImgReaderAPI.ReadImg(path, meta, next) => {
             M.pure {
               val imgOpener = new ImgOpener(context)
+              val conf = new SCIFIOConfig().imgOpenerSetComputeMinMax(false)
+              val scifio = new SCIFIO(context)
+              val rdr = scifio.initializer().initializeReader(path.toString)
 
               next(
                 LLSMImg(
                   imgOpener.openImgs(
-                    path.toString,
+                    rdr,
+                    new UnsignedShortType,
                     factory,
-                    new UnsignedShortType).get(0),
+                    conf).get(0),
                   meta)
               )
             }
