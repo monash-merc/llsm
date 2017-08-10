@@ -92,12 +92,12 @@ lazy val publishSettings = List(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
-  homepage := Some(url("https://github.com/keithschulze/llsm")),
+  homepage := Some(url("https://github.com/monash-merc/llsm")),
   pomIncludeRepository := Function.const(false),
   pomExtra := (
     <scm>
-      <url>git@github.com:keithschulze/llsm.git</url>
-      <connection>scm:git:git@github.com:keithschulze/llsm.git</connection>
+      <url>git@github.com:monash-merc/llsm.git</url>
+      <connection>scm:git:git@github.com:monash-merc/llsm.git</connection>
     </scm>
     <developers>
       <developer>
@@ -148,7 +148,7 @@ lazy val docSettings = Seq(
   micrositeHighlightTheme := "atom-one-light",
   micrositeBaseUrl := "llsm",
   micrositeDocumentationUrl := "/llsm/docs/",
-  micrositeGithubOwner := "keithschulze",
+  micrositeGithubOwner := "monash-merc",
   micrositeGithubRepo := "llsm",
   micrositePalette := Map(
     "brand-primary"   -> "#43C5E4",
@@ -165,13 +165,13 @@ lazy val docSettings = Seq(
   docMappingsApiDir := "api",
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc),
                        docMappingsApiDir),
-  git.remoteRepo := "git@github.com:keithschulze/llsm.git",
+  git.remoteRepo := "git@github.com:monash-merc/llsm.git",
   ghpagesNoJekyll := false,
   fork in tut := true,
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
     "-doc-source-url",
-    "https://github.com/keithschulze/llsm/tree/master€{FILE_PATH}.scala",
+    "https://github.com/monash-merc/llsm/tree/master€{FILE_PATH}.scala",
     "-sourcepath",
     baseDirectory.in(LocalRootProject).value.getAbsolutePath,
     "-diagrams"
