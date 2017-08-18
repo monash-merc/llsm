@@ -5,7 +5,6 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.stream.Collectors
 
 import scala.collection.JavaConverters._
-import scala.util.{Try, Success, Failure}
 
 import cats.MonadError
 import cats.data.Coproduct
@@ -58,8 +57,8 @@ import org.scijava.plugin.{Plugin, Parameter}
   */
 @Plugin(`type` = classOf[Command],
   headless = true,
-  menuPath = "Plugins>LLSM>Deskew Time Series")
-class DeskewTimeSeriesPlugin extends Command {
+  menuPath = "Plugins>LLSM>Preview Dataset...")
+class PreviewPlugin extends Command {
 
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
   var input: File = new File(System.getProperty("user.home"))
@@ -69,11 +68,13 @@ class DeskewTimeSeriesPlugin extends Command {
 
   @Parameter(label = "Img Container Type",
     choices = Array("Array", "Planar", "Cell"),
+    persist = false,
     required = false)
   var container: String = "Cell"
 
   @Parameter(label = "Interpolation scheme",
     choices = Array("None", "Nearest Neighbour", "Linear", "Lanczos"),
+    persist = false,
     required = false)
   var interpolation: String = "None"
 
@@ -92,11 +93,57 @@ class DeskewTimeSeriesPlugin extends Command {
   @Parameter
   var context: Context = _
 
+
   def processImgs[F[_]: Metadata: ImgReader: Process: Progress](
       paths: List[Path]
   ): ParSeq[F, Option[SCIFIOImgPlus[UnsignedShortType]]] =
-    paths.traverse(p => ParSeq.liftSeq(Programs.processImg[F](p)))
-      .map(lImgs => ImgUtils.aggregateImgs(lImgs))
+    paths.zipWithIndex.traverse {
+      case (p, i) => ParSeq.liftSeq {
+        for {
+          img <- Programs.processImg[F](p)
+          _   <- Progress[F].progress(i + 1, paths.size)
+        } yield img
+      }
+    }.map(lImgs => ImgUtils.aggregateImgs(lImgs))
+
+  private[this] def displayResult: Either[Throwable, Option[SCIFIOImgPlus[UnsignedShortType]]] => Unit =
+    result => result match {
+      case Right(Some(img)) => {
+        val imeta = img.getImageMetadata
+        val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
+          case -1     => None
+          case i: Int => Some(i)
+        }
+
+        val imgDims = Array.ofDim[Long](img.numDimensions)
+        img.dimensions(imgDims)
+        val out: ImagePlus = cIndex match {
+          case Some(i) =>
+            ImageJFunctions.wrap(Views.permute(img, i, 2),
+              s"${imeta.getName}_deskewed")
+            case None =>
+              ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
+        }
+        val cal = new Calibration(out)
+        cal.setUnit("um")
+        cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
+        cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
+        cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
+
+        if (imeta.getAxisLength(Axes.TIME) > 1) {
+          cal.setTimeUnit("ms")
+          cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
+        }
+
+        out.setCalibration(cal)
+        out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
+          imeta.getAxisLength(Axes.Z).toInt,
+          imeta.getAxisLength(Axes.TIME).toInt)
+        ui.show(out)
+      }
+      case Right(None) => log.error("Unable to process images because metadata could not be read")
+      case Left(e) => log.error(e)
+    }
 
   /**
    * Entry point to running a plugin.
@@ -137,42 +184,8 @@ class DeskewTimeSeriesPlugin extends Command {
       .collect(Collectors.toList[Path])
       .asScala.filter(_.toString.endsWith(".tif"))
 
-    processImgs[App](imgPaths.toList).run(compiler[Try]) match {
-      case Success(Some(img)) => {
-        val imeta = img.getImageMetadata
-        val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
-          case -1     => None
-          case i: Int => Some(i)
-        }
+    val prog = processImgs[App](imgPaths.toList)
 
-        val imgDims = Array.ofDim[Long](img.numDimensions)
-        img.dimensions(imgDims)
-        val out: ImagePlus = cIndex match {
-          case Some(i) =>
-            ImageJFunctions.wrap(Views.permute(img, i, 2),
-              s"${imeta.getName}_deskewed")
-            case None =>
-              ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
-        }
-        val cal = new Calibration(out)
-        cal.setUnit("um")
-        cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
-        cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
-        cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
-
-        if (imeta.getAxisLength(Axes.TIME) > 1) {
-          cal.setTimeUnit("ms")
-          cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
-        }
-
-        out.setCalibration(cal)
-        out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
-          imeta.getAxisLength(Axes.Z).toInt,
-          imeta.getAxisLength(Axes.TIME).toInt)
-        ui.show(out)
-      }
-      case Success(None) => log.error("Unable to process images because metadata could not be read")
-      case Failure(e) => log.error(e)
-    }
+    displayResult(prog.run(compiler[Either[Throwable, ?]]))
   }
 }

@@ -54,8 +54,8 @@ import org.scijava.plugin.{Plugin, Parameter}
 
 @Plugin(`type` = classOf[Command],
         headless = true,
-        menuPath = "Plugins>LLSM>Convert Time Series")
-class LLSMConvertPlugin extends Command {
+        menuPath = "Plugins>LLSM>Convert Dataset...")
+class ConvertPlugin extends Command {
 
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
   var input: File = _
