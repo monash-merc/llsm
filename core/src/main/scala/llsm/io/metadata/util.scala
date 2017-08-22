@@ -54,7 +54,7 @@ object MetadataUtils {
    * @param imgs List of LLSMImgs
    * @return ImageMetadata
    */
-  def createImageMetadata(imgs: List[LLSMImg]): ImageMetadata = {
+  def createImageMetadata(imgs: List[LLSMImg]): Option[ImageMetadata] = {
     val meta = new DefaultImageMetadata
     val (name, channelIdxs, stackIdxs, wavelengths, times, timesAbs) =
       imgs.foldLeft(
@@ -65,10 +65,9 @@ object MetadataUtils {
          TreeSet.empty[Long],
          TreeSet.empty[Long])) {
         case ((n, c, s, w, t, ta),
-              LLSMImg(img, 
+              LLSMImg(img,
                 FileMetadata(
                   FilenameMetadata(_, _, channel, stack, wavelength, time, timeAbs),
-                  _,
                   _,
                   _,
                   _,
@@ -76,55 +75,58 @@ object MetadataUtils {
           (n, c + channel, s + stack, w + wavelength, t + time, ta + timeAbs)
       }
 
-    val refImg = imgs.head
-    val waveform: WaveformMetadata    = refImg.meta.waveform
-    val camera: CameraMetadata        = refImg.meta.camera
-    val sample: SampleStage           = refImg.meta.sample
-    val config: ConfigurableMetadata  = refImg.meta.config
+      imgs.headOption map {
+        refImg => {
+          val waveform: WaveformMetadata    = refImg.meta.waveform
+          val camera: CameraMetadata        = refImg.meta.camera
+          val sample: SampleStage           = refImg.meta.sample
+          val config: ConfigurableMetadata  = refImg.meta.config
 
-    val xAxis: CalibratedAxis = new DefaultLinearAxis(Axes.X, "um", config.xVoxelSize)
-    val yAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Y, "um", config.yVoxelSize)
+          val xAxis: CalibratedAxis = new DefaultLinearAxis(Axes.X, "um", config.xVoxelSize)
+          val yAxis: CalibratedAxis = new DefaultLinearAxis(Axes.Y, "um", config.yVoxelSize)
 
-    // TODO: This is ugly baby
-    val axes: List[CalibratedAxis] = List(xAxis, yAxis) ++
-        (if (waveform.nSlices > 1) {
-         val zVoxelSize: Double = Deskew.calcZInterval(
-           waveform.sPZTInterval,
-           waveform.zPZTInterval,
-           sample.angle,
-           config.xVoxelSize
-         )
-         List(new DefaultLinearAxis(Axes.Z, "um", zVoxelSize))
-       } else Nil) ++
-        (if (channelIdxs.size > 1) {
-         List(new DefaultLinearAxis(Axes.CHANNEL))
-       } else Nil) ++
-        (if (times.size > 1) {
-         val diffs: List[Long] =
-           (times.toList.drop(1), times.toList).zipped.map(_ - _)
-         val avInterval: Double = diffs.reduce(_ + _).toDouble / diffs.size
-         List(new DefaultLinearAxis(Axes.TIME, "ms", avInterval))
-       } else Nil)
+          // TODO: This is ugly baby
+          val axes: List[CalibratedAxis] = List(xAxis, yAxis) ++
+              (if (waveform.nSlices > 1) {
+               val zVoxelSize: Double = Deskew.calcZInterval(
+                 waveform.sPZTInterval,
+                 waveform.zPZTInterval,
+                 sample.angle,
+                 config.xVoxelSize
+               )
+               List(new DefaultLinearAxis(Axes.Z, "um", zVoxelSize))
+             } else Nil) ++
+              (if (channelIdxs.size > 1) {
+               List(new DefaultLinearAxis(Axes.CHANNEL))
+             } else Nil) ++
+              (if (times.size > 1) {
+               val diffs: List[Long] =
+                 (times.toList.drop(1), times.toList).zipped.map(_ - _)
+               val avInterval: Double = diffs.foldRight(0L)(_ + _).toDouble / diffs.size
+               List(new DefaultLinearAxis(Axes.TIME, "ms", avInterval))
+             } else Nil)
 
-    val stackDim = Array.ofDim[Long](refImg.img.numDimensions)
-    refImg.img.dimensions(stackDim)
-    val dims: Array[Long] = stackDim ++ 
-        (if (channelIdxs.size > 1)
-           Array(channelIdxs.size.toLong)
-         else Nil) ++
-        (if (times.size > 1)
-           Array(times.size.toLong)
-         else Nil)
+          val stackDim = Array.ofDim[Long](refImg.img.numDimensions)
+          refImg.img.dimensions(stackDim)
+          val dims: Array[Long] = stackDim ++
+              (if (channelIdxs.size > 1)
+                 Array(channelIdxs.size.toLong)
+               else Nil) ++
+              (if (times.size > 1)
+                 Array(times.size.toLong)
+               else Nil)
 
-    meta.populate(name,
-                  axes.asJava,
-                  dims.toArray,
-                  FormatTools.UINT16,
-                  false,
-                  true,
-                  false,
-                  false,
-                  false)
-    meta
+          meta.populate(name,
+                        axes.asJava,
+                        dims.toArray,
+                        FormatTools.UINT16,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false)
+          meta
+        }
+      }
   }
 }

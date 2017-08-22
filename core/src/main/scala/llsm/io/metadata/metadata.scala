@@ -15,8 +15,7 @@ case class FileMetadata(
     waveform: WaveformMetadata,
     camera: CameraMetadata,
     sample: SampleStage,
-    config: ConfigurableMetadata,
-    image: Option[ImgMetadata] = None)
+    config: ConfigurableMetadata)
 
 object FileMetadata extends MetadataImplicits with Ordering[FileMetadata] {
 
@@ -24,8 +23,8 @@ object FileMetadata extends MetadataImplicits with Ordering[FileMetadata] {
   case class MetadataIOError(msg: String) extends MetadataError
 
   def compare(a: FileMetadata, b: FileMetadata): Int = (a, b) match {
-    case (FileMetadata(FilenameMetadata(_, _, ac, _, _, at, _), _, _, _, _, _),
-          FileMetadata(FilenameMetadata(_, _, bc, _, _, bt, _), _, _, _, _, _)) =>
+    case (FileMetadata(FilenameMetadata(_, _, ac, _, _, at, _), _, _, _, _),
+          FileMetadata(FilenameMetadata(_, _, bc, _, _, bt, _), _, _, _, _)) =>
       if (at == bt) ac.compare(bc)
       else at.compare(bt)
   }
@@ -48,10 +47,7 @@ object FileMetadata extends MetadataImplicits with Ordering[FileMetadata] {
           for {
             txtMeta <- readMetadataFromTxtFile(meta)
             fileMeta <- parseMetadataFromFileNames(imgPaths.toList)
-            imgMeta <- extractImgMeta(imgPaths.toList, txtMeta)
-          } yield imgMeta.zip(fileMeta).map {
-            case (im, fm) => FileMetadata(fm, txtMeta.waveform, txtMeta.camera, txtMeta.sample, config, Some(im))
-          }
+          } yield fileMeta.map( fm => FileMetadata(fm, txtMeta.waveform, txtMeta.camera, txtMeta.sample, config))
       }
   }
 
