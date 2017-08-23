@@ -36,16 +36,20 @@ trait MetadataInterpreters {
     new (MetadataF ≈< MetadataLowF) {
       def apply[A](fa: MetadataF[A]): FreeApplicative[MetadataLowF, A] =
         fa match {
-          case MetadataAPI.ReadMetadata(path, next) =>
-            (MetadataLow.extractFilenameMeta(path) |@|
-             MetadataLow.extractTextMeta(path) |@|
-             MetadataLow.extractImgMeta(path) |@|
-             MetadataLow.configurableMeta).map {
-              case (f, t, i, c) =>
-                next(FileMetadata(f, t.waveform, t.camera, t.sample, c, i))
+          case MetadataAPI.ReadMetadata(path, next) => {
+            @SuppressWarnings(Array("org.wartremover.warts.Any"))
+            val fetchedMeta =
+              (MetadataLow.extractFilenameMeta(path) |@|
+               MetadataLow.extractTextMeta(path) |@|
+               MetadataLow.configurableMeta)
+
+            fetchedMeta.map[A] {
+              case (f, t, c) =>
+                next(FileMetadata(f, t.waveform, t.camera, t.sample, c))
             }
-              case MetadataAPI.WriteMetadata(path, meta, next) =>
-                MetadataLow.writeMeta(path, meta).map(next)
+          }
+          case MetadataAPI.WriteMetadata(path, meta, next) =>
+            MetadataLow.writeMeta(path, meta).map(next)
         }
     }
 
@@ -56,33 +60,25 @@ trait MetadataInterpreters {
   )(
     implicit
     M: ApplicativeError[M, Throwable]
-  ) = λ[FunctionK[MetadataLowF, Exec[M, ?]]] {
+  ): FunctionK[MetadataLowF, Exec[M, ?]] = λ[FunctionK[MetadataLowF, Exec[M, ?]]] {
     fa => Kleisli { _ =>
       fa match {
         case MetadataLow.ConfigurableMeta => M.pure(config)
         case MetadataLow.ExtractFilenameMeta(path) =>
-          M.catchNonFatal(
-            Parser[FilenameMetadata](path.getFileName.toString) match {
-              case Right(fm) => fm
-              case Left(ParsingFailure(_, e)) => throw new Exception(e)
-            }
-          )
-        case MetadataLow.ExtractTextMeta(path) => M.catchNonFatal {
+          Parser[FilenameMetadata](path.getFileName.toString) match {
+            case Right(fm) => M.pure(fm)
+            case Left(ParsingFailure(_, e)) => M.raiseError(new Exception(e))
+          }
+        case MetadataLow.ExtractTextMeta(path) => {
           val parent = path.getParent
           Files.list(parent).iterator.asScala
             .find(_.toString.endsWith(".txt")) match {
               case Some(p) => FileMetadata.readMetadataFromTxtFile(p) match {
-                case Right(m) => m
-                case Left(FileMetadata.MetadataIOError(msg)) => throw new Exception(msg)
+                case Right(m) => M.pure(m)
+                case Left(FileMetadata.MetadataIOError(msg)) => M.raiseError(new Exception(msg))
               }
-              case None => throw new Exception("FileMetadata file not found")
+              case None => M.raiseError(new Exception("FileMetadata file not found"))
             }
-        }
-        case MetadataLow.ExtractBasicImageMeta(path) => M.pure {
-          // val scifio = new SCIFIO(context)
-          // val format = scifio.format().getFormat(path.toString)
-          // val meta = format.createParser().parse(path.toString).get(0)
-          None
         }
         case MetadataLow.WriteMetadata(path, metas) =>
           M.catchNonFatal {
@@ -101,7 +97,7 @@ trait MetadataInterpreters {
   ): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
-        metaFToMetaLowF(fa).foldMap(simpleMetaLowReader[M](config, context)).run(())
+        metaFToMetaLowF(fa).foldMap[Exec[M, ?]](simpleMetaLowReader[M](config, context)).run(())
   }
 
   val metadataLogging: MetadataF ~< Halt[LoggingF, ?] =

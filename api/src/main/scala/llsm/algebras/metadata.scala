@@ -10,7 +10,6 @@ import cats.free.{
 import llsm.io.metadata.{
   ConfigurableMetadata,
   FilenameMetadata,
-  ImgMetadata,
   FileMetadata,
   TextMetadata
 }
@@ -40,22 +39,19 @@ object MetadataAPI {
       def writeMetadata(path: Path, metas: List[FileMetadata]): Free[G, Unit] =
         Free.inject[F, G](F.writeMetadata(path, metas))
     }
-  
+
 }
 
 sealed trait MetadataLowF[A]
 
 object MetadataLow {
   case object ConfigurableMeta extends MetadataLowF[ConfigurableMetadata]
-  case class ExtractBasicImageMeta(path: Path) extends MetadataLowF[Option[ImgMetadata]]
   case class ExtractFilenameMeta(path: Path) extends MetadataLowF[FilenameMetadata]
   case class ExtractTextMeta(path: Path) extends MetadataLowF[TextMetadata]
   case class WriteMetadata(path: Path, metas: List[FileMetadata]) extends MetadataLowF[Unit]
 
   def configurableMeta: FreeApplicative[MetadataLowF, ConfigurableMetadata] =
     FreeApplicative.lift(ConfigurableMeta)
-  def extractImgMeta(path: Path): FreeApplicative[MetadataLowF, Option[ImgMetadata]] =
-    FreeApplicative.lift(ExtractBasicImageMeta(path))
   def extractFilenameMeta(path: Path): FreeApplicative[MetadataLowF, FilenameMetadata] =
     FreeApplicative.lift(ExtractFilenameMeta(path))
   def extractTextMeta(path: Path): FreeApplicative[MetadataLowF, TextMetadata] =

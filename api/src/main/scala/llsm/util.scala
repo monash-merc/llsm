@@ -10,7 +10,8 @@ import scala.collection.JavaConverters._
 import scala.xml._
 import scala.xml.transform._
 
-import _root_.io.scif.{ ImageMetadata, SCIFIO }
+import cats.implicits._
+import _root_.io.scif.SCIFIO
 import _root_.io.scif.img.SCIFIOImgPlus
 import _root_.io.scif.ome.services.OMEMetadataService
 import llsm.io.LLSMImg
@@ -37,9 +38,9 @@ object ImgUtils {
    * @param imgs List of 3D stacks
    * @return 5D image and metadata
    */
-  def aggregateImgs(lImgs: List[LLSMImg]): SCIFIOImgPlus[UnsignedShortType] = {
-    val aggImg: Img[UnsignedShortType] = {
-      val tStacks: List[RandomAccessibleInterval[UnsignedShortType]] =
+  def aggregateImgs(lImgs: List[LLSMImg]): Option[SCIFIOImgPlus[UnsignedShortType]] = {
+    val aggImg: Option[Img[UnsignedShortType]] = {
+      val tStacks: Option[List[RandomAccessibleInterval[UnsignedShortType]]] =
         lImgs
           .groupBy(_.meta.filename.stack)
           .toSeq
@@ -49,22 +50,27 @@ object ImgUtils {
               val cGroups: List[RandomAccessibleInterval[UnsignedShortType]] =
                 cStack.map(c => c.img)
               if (cGroups.size > 1)
-                Views.stack[UnsignedShortType](cGroups.asJava)
-              else cGroups.head
+                Some(Views.stack[UnsignedShortType](cGroups.asJava))
+              else cGroups.headOption
             }
-          }.toList
-      ImgView.wrap(
-        if (tStacks.size > 1) Views.stack[UnsignedShortType](tStacks.asJava)
-        else tStacks.head,
-        lImgs(0).img.factory
-      )
+          }.toList.sequence
+      tStacks.flatMap {
+        ts => {
+          val stack = if (ts.size > 1) Some(Views.stack[UnsignedShortType](ts.asJava))
+                      else ts.headOption
+
+          stack.map(s => ImgView.wrap(s, lImgs(0).img.factory))
+        }
+      }
     }
-
-    val meta: ImageMetadata = MetadataUtils.createImageMetadata(lImgs)
-
-    val out = new SCIFIOImgPlus(aggImg)
-    out.setImageMetadata(meta)
-    out
+    for {
+      meta <- MetadataUtils.createImageMetadata(lImgs)
+      img <- aggImg
+    } yield {
+      val out = new SCIFIOImgPlus(img)
+      out.setImageMetadata(meta)
+      out
+    }
   }
 
   /** Writes a companion OME metadata file for a List of processed LLSM Images.
@@ -84,60 +90,61 @@ object ImgUtils {
     val scifio: SCIFIO = new SCIFIO(context)
     val omeService = context.getService(classOf[OMEMetadataService])
 
-    val omexml = new OMEXMLMetadataImpl()
-    omeService.populateMetadata(omexml, 0, companionName, MetadataUtils.createImageMetadata(imgs))
-    omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
 
-    val omeString: Option[String] = outExt match {
-      case "ome.tif" => {
-        imgs.foreach {
-          case LLSMImg(_, FileMetadata(file, wave, _, _, _, _)) => {
-            omexml.setTiffDataFirstC(
-              new NonNegativeInteger(file.channel),
-              0,
-              file.channel * wave.nFrames + file.stack
-            )
-            omexml.setTiffDataFirstT(
-              new NonNegativeInteger(file.stack),
-              0,
-              file.channel * wave.nFrames + file.stack
-            )
-            omexml.setTiffDataPlaneCount(
-              new NonNegativeInteger(wave.nSlices.toInt),
-              0,
-              file.channel * wave.nFrames + file.stack
-            )
-            omexml.setUUIDFileName(
-              file.name,
-              0,
-              file.channel * wave.nFrames + file.stack
-            )
-            omexml.setUUIDValue(
-              file.id.toString,
-              0,
-              file.channel * wave.nFrames + file.stack
+    val omeString: Option[String] = MetadataUtils.createImageMetadata(imgs).flatMap(meta => {
+      val omexml = new OMEXMLMetadataImpl()
+      omeService.populateMetadata(omexml, 0, companionName, meta)
+      omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
+      outExt match {
+        case "ome.tif" => {
+          imgs.foreach {
+            case LLSMImg(_, FileMetadata(file, wave, _, _, _)) => {
+              omexml.setTiffDataFirstC(
+                new NonNegativeInteger(file.channel),
+                0,
+                file.channel * wave.nFrames + file.stack
+              )
+              omexml.setTiffDataFirstT(
+                new NonNegativeInteger(file.stack),
+                0,
+                file.channel * wave.nFrames + file.stack
+              )
+              omexml.setTiffDataPlaneCount(
+                new NonNegativeInteger(wave.nSlices.toInt),
+                0,
+                file.channel * wave.nFrames + file.stack
+              )
+              omexml.setUUIDFileName(
+                file.name,
+                0,
+                file.channel * wave.nFrames + file.stack
+              )
+              omexml.setUUIDValue(
+                file.id.toString,
+                0,
+                file.channel * wave.nFrames + file.stack
 
-            )
+              )
+            }
           }
+          Some(omexml.dumpXML)
         }
-        Some(omexml.dumpXML)
-      }
-      case _ => {
-        val rewriteTransform = new RewriteRule {
-          override def transform(n: Node): Seq[Node] = n match {
-            case e @ Elem(prefix, "Pixels", att, scope, child @ _*) =>
-              Elem(prefix, "Pixels", att, scope, false, child ++ <MetadataOnly/> : _*)
-            case other => other
+        case _ => {
+          val rewriteTransform = new RewriteRule {
+            override def transform(n: Node): Seq[Node] = n match {
+              case e @ Elem(prefix, "Pixels", att, scope, child @ _*) =>
+                Elem(prefix, "Pixels", att, scope, false, child ++ <MetadataOnly/> : _*)
+              case other => other
+            }
           }
+          new RuleTransformer(rewriteTransform).transform(XML.loadString(omexml.dumpXML)).headOption.map(x => x.toString)
         }
-        new RuleTransformer(rewriteTransform).transform(XML.loadString(omexml.dumpXML)).headOption.map(x => x.toString)
       }
-    }
+    })
 
     omeString match {
       case Some(ome) => {
-        Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
-        ()
+        val success = Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
       }
       case None => ()
     }

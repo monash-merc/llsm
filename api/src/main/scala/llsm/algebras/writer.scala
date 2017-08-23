@@ -31,10 +31,13 @@ object ImgWriterAPI {
 sealed trait LowWriterF[A]
 case class WriteOMETIFF(path: Path, img: LLSMImg) extends LowWriterF[FileMetadata]
 case class WriteHDF5(path: Path, img: LLSMImg) extends LowWriterF[FileMetadata]
+case class WriteError(t: Throwable) extends LowWriterF[FileMetadata]
 
 object LowWriterAPI {
   def writeOMETIFF(path: Path, img: LLSMImg): Free[LowWriterF, FileMetadata] =
     Free.liftF[LowWriterF, FileMetadata](WriteOMETIFF(path, img))
   def writeHDF5(path: Path, img: LLSMImg): Free[LowWriterF, FileMetadata] =
     Free.liftF[LowWriterF, FileMetadata](WriteHDF5(path, img))
+  def writeError(t: Throwable): Free[LowWriterF, FileMetadata] =
+    Free.liftF[LowWriterF, FileMetadata](WriteError(t))
 }

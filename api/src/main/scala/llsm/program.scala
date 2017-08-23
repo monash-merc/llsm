@@ -8,7 +8,7 @@ import llsm.algebras.{
   ImgReader,
   ImgWriter,
   Metadata,
-  Process, 
+  Process,
   Progress
 }
 import llsm.fp.ParSeq
@@ -59,23 +59,24 @@ object Programs {
       paths: List[Path],
       outputPath: Path
   ): Free[F, List[LLSMImg]] =
-    paths.zipWithIndex.traverse {
+    paths.zipWithIndex.traverse[Free[F, ?], LLSMImg] {
       case (p, i) => for {
         m <- convertImg[F](p, outputPath)
         _ <- Progress[F].progress(i, paths.size)
       } yield m
     }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   def convertImgsP[F[_]: Metadata: ImgReader: Process: Progress: ImgWriter](
       paths: List[Path],
       outputPath: Path
-  ): ParSeq[F, List[LLSMImg]] = {
-    paths.zipWithIndex.traverse {
-      case (p, i) =>
-        ParSeq.liftSeq(for {
+  ): ParSeq[F, List[LLSMImg]] =
+    paths.zipWithIndex.traverse[ParSeq[F, ?], LLSMImg] {
+      case (p, i) => {
+        ParSeq.liftSeq[F, LLSMImg](for {
           m <- convertImg[F](p, outputPath)
           _ <- Progress[F].progress(i, paths.size)
         } yield m)
+      }
     }
-  }
 }

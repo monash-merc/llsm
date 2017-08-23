@@ -42,7 +42,8 @@ import llsm.algebras.{
   LowWriterAPI,
   LowWriterF,
   WriteOMETIFF,
-  WriteHDF5
+  WriteHDF5,
+  WriteError
 }
 import llsm.formats.OMETIFFCustom
 import llsm.fp._
@@ -103,7 +104,12 @@ trait ImgWriterInterpreters {
 
 
 
-  def llsmWriter[M[_]](context: Context)(implicit me: MonadError[M, Throwable]): ImgWriterF ~> M =
+  def llsmWriter[M[_]](
+    context: Context
+  )(
+    implicit
+    me: MonadError[M, Throwable]
+  ): ImgWriterF ~> M =
     new (ImgWriterF ~> M) {
       def apply[B](fa: ImgWriterF[B]): M[B] =
         llsmWriterToLowWriter(fa).foldMap(llsmLowWriter[M](context))
@@ -118,7 +124,8 @@ trait ImgWriterInterpreters {
               LowWriterAPI.writeHDF5(path, img).map(next)
             else if (path.toString.endsWith(".ome.tif"))
               LowWriterAPI.writeOMETIFF(path, img).map(next)
-            else throw new Exception("Unsupported output format.")
+            else LowWriterAPI.writeError(new Exception("Unsupported output format. Only .h5 and .ome.tif are supported at this time."))
+                  .map(next)
         }
     }
 
@@ -127,7 +134,7 @@ trait ImgWriterInterpreters {
     new (LowWriterF ~> M) {
       def apply[B](fa: LowWriterF[B]): M[B] =
         fa match {
-          case WriteOMETIFF(path, limg @ LLSMImg(img, fm @ FileMetadata(file, wave, cam, sample, config, im))) =>
+          case WriteOMETIFF(path, limg @ LLSMImg(img, fm @ FileMetadata(file, wave, cam, sample, config))) =>
             M.catchNonFatal {
               val conf = new SCIFIOConfig()
                 .writerSetCompression(CompressionType.LZW.getCompression)
@@ -151,7 +158,7 @@ trait ImgWriterInterpreters {
               // Create ImageMetadata
               val imeta = MetadataUtils.createImageMetadata(limg)
               val meta = new TIFFFormat.Metadata()
-              scifio.translator().translate(new DefaultMetadata(List(imeta).asJava), meta, false)
+              val success = scifio.translator().translate(new DefaultMetadata(List(imeta).asJava), meta, false)
 
               val writer = new OMETIFFCustom.Writer()
               writer.setContext(context)
@@ -172,7 +179,7 @@ trait ImgWriterInterpreters {
 
               fm.copy(filename = filenameMeta)
             }
-          case WriteHDF5(path, LLSMImg(img, meta @ FileMetadata(file, wave, cam, sample, config, im))) =>
+          case WriteHDF5(path, LLSMImg(img, meta @ FileMetadata(file, wave, cam, sample, config))) =>
             M.catchNonFatal {
               if (!Files.exists(path))
                 WriterUtils.createHDF5(path)
@@ -219,6 +226,7 @@ trait ImgWriterInterpreters {
               val filenameMeta = file.copy(name = path.getFileName.toString)
               meta.copy(filename = filenameMeta)
             }
+            case WriteError(t) => M.raiseError(t)
     }
 
   }
@@ -271,10 +279,13 @@ object WriterUtils {
       timepoints: List[TimePoint],
       channels: Map[Integer, BasicViewSetup],
       transform: AffineTransform3D): Unit = synchronized {
-    val parts = new ArrayList[Partition]
-    parts.add(partition)
 
+    val parts = new ArrayList[Partition](List(partition).asJava)
+
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
     val hdf5Loader = new Hdf5ImageLoader(hdf5Path.toFile, parts, null, false)
+
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
     val seq = new SequenceDescriptionMinimal(
       new TimePoints(timepoints.asJava),
       channels.asJava,
