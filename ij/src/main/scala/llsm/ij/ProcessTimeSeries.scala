@@ -94,7 +94,7 @@ class DeskewTimeSeriesPlugin extends Command {
 
   def processImgs[F[_]: Metadata: ImgReader: Process: Progress](
       paths: List[Path]
-  ): ParSeq[F, SCIFIOImgPlus[UnsignedShortType]] =
+  ): ParSeq[F, Option[SCIFIOImgPlus[UnsignedShortType]]] =
     paths.traverse(p => ParSeq.liftSeq(Programs.processImg[F](p)))
       .map(lImgs => ImgUtils.aggregateImgs(lImgs))
 
@@ -138,7 +138,7 @@ class DeskewTimeSeriesPlugin extends Command {
       .asScala.filter(_.toString.endsWith(".tif"))
 
     processImgs[App](imgPaths.toList).run(compiler[Try]) match {
-      case Success(img) => {
+      case Success(Some(img)) => {
         val imeta = img.getImageMetadata
         val xIndex = imeta.getAxisIndex(Axes.X)
         val zIndex = imeta.getAxisIndex(Axes.Z)
@@ -173,6 +173,7 @@ class DeskewTimeSeriesPlugin extends Command {
           imeta.getAxisLength(Axes.TIME).toInt)
         ui.show(out)
       }
+      case Success(None) => log.error("Unable to process images because metadata could not be read")
       case Failure(e) => log.error(e)
     }
   }

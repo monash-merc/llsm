@@ -60,7 +60,6 @@ lazy val commonSettings = List(
     _.filterNot(disabledReplOptions.contains(_))
   },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
-  wartremoverWarnings in (Compile, compile) ++= Warts.unsafe,
   libraryDependencies ++= Seq(
     "com.lihaoyi" % "ammonite" % "1.0.0" % "test" cross CrossVersion.full),
   sourceGenerators in Test += Def.task {
@@ -80,6 +79,10 @@ lazy val commonSettings = List(
   addCompilerPlugin(
     "org.spire-math" % "kind-projector" % "0.9.4" cross CrossVersion.binary)
 )
+
+lazy val coreApiSettings = List(
+  wartremoverWarnings in (Compile, compile) ++= Warts.unsafe
+  )
 
 lazy val publishSettings = List(
   publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))),
@@ -217,6 +220,7 @@ lazy val core = project
   .disablePlugins(AssemblyPlugin)
   .settings(moduleName := "llsm-core")
   .settings(llsmSettings)
+  .settings(coreApiSettings)
   .settings(
     exportJars := true,
     libraryDependencies ++= Seq(
@@ -233,6 +237,7 @@ lazy val api = project
   .dependsOn(core)
   .settings(moduleName := "llsm-api")
   .settings(llsmSettings)
+  .settings(coreApiSettings)
   .settings(
     exportJars := true,
     libraryDependencies ++= Seq(
@@ -299,7 +304,8 @@ lazy val tests = project
   .disablePlugins(AssemblyPlugin)
   .dependsOn(core, api)
   .settings(moduleName := "llsm-tests")
-  .settings(llsmSettings: _*)
+  .settings(llsmSettings)
+  .settings(coreApiSettings)
   .settings(noPublishSettings: _*)
   .settings(
     libraryDependencies ++= Seq(

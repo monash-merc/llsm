@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit
 import net.imglib2.RandomAccessibleInterval
 import net.imglib2.img.Img
 import net.imglib2.interpolation.randomaccess.{
+  NearestNeighborInterpolatorFactory,
   NLinearInterpolatorFactory,
   LanczosInterpolatorFactory
 }
@@ -47,7 +48,7 @@ class FakeDeskewBenchmark extends FakeDeskewData {
     toImg(Deskew.deskewStack(img, 0, 2, 3))
 
   @Benchmark def deskewNearestNeighbourInt: Img[UnsignedShortType] =
-    toImg(Deskew.deskewRealStack(img, 0, 2, 2.9))
+    toImg(Deskew.deskewRealStack(img, 0, 2, 2.9, new NearestNeighborInterpolatorFactory))
 
   @Benchmark def deskewNLinearInt: Img[UnsignedShortType] =
     toImg(
