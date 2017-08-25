@@ -84,14 +84,14 @@ object FileMetadata extends MetadataImplicits with Ordering[FileMetadata] {
     */
   def parseMetadataFromFileNames(imgFileList: List[Path]): Either[MetadataError, List[FilenameMetadata]] = {
     val fnMeta: Parser.Result[List[FilenameMetadata]] =
-      sequenceListEither(imgFileList.map(path => Parser[FilenameMetadata](path.getFileName().toString)))
+      sequenceListEither(imgFileList.map[Parser.Result[FilenameMetadata], List[Parser.Result[FilenameMetadata]]](path => Parser[FilenameMetadata](path.getFileName().toString)))
 
     fnMeta.left.map { case ParsingFailure(m, e) => MetadataIOError(s"$m:\n$e") }
   }
 
   def extractImgMeta(imgFileList: List[Path], textMeta: TextMetadata): Either[MetadataError, List[ImgMetadata]] = {
     val scifio: SCIFIO = new SCIFIO()
-    sequenceListEither(imgFileList.map(
+    sequenceListEither(imgFileList.map[Either[MetadataError, ImgMetadata], List[Either[MetadataError, ImgMetadata]]](
       p => Try {
         val format = scifio.format().getFormat(p.toString)
         format.createParser().parse(p.toString)

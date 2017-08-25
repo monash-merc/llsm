@@ -22,19 +22,16 @@ import bdv.spimdata.{
   XmlIoSpimDataMinimal
 }
 import cats.{~>, MonadError}
-import cats.implicits._
 import cats.free.Free
 import ch.systemsx.cisd.hdf5.HDF5Factory
 import io.scif.{
   DefaultMetadata,
-  ImageMetadata,
   SCIFIO
 }
 import io.scif.config.SCIFIOConfig
 import io.scif.codec.CompressionType
 import io.scif.img.{ImgSaver, SCIFIOImgPlus}
 import io.scif.formats.TIFFFormat
-import io.scif.ome.services.OMEMetadataService
 import llsm.Deskew
 import llsm.algebras.{
   ImgWriterAPI,
@@ -61,7 +58,6 @@ import mpicbg.spim.data.sequence.{
   TimePoint,
   TimePoints
 }
-import net.imagej.axis.{Axes, CalibratedAxis}
 import net.imglib2.FinalDimensions
 import net.imglib2.realtransform.AffineTransform3D
 import org.scijava.Context
@@ -70,31 +66,6 @@ sealed trait LLSMWriterError
 case class HDF5Error(message: String, err: Throwable) extends LLSMWriterError
 
 trait ImgWriterInterpreters {
-
-  private[this] def xyzDims(meta: ImageMetadata): Either[LLSMWriterError, Tuple3[Long, Long, Long]] = {
-    val z: Long = meta.getAxisLength(Axes.Z)
-    if (z == 1) {
-      val message = "HDF5 writing requires at least a 3D image with XYZ dimensions."
-      Either.left(HDF5Error(message, new Exception(message)))
-    } else {
-      val x: Long = meta.getAxisLength(Axes.X)
-      val y: Long = meta.getAxisLength(Axes.Y)
-      Either.right((x, y, z))
-    }
-  }
-
-  private[this] def xyzVoxelSize(meta: ImageMetadata): Either[LLSMWriterError, Tuple4[String, Double, Double, Double]] = {
-    val zIndex: Int = meta.getAxisIndex(Axes.Z)
-    if (zIndex == -1) {
-      val msg = "Z dimension does not appear to be calibrated."
-      Either.left(HDF5Error(msg, new Exception(msg)))
-    } else {
-      val x: CalibratedAxis = meta.getAxis(meta.getAxisIndex(Axes.X))
-      val y: CalibratedAxis = meta.getAxis(meta.getAxisIndex(Axes.Y))
-      val z: CalibratedAxis = meta.getAxis(zIndex)
-      Either.right((x.unit, x.calibratedValue(1), y.calibratedValue(1), z.calibratedValue(1)))
-    }
-  }
 
   private[this] def createAffine3D(pw: Double, ph: Double, pd: Double): AffineTransform3D = {
     val sourceTransform = new AffineTransform3D
@@ -134,52 +105,45 @@ trait ImgWriterInterpreters {
     new (LowWriterF ~> M) {
       def apply[B](fa: LowWriterF[B]): M[B] =
         fa match {
-          case WriteOMETIFF(path, limg @ LLSMImg(img, fm @ FileMetadata(file, wave, cam, sample, config))) =>
-            M.catchNonFatal {
-              val conf = new SCIFIOConfig()
-                .writerSetCompression(CompressionType.LZW.getCompression)
-                .imgSaverSetWriteRGB(false)
+          case WriteOMETIFF(path, limg @ LLSMImg(img, fm @ FileMetadata(file, wave@_, cam@_, sample@_, config@_))) => {
+            val conf = new SCIFIOConfig()
+              .writerSetCompression(CompressionType.LZW.getCompression)
+              .imgSaverSetWriteRGB(false)
 
-              val (name, ext) = WriterUtils.splitExtension(path.getFileName.toString)
-              val outputName = s"${name}_C${file.channel}_T${file.stack}.$ext"
-              val outputPath = Paths.get(path.getParent.toString, outputName)
+            val (name, ext) = WriterUtils.splitExtension(path.getFileName.toString)
+            val outputName = s"${name}_C${file.channel}_T${file.stack}.$ext"
+            val outputPath = Paths.get(path.getParent.toString, outputName)
 
-              val scifio = new SCIFIO(context)
+            val scifio = new SCIFIO(context)
 
-              val omeService: OMEMetadataService = scifio.getContext().getService(classOf[OMEMetadataService])
-              val format = scifio.format().getFormatFromClass(classOf[TIFFFormat])
+            val omexml = new OMEXMLMetadataImpl()
+            omexml.setUUID(file.id.toString)
+            omexml.setBinaryOnlyMetadataFile(s"${name}.companion.ome")
+            omexml.setBinaryOnlyUUID(UUID.nameUUIDFromBytes(name.getBytes).toString)
 
-              val omexml = new OMEXMLMetadataImpl()
-              omexml.setUUID(file.id.toString)
-              omexml.setBinaryOnlyMetadataFile(s"${name}.companion.ome")
-              omexml.setBinaryOnlyUUID(UUID.nameUUIDFromBytes(name.getBytes).toString)
+            // Create ImageMetadata
+            val imeta = MetadataUtils.createImageMetadata(limg)
+            val meta = new TIFFFormat.Metadata()
+            val success = scifio.translator().translate(new DefaultMetadata(List(imeta).asJava), meta, false)
 
-
-              // Create ImageMetadata
-              val imeta = MetadataUtils.createImageMetadata(limg)
-              val meta = new TIFFFormat.Metadata()
-              val success = scifio.translator().translate(new DefaultMetadata(List(imeta).asJava), meta, false)
-
+            if (success) {
               val writer = new OMETIFFCustom.Writer()
               writer.setContext(context)
               writer.setMetadata(meta)
               writer.setDest(outputPath.toString, 0)
               writer.setOMEXMLMeta(omexml)
 
-              val aTypes = meta.get(0).getAxes.asScala.map(a => a.`type`)
-              val cals = meta.get(0).getAxes.asScala.map(a => a.calibratedValue(1))
-
               val imgPlus = new SCIFIOImgPlus(img, outputName)
 
               val saver = new ImgSaver(context)
 
-              val m = saver.saveImg(writer, imgPlus, conf)
-
-              val filenameMeta = file.copy(name = outputName)
-
-              fm.copy(filename = filenameMeta)
-            }
-          case WriteHDF5(path, LLSMImg(img, meta @ FileMetadata(file, wave, cam, sample, config))) =>
+              M.map(M.catchNonFatal(saver.saveImg(writer, imgPlus, conf)))(_ => {
+                val filenameMeta = file.copy(name = outputName)
+                fm.copy(filename = filenameMeta)
+              })
+            } else M.raiseError(new Exception("Unable to translate ImageMetadata to OMEXML metadata."))
+          }
+          case WriteHDF5(path, LLSMImg(img, meta @ FileMetadata(file, wave, cam@_, sample, config))) =>
             M.catchNonFatal {
               if (!Files.exists(path))
                 WriterUtils.createHDF5(path)
@@ -191,7 +155,7 @@ trait ImgWriterInterpreters {
                 "um",
                 config.xVoxelSize,
                 config.yVoxelSize,
-                Deskew.calcZInterval(wave.sPZTInterval, wave.zPZTInterval, sample.angle, config.xVoxelSize)
+                Deskew.calcZInterval(wave.sPZTInterval, wave.zPZTInterval, sample.angle)
               )
               val voxelSize = new FinalVoxelDimensions(units, vw, vh, vd)
               val c: Int = wave.channels.size
@@ -257,7 +221,7 @@ object WriterUtils {
 
   def outputExists(outputPath: Path): Boolean = {
     val parent: Path = outputPath.getParent
-    val (name, ext) = splitExtension(outputPath.toString)
+    val (name, _) = splitExtension(outputPath.toString)
     val matcher = FileSystems.getDefault().getPathMatcher(s"glob:$name*")
     Files.list(parent)
       .collect(Collectors.toList[Path])

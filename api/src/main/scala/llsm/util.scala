@@ -10,8 +10,8 @@ import scala.collection.JavaConverters._
 import scala.xml._
 import scala.xml.transform._
 
+import cats.ApplicativeError
 import cats.implicits._
-import _root_.io.scif.SCIFIO
 import _root_.io.scif.img.SCIFIOImgPlus
 import _root_.io.scif.ome.services.OMEMetadataService
 import llsm.io.LLSMImg
@@ -82,14 +82,19 @@ object ImgUtils {
    * @param context SciJava context that is used for SCIFIO
    * @return Unit
    */
-  def writeOMEMetadata(path: Path, imgs: List[LLSMImg], context: Context): Unit  = {
+  def writeOMEMetadata[M[_]](
+    path: Path,
+    imgs: List[LLSMImg],
+    context: Context
+  )(
+    implicit
+    M: ApplicativeError[M, Throwable]
+  ): M[Unit] = {
     val outPath: Path = path.getParent
     val (outName, outExt) = WriterUtils.splitExtension(path.getFileName.toString)
     val companionName = s"$outName.companion.ome"
 
-    val scifio: SCIFIO = new SCIFIO(context)
     val omeService = context.getService(classOf[OMEMetadataService])
-
 
     val omeString: Option[String] = MetadataUtils.createImageMetadata(imgs).flatMap(meta => {
       val omexml = new OMEXMLMetadataImpl()
@@ -132,7 +137,7 @@ object ImgUtils {
         case _ => {
           val rewriteTransform = new RewriteRule {
             override def transform(n: Node): Seq[Node] = n match {
-              case e @ Elem(prefix, "Pixels", att, scope, child @ _*) =>
+              case Elem(prefix, "Pixels", att, scope, child @ _*) =>
                 Elem(prefix, "Pixels", att, scope, false, child ++ <MetadataOnly/> : _*)
               case other => other
             }
@@ -144,9 +149,11 @@ object ImgUtils {
 
     omeString match {
       case Some(ome) => {
-        val success = Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
+        M.catchNonFatal {
+          val _ = Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
+        }
       }
-      case None => ()
+      case None => M.raiseError(new Exception("Unable to create OMEXML companion metadata object."))
     }
 
   }

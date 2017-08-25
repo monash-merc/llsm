@@ -131,9 +131,9 @@ class LLSMConvertPlugin extends Command {
     paths: List[Path],
     outputPath: Path,
     context: Context
-  ): ParSeq[F, Unit] =
+  ): ParSeq[F, Either[Throwable, Unit]] =
     Programs.convertImgsP[F](paths, outputPath)
-      .map(lImg => ImgUtils.writeOMEMetadata(outputPath, lImg, context))
+      .map(lImg => ImgUtils.writeOMEMetadata[Either[Throwable, ?]](outputPath, lImg, context))
   /**
     * Entry point to running a plugin.
     */
@@ -173,7 +173,7 @@ class LLSMConvertPlugin extends Command {
                   llsmWriter[M](context) or
                       (processCompiler[M] or
                         (ijImgReader[M](context, imgFactory, log) or
-                          (ijMetadataReader[M](config, context, log) or
+                          (ijMetadataReader[M](config, log) or
                             ijProgress[M](status))))
 
       // Get a list of TIFF images from the input path.
@@ -185,10 +185,11 @@ class LLSMConvertPlugin extends Command {
       // the compiler.
       val p = program[App](imgPaths.toList, Paths.get(output.getPath, outputFileName), context)
 
-      val outputF: Try[Unit] => Unit = result => result match {
-        case Success(_) => {
+      val outputF: Try[Either[Throwable, Unit]] => Unit = result => result match {
+        case Success(Right(_)) => {
           log.info("Successfully converted images")
         }
+        case Success(Left(e)) => log.error(e)
         case Failure(e) => log.error(e)
       }
 

@@ -60,11 +60,11 @@ trait ImgReaderInterpreters {
    *  be composed with a ImgReader interpreter to define a new interpreter that
    *  logs as well.
    */
-  val readerLogging: ImgReaderF ~< Halt[LoggingF, ?] =
+  def readerLogging: ImgReaderF ~< Halt[LoggingF, ?] =
     new (ImgReaderF ~< Halt[LoggingF, ?]) {
       def apply[A](fa: ImgReaderF[A]): Free[Halt[LoggingF, ?], A] =
         fa match {
-          case ImgReaderAPI.ReadImg(path, meta, _) =>
+          case ImgReaderAPI.ReadImg(path, _, _) =>
             Free.liftF[Halt[LoggingF, ?], A](
               LoggingAPI[LoggingF].debug(s"Reading image: $path")
             )

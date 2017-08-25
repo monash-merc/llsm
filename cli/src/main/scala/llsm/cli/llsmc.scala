@@ -219,18 +219,20 @@ object LLSMC extends App {
                 llsmWriter[M](context) or
                     (processCompiler[M] or
                       (cliImgReader[M](context, imgFactory, config.debug) or
-                        (cliMetadataReader[M](conf, context, config.debug) or
+                        (cliMetadataReader[M](conf, config.debug) or
                           consoleProgress[M])))
 
       val prog = program[App](fl, config.output, context)
 
-      val outputF: Try[Unit] => Unit =
-        result => result match {
-          case Success(_) => {
-            println("Successfully converted images")
-            context.dispose
-          }
-          case Failure(e) => println(s"ERROR: $e")
+      val outputF: Try[Either[Throwable, Unit]] => Unit =
+        result => {
+          context.dispose
+          result match {
+            case Success(Right(_)) =>
+              println("Successfully converted images")
+            case Success(Left(e)) => println(s"ERROR: ${e.getMessage}")
+            case Failure(e) => println(s"ERROR: ${e.getMessage}")
+        }
         }
 
       if (config.parallel) {
@@ -246,7 +248,7 @@ object LLSMC extends App {
     paths: List[Path],
     outputPath: Path,
     context: Context
-  ): ParSeq[F, Unit] =
+  ): ParSeq[F, Either[Throwable, Unit]] =
     Programs.convertImgsP[F](paths, outputPath)
-      .map(lImg => ImgUtils.writeOMEMetadata(outputPath, lImg, context))
+      .map(lImg => ImgUtils.writeOMEMetadata[Either[Throwable, ?]](outputPath, lImg, context))
 }

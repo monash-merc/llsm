@@ -86,7 +86,7 @@ object MetadataUtils {
              val zVoxelSize: Double = Deskew.calcZInterval(
                waveform.sPZTInterval,
                waveform.zPZTInterval,
-               sample.angle,
+               sample.angle
              )
              List(new DefaultLinearAxis(Axes.Z, "um", zVoxelSize))
            } else Nil) ++

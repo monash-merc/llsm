@@ -56,7 +56,7 @@ class IOSpec extends IOSuite {
       val interpreter = processCompiler[Try] or (new MetadataSuite().metaMockCompiler[Try](channel*time, channel, time) or scifioReader[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
 
       program[App](Paths.get(imgPath)).foldMap(interpreter) match {
-        case Success(LLSMImg(img, meta)) => {
+        case Success(LLSMImg(img, meta@_)) => {
           img shouldBe a [Img[_]]
           img.numDimensions should equal (5)
           val dims = Array.ofDim[Long](img.numDimensions)

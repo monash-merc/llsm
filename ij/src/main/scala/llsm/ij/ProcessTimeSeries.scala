@@ -62,7 +62,7 @@ import org.scijava.plugin.{Plugin, Parameter}
 class DeskewTimeSeriesPlugin extends Command {
 
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
-  var input: File = _
+  var input: File = new File(System.getProperty("user.home"))
 
   @Parameter(label = "X/Y voxel size (um)", required = true)
   var pixelSize: Double = 0.104
@@ -130,7 +130,7 @@ class DeskewTimeSeriesPlugin extends Command {
     def compiler[M[_]: MonadError[?[_], Throwable]] =
       processCompiler[M] or
       (ijImgReader[M](context, imgFactory, log) or
-      (ijMetadataReader[M](config, context, log) or
+      (ijMetadataReader[M](config, log) or
       ijProgress[M](status)))
 
     val imgPaths = Files.list(Paths.get(input.getPath))
@@ -140,8 +140,6 @@ class DeskewTimeSeriesPlugin extends Command {
     processImgs[App](imgPaths.toList).run(compiler[Try]) match {
       case Success(Some(img)) => {
         val imeta = img.getImageMetadata
-        val xIndex = imeta.getAxisIndex(Axes.X)
-        val zIndex = imeta.getAxisIndex(Axes.Z)
         val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
           case -1     => None
           case i: Int => Some(i)

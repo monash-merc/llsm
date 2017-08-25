@@ -313,6 +313,7 @@ lazy val ij = project
       "org.scijava"   % "scripting-scala"       % ijScalaVersion    % "provided",
       "sc.fiji"       % "bigdataviewer-core"    % bdvCoreVersion    % "provided"
     ),
+    scalacOptions ~= (_ filterNot(_ == "-Xcheckinit")), // disable checkinit because ImageJ does a lot of runtime injection
     mainClass in (Compile, run) := Some("net.imagej.Main"),
     fork in run := true,
     javaOptions ++= Seq("-Xmx12G"),//, "-Dscijava.log.level=debug"),

@@ -67,6 +67,10 @@ Z motion :	Sample piezo"""
         assertResult("Linear")(wt)
         assertResult("Sample piezo")(zm)
         assertResult("per Z")(cyc)
+        assertResult(251)(nSlices)
+        assertResult(0)(zPZTOffset)
+        assertResult(0.3)(sPZTOffset)
+        assertResult(20)(nFrames)
         assertResult(2)(channels.size)
         assertResult(0)(channels(0).id)
       }
