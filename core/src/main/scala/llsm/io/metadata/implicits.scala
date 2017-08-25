@@ -268,7 +268,7 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
   implicit val cameraCoordParser = new Parser[CameraMetadata.Coord] {
     def apply(s: String): Parser.Result[CameraMetadata.Coord] =
       s.split(" ").toList match {
-        case List(xs, ys) =>
+        case List(xs, _) =>
           for {
             x <- Parser[Long](xs.split("=")(1))
             y <- Parser[Long](xs.split("=")(1))

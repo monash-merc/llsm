@@ -85,6 +85,6 @@ object Deskew {
   def calcShearFactor(interval: Double, angle: Double, voxelSize: Double): Double =
     Math.cos(Math.toRadians(angle)) * interval / voxelSize
 
-  def calcZInterval(sampleInterval: Double, zPiezoInterval: Double, angle: Double, xVoxelSize: Double): Double =
+  def calcZInterval(sampleInterval: Double, zPiezoInterval: Double, angle: Double): Double =
     Math.sin(Math.toRadians(angle)) * sampleInterval + zPiezoInterval
 }
