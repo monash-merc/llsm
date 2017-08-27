@@ -5,7 +5,7 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 inThisBuild(List(
   organization := "edu.monash",
   scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.11.11", "2.12.3", "2.13.0-M2")
+  crossScalaVersions := Seq("2.11.11", "2.12.3")
 ))
 
 addCommandAlias(
@@ -82,29 +82,30 @@ lazy val commonSettings = List(
   resolvers ++= Seq(
     "imagej.public" at "http://maven.imagej.net/content/groups/public"
   ),
-  scalacOptions in (Compile, console) ~= {
-    _.filterNot(disabledReplOptions.contains(_))
-  },
+  addCompilerPlugin(
+    "org.spire-math" % "kind-projector" % "0.9.4" cross CrossVersion.binary
+  )
+)
+
+// Restrict ammonite to Scala 2.11 and 2.12
+lazy val ammSettings = Seq(
+  scalacOptions in (Compile, console) := (scalacOptions in (Compile, console)).value.filterNot(disabledReplOptions.contains(_)),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
-  libraryDependencies ++= Seq(
-    "com.lihaoyi" % "ammonite" % "1.0.1" % "test" cross CrossVersion.full),
+  libraryDependencies += "com.lihaoyi" % "ammonite" % "1.0.2" % "test" cross CrossVersion.full,
   sourceGenerators in Test += Def.task {
-      val file = (sourceManaged in Test).value / "amm.scala"
-      IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
-      Seq(file)
+    val file = (sourceManaged in Test).value / "amm.scala"
+    IO.write(file, """object amm extends App { ammonite.Main().run()  }""")
+    Seq(file)
   }.taskValue,
   (fullClasspath in Test) ++= {
-    (updateClassifiers in Test).value
-      .configurations
-      .find(_.configuration == Test.name)
-      .get
-      .modules
-      .flatMap(_.artifacts)
-      .collect{case (a, f) if a.classifier == Some("sources") => f}
-  },
-  addCompilerPlugin(
-    "org.spire-math" % "kind-projector" % "0.9.4" cross CrossVersion.binary)
-)
+   (updateClassifiers in Test).value
+     .configurations
+     .find(_.configuration == Test.name)
+     .get
+     .modules
+     .flatMap(_.artifacts)
+     .collect{case (a, f) if a.classifier == Some("sources") => f}
+  })
 
 lazy val coreApiSettings = List(
   wartremoverWarnings in (Compile, compile) ++= Warts.unsafe
@@ -166,7 +167,7 @@ lazy val scoverageSettings = Seq(
   coverageFailOnMinimum := false
 )
 
-lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
+lazy val llsmSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings ++ ammSettings
 
 lazy val docMappingsApiDir =
   settingKey[String]("Subdirectory in site target directory for API docs")
@@ -394,14 +395,15 @@ def orgScalacOptions(version: String): List[String] =
     case _             => List.empty
   }
 
-def scalaVersionDeps(version: String): List[ModuleID] =
+def scalaVersionDeps(version: String): List[ModuleID] = {
   CrossVersion.partialVersion(version) match {
-    case Some((2, 11)) =>
-      List(
-        compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"))
+    case Some((2, 11)) => List(
+        compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0")
+      )
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }
+}
 
 
 def coreVersionDeps(version: String): List[ModuleID] =
