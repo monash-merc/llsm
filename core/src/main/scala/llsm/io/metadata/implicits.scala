@@ -22,8 +22,8 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
 
   implicit val filenameParser = new Parser[FilenameMetadata] {
     def apply(s: String): Parser.Result[FilenameMetadata] =
-      s.split("_").toList match {
-        case List(name, channel, stack, cw, time, absTime) =>
+      s.split("_").toList.reverse match {
+        case List(absTime, time, cw, stack, channel, name @ _*) =>
           for {
             ch <- Try(channel.substring(2).toInt) match {
               case Success(ch) => Right(ch)
@@ -59,7 +59,7 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
                     s"Unable to parse absolute timestamp from file name: $s",
                     e))
             }
-          } yield FilenameMetadata(UUID.nameUUIDFromBytes(s.getBytes), name, ch, st, w, t, tAbs)
+          } yield FilenameMetadata(UUID.nameUUIDFromBytes(s.getBytes), name.reverse.mkString("_"), ch, st, w, t, tAbs)
         case _ =>
           Left(
             ParsingFailure(

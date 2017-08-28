@@ -179,6 +179,17 @@ subROIs :	Unknown type
           FilenameMetadata(UUID.nameUUIDFromBytes(fn.getBytes), "Resolution test 4", 1, 1, w, 7480L, 8884606L)))
     }
   }
+  it should "successly parse when the name has underscores in it" in {
+    val fn: String =
+      s"Resolution_test_4_ch1_stack0001_488nm_0007480msec_0008884606msecAbs.tif"
+
+    val pfn: Parser.Result[FilenameMetadata] = Parser[FilenameMetadata](fn)
+
+    pfn should be('right)
+    pfn should be(
+      Either.right(
+        FilenameMetadata(UUID.nameUUIDFromBytes(fn.getBytes), "Resolution_test_4", 1, 1, 488, 7480L, 8884606L)))
+  }
   it should "fail when passed a malformed file name" in {
     val file: String = "Test_hello.txt"
 
