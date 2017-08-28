@@ -319,7 +319,7 @@ lazy val ij = project
     fork in run := true,
     javaOptions ++= Seq("-Xmx12G"),//, "-Dscijava.log.level=debug"),
     test in assembly := {},
-    assemblyJarName in assembly := s"llsm-ij_${scalaVersion.value}.jar",
+    assemblyJarName in assembly := s"llsm-ij-${version.value}.jar",
     assemblyOption in assembly := (assemblyOption in assembly).value
       .copy(includeScala = false, cacheOutput = false),
     run in Compile := Defaults.runTask(fullClasspath in Compile,
@@ -405,7 +405,7 @@ def scalaVersionDeps(version: String): List[ModuleID] = {
   }
 }
 
-
+// Cats required to support Right-biased Either in scala 2.11
 def coreVersionDeps(version: String): List[ModuleID] =
   CrossVersion.partialVersion(version) match {
     case Some((2, 11)) =>
