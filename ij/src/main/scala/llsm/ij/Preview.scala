@@ -8,20 +8,16 @@ import scala.collection.JavaConverters._
 
 import cats.MonadError
 import cats.data.Coproduct
+import cats.free.Free
 import cats.implicits._
-import ij.ImagePlus
-import ij.measure.Calibration
-import io.scif.img.SCIFIOImgPlus
 import io.scif.img.cell.SCIFIOCellImgFactory
 import llsm.{
   Programs,
   NoInterpolation,
   NNInterpolation,
   LinearInterpolation,
-  LanczosInterpolation,
-  ImgUtils
+  LanczosInterpolation
 }
-import llsm.fp.ParSeq.ops._
 import llsm.algebras.{
   Metadata,
   MetadataF,
@@ -30,20 +26,18 @@ import llsm.algebras.{
   Process,
   ProcessF,
   Progress,
-  ProgressF
+  ProgressF,
+  Visualise,
+  VisualiseF
 }
 import llsm.interpreters._
-import llsm.fp._
 import llsm.io.metadata.ConfigurableMetadata
 import llsm.ij.interpreters._
 import net.imagej.DatasetService
-import net.imagej.axis.Axes
 import net.imglib2.img.ImgFactory
 import net.imglib2.img.array.ArrayImgFactory
 import net.imglib2.img.planar.PlanarImgFactory
-import net.imglib2.img.display.imagej.ImageJFunctions
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
-import net.imglib2.view.Views
 import org.scijava.{Context, ItemIO}
 import org.scijava.app.StatusService
 import org.scijava.command.Command
@@ -94,56 +88,21 @@ class PreviewPlugin extends Command {
   var context: Context = _
 
 
-  def processImgs[F[_]: Metadata: ImgReader: Process: Progress](
+  def processImgs[F[_]: Metadata: ImgReader: Process: Progress: Visualise](
       paths: List[Path]
-  ): ParSeq[F, Option[SCIFIOImgPlus[UnsignedShortType]]] =
-    paths.zipWithIndex.traverse {
-      case (p, i) => ParSeq.liftSeq {
-        for {
-          img <- Programs.processImg[F](p)
-          _   <- Progress[F].progress(i + 1, paths.size)
-        } yield img
-      }
-    }.map(lImgs => ImgUtils.aggregateImgs(lImgs))
-
-  private[this] def displayResult: Either[Throwable, Option[SCIFIOImgPlus[UnsignedShortType]]] => Unit =
-    result => result match {
-      case Right(Some(img)) => {
-        val imeta = img.getImageMetadata
-        val cIndex: Option[Int] = imeta.getAxisIndex(Axes.CHANNEL) match {
-          case -1     => None
-          case i: Int => Some(i)
+  ): Free[F, Unit] =
+    for {
+      imgs <- paths.zipWithIndex.traverse {
+          case (p, i) =>
+            for {
+              img <- Programs.processImg[F](p)
+              _   <- Progress[F].progress(i + 1, paths.size)
+            } yield img
         }
+      agg <- Process[F].aggregate(imgs)
+      o   <- Visualise[F].show(agg)
+    } yield o
 
-        val imgDims = Array.ofDim[Long](img.numDimensions)
-        img.dimensions(imgDims)
-        val out: ImagePlus = cIndex match {
-          case Some(i) =>
-            ImageJFunctions.wrap(Views.permute(img, i, 2),
-              s"${imeta.getName}_deskewed")
-            case None =>
-              ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
-        }
-        val cal = new Calibration(out)
-        cal.setUnit("um")
-        cal.pixelWidth = imeta.getAxis(Axes.X).calibratedValue(1)
-        cal.pixelHeight = imeta.getAxis(Axes.Y).calibratedValue(1)
-        cal.pixelDepth = imeta.getAxis(Axes.Z).calibratedValue(1)
-
-        if (imeta.getAxisLength(Axes.TIME) > 1) {
-          cal.setTimeUnit("ms")
-          cal.frameInterval = imeta.getAxis(Axes.TIME).calibratedValue(1)
-        }
-
-        out.setCalibration(cal)
-        out.setDimensions(imeta.getAxisLength(Axes.CHANNEL).toInt,
-          imeta.getAxisLength(Axes.Z).toInt,
-          imeta.getAxisLength(Axes.TIME).toInt)
-        ui.show(out)
-      }
-      case Right(None) => log.error("Unable to process images because metadata could not be read")
-      case Left(e) => log.error(e)
-    }
 
   /**
    * Entry point to running a plugin.
@@ -151,9 +110,11 @@ class PreviewPlugin extends Command {
   override def run(): Unit = {
 
     type App[A] =
-      Coproduct[ProcessF,
-        Coproduct[ImgReaderF,
-          Coproduct[MetadataF, ProgressF, ?],
+      Coproduct[VisualiseF,
+        Coproduct[ProcessF,
+          Coproduct[ImgReaderF,
+            Coproduct[MetadataF, ProgressF, ?],
+          ?],
         ?],
       A]
 
@@ -175,10 +136,11 @@ class PreviewPlugin extends Command {
     }
 
     def compiler[M[_]: MonadError[?[_], Throwable]] =
-      processCompiler[M] or
+      ijVis[M](HyperStack) or
+      (processCompiler[M] or
       (ijImgReader[M](context, imgFactory, log) or
       (ijMetadataReader[M](config, log) or
-      ijProgress[M](status)))
+      ijProgress[M](status))))
 
     val imgPaths = Files.list(Paths.get(input.getPath))
       .collect(Collectors.toList[Path])
@@ -186,6 +148,9 @@ class PreviewPlugin extends Command {
 
     val prog = processImgs[App](imgPaths.toList)
 
-    displayResult(prog.run(compiler[Either[Throwable, ?]]))
+    prog.foldMap(compiler[Either[Throwable, ?]]) match {
+      case Left(e) => log.error(e)
+      case _ => ()
+    }
   }
 }

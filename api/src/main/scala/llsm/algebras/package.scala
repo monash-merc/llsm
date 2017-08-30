@@ -33,4 +33,10 @@ package object algebras {
   object ImgWriter {
     def apply[F[_]](implicit ev: ImgWriterAPI[Free[F, ?]]): ImgWriterAPI[Free[F, ?]] = ev
   }
+
+  type Visualise[G[_]] = Inject[VisualiseF, G]
+
+  object Visualise {
+    def apply[F[_]](implicit ev: VisualiseAPI[Free[F, ?]]): VisualiseAPI[Free[F, ?]] = ev
+  }
 }
