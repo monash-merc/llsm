@@ -6,10 +6,11 @@ from early implementations of the Lattice Light-sheet Microscope<sup>1</sup>.
 
 Features include:
 
-* Read and parse LLSM metadata from raw LLSM data.
-* Read LLSM data.
+* Read and parse LLSM metadata from raw LLSM data from the Janelia LabView
+    application.
+* Read LLSM raw data from the Janelia LabView application.
 * Deskew LLSM volumes.
-* Output LLSM volumes as OME-TIFF.
+* Output LLSM volumes as OME-TIFF or BigDataViewer HDF5 formats.
 
 `llsm` is underpinned by Typelevel and ImageJ/Fiji community libraries including `cats`, `imglib2` and `scifio`.
 

@@ -1,6 +1,8 @@
 ---
 layout: docs
 title: Instrument Operators
+section: operators
+position: 20
 ---
 
 # LLSM Operator Documentation

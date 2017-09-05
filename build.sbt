@@ -178,7 +178,7 @@ lazy val docSettings = Seq(
   micrositeAuthor := "Keith Schulze",
   micrositeHighlightTheme := "atom-one-light",
   micrositeBaseUrl := "llsm",
-  micrositeDocumentationUrl := "/llsm/docs/",
+  micrositeDocumentationUrl := "/llsm/api/",
   micrositeGithubOwner := "monash-merc",
   micrositeGithubRepo := "llsm",
   micrositePalette := Map(
@@ -225,7 +225,20 @@ lazy val docs = project
   .settings(docSettings)
   .settings(
     scalacOptions in Tut ~= (_.filterNot(
-    Set("-Ywarn-unused-import", "-Ywarn-dead-code")))
+      Set(
+        "-Ywarn-unused-import",
+        "-Ywarn-dead-code",
+        "-Ywarn-unused:imports"
+      )
+    )),
+    libraryDependencies ++= Seq(
+      "net.imglib2" % "imglib2"               % imglib2Version    % "tut",
+      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "tut",
+      "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "tut",
+      "io.scif"     % "scifio"                % scifioVersion     % "tut",
+      "io.scif"     % "scifio-ome-xml"        % scifioOMEVersion  % "tut",
+      "sc.fiji"     % "bigdataviewer-core"    % bdvCoreVersion    % "tut"
+    )
   )
   .dependsOn(core, api)
 

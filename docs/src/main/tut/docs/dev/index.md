@@ -1,6 +1,8 @@
 ---
 layout: docs
 title: Developers
+section: develop
+position: 30
 ---
 
 # Developer Documentation

@@ -2,12 +2,14 @@
 layout: home
 title: Home
 section: "home"
+position: 0
 ---
 
 `llsm` is a set of Scala libraries for working with Lattice Light-Sheet Microscopy (LLSM) data. Features include:
 
-* Read and parse LLSM metadata from raw LLSM data.
-* Read LLSM data.
+* Read and parse LLSM metadata from raw LLSM data from the Janelia LabView
+    application.
+* Read LLSM raw data from the Janelia LabView application.
 * Deskew LLSM volumes.
 * Output LLSM volumes as OME-TIFF or HDF5.
 
@@ -16,9 +18,10 @@ section: "home"
 # Getting Started
 `llsm` is divided into several sub-projects:
 
-* `core` processing libraries with limited dependencies (`imglib2`, `scifio`, `cats-core`).
-* `api` a Free monad based API/DSL
-* `ij` a set of plugins for ImageJ to accomplish some basic tasks.
+* `core` - processing libraries with limited dependencies (`imglib2`, `scifio`, `cats-core`).
+* `api` - a Free monad based API/DSL for describing LLSM processing workflows
+* `ij` - a set of plugins for ImageJ to accomplish some basic tasks
+* `cli` - a command-line interface for LLSM dataset conversions
 
 # Note
 `llsm` is currently in pre-release. You should expect some bugs.

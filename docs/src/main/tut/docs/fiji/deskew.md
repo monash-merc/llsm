@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Deskewing
-menu_section: users
+section: fiji
 ---
 
 # Deskewing LLSM data

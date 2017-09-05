@@ -2,24 +2,40 @@ options:
   - title: Introduction
     url: docs/index.html
 
-  - title: Users
-    url: docs/users/index.html
-    menu_section: users
+  - title: Fiji Plugins
+    url: docs/fiji/index.html
+    menu_type: fiji
+    menu_section: fiji
 
     nested_options:
       - title: Getting Started
-        url: docs/users/index.html
+        url: docs/fiji/index.html
 
-      - title: ImageJ/Fiji Plugins
-        url: docs/users/imagej.html
+      - title: Preview
+        url: docs/fiji/preview.html
+
+      - title: Convert
+        url: docs/fiji/convert.html
 
       - title: Deskewing
-        url: docs/users/deskew.html
+        url: docs/fiji/deskew.html
 
   - title: Instrument Operators
     url: docs/operators.html
+    menu_type: operators
     menu_section: operators
 
   - title: Developers
     url: docs/dev/index.html
+    menu_type: develop
     menu_section: develop
+
+    nested_options:
+      - title: Overview
+        url: docs/dev/overview.html
+
+      - title: Core Module
+        url: docs/dev/core.html
+
+      - title: API Module
+        url: docs/dev/api.html
