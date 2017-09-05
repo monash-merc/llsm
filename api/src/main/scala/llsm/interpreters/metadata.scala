@@ -9,6 +9,7 @@ import cats.implicits._
 import cats.arrow.FunctionK
 import cats.data.Kleisli
 import cats.free.FreeApplicative
+import llsm.ImgUtils
 import llsm.algebras.{
   LoggingAPI,
   LoggingF,
@@ -26,6 +27,7 @@ import llsm.io.metadata.{
   ParsingFailure
  }
 import llsm.io.metadata.implicits._
+import org.scijava.Context
 
 trait MetadataInterpreters {
 
@@ -54,7 +56,8 @@ trait MetadataInterpreters {
 
 
   private def simpleMetaLowReader[M[_]](
-    config: ConfigurableMetadata
+    config: ConfigurableMetadata,
+    context: Context
   )(
     implicit
     M: ApplicativeError[M, Throwable]
@@ -78,23 +81,22 @@ trait MetadataInterpreters {
               case None => M.raiseError(new Exception("FileMetadata file not found"))
             }
         }
-        case MetadataLow.WriteMetadata(path@_, metas@_) =>
-          M.catchNonFatal {
-          }
+        case MetadataLow.WriteMetadata(path, metas) => ImgUtils.writeOMEMetadata[M](path, metas, context)
       }
     }
   }
 
 
   def basicMetadataReader[M[_]](
-    config: ConfigurableMetadata
+    config: ConfigurableMetadata,
+    context: Context
   )(
     implicit
     M: ApplicativeError[M, Throwable]
   ): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
-        metaFToMetaLowF(fa).foldMap[Exec[M, ?]](simpleMetaLowReader[M](config)).run(())
+        metaFToMetaLowF(fa).foldMap[Exec[M, ?]](simpleMetaLowReader[M](config, context)).run(())
   }
 
   def metadataLogging: MetadataF ~< Halt[LoggingF, ?] =

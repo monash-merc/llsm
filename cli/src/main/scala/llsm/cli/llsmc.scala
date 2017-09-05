@@ -219,7 +219,7 @@ object LLSMC extends App {
                 llsmWriter[M](context) or
                     (processCompiler[M] or
                       (cliImgReader[M](context, imgFactory, config.debug) or
-                        (cliMetadataReader[M](conf, config.debug) or
+                        (cliMetadataReader[M](conf, context, config.debug) or
                           consoleProgress[M])))
 
       val prog = program[App](fl, config.output, context)
@@ -241,7 +241,7 @@ object LLSMC extends App {
         outputF(prog.run(compiler[Try]))
       }
     }
-    case None =>
+    case None => println("ERROR: Bad config")
   }
 
   def program[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](

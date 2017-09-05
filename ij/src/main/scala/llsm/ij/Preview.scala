@@ -143,7 +143,7 @@ class PreviewPlugin extends Command {
       ijVis[M](if (bdv) BigDataViewer else HyperStack) or
       (processCompiler[M] or
       (ijImgReader[M](context, imgFactory, log) or
-      (ijMetadataReader[M](config, log) or
+      (ijMetadataReader[M](config, context, log) or
       ijProgress[M](status))))
 
     val imgPaths = Files.list(Paths.get(input.getPath))

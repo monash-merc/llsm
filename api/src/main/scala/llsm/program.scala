@@ -61,9 +61,9 @@ object Programs {
   ): Free[F, List[LLSMImg]] =
     paths.zipWithIndex.traverse[Free[F, ?], LLSMImg] {
       case (p, i) => for {
-        m <- convertImg[F](p, outputPath)
-        _ <- Progress[F].progress(i, paths.size)
-      } yield m
+        img <- convertImg[F](p, outputPath)
+        _ <- Progress[F].progress(i + 1, paths.size)
+      } yield img
     }
 
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
@@ -72,11 +72,11 @@ object Programs {
       outputPath: Path
   ): ParSeq[F, List[LLSMImg]] =
     paths.zipWithIndex.traverse[ParSeq[F, ?], LLSMImg] {
-      case (p, i) => {
-        ParSeq.liftSeq[F, LLSMImg](for {
-          m <- convertImg[F](p, outputPath)
-          _ <- Progress[F].progress(i, paths.size)
-        } yield m)
+      case (p, i) => ParSeq.liftSeq[F, LLSMImg]{
+        for {
+          img <- convertImg[F](p, outputPath)
+          _ <- Progress[F].progress(i + 1, paths.size)
+        } yield img
       }
     }
 }

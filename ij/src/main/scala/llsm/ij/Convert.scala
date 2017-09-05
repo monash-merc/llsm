@@ -6,12 +6,10 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.stream.Collectors
 
 import scala.collection.JavaConverters._
-import scala.util.{Try, Success, Failure}
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 import cats.MonadError
 import cats.data.Coproduct
+import cats.free.Free
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
 import ij.gui.YesNoCancelDialog
@@ -20,8 +18,7 @@ import llsm.{
   NNInterpolation,
   LinearInterpolation,
   LanczosInterpolation,
-  Programs,
-  ImgUtils
+  Programs
 }
 import llsm.algebras.{
   Metadata,
@@ -35,8 +32,6 @@ import llsm.algebras.{
   Progress,
   ProgressF
 }
-import llsm.fp.ParSeq
-import llsm.fp.ParSeq.ops._
 import llsm.interpreters._
 import llsm.io.metadata.{ ConfigurableMetadata }
 import llsm.ij.interpreters._
@@ -60,11 +55,11 @@ class ConvertPlugin extends Command {
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
   var input: File = _
 
-  @Parameter(style = "directory", label = "Output Directory", `type` = ItemIO.INPUT)
+  @Parameter(style = "save", label = "Output", validater = "validateName", `type` = ItemIO.INPUT)
   var output: File = _
 
-  @Parameter(validater = "validateName")
-  var outputFileName: String = _
+  // @Parameter()
+  // var outputFileName: String = _
 
   var validName: Boolean = false
 
@@ -82,10 +77,6 @@ class ConvertPlugin extends Command {
              persist = false,
              required = false)
   var interpolation: String = "None"
-
-  @Parameter(label = "Parallel processing (experimental)",
-             persist = false)
-  var parallel: Boolean = false
 
   @Parameter
   var ui: UIService = _
@@ -109,9 +100,9 @@ class ConvertPlugin extends Command {
   }
 
   def validateConfig(): ValidConfig =
-    if (!outputFileName.endsWith(".h5") && !outputFileName.endsWith(".ome.tif"))
+    if (!output.getPath().endsWith(".h5") && !output.getPath().endsWith(".ome.tif"))
       ValidConfig.fail("Invalid output type. Only .h5 and .ome.tif are supported")
-    else if (WriterUtils.outputExists(Paths.get(output.getPath, outputFileName))) {
+    else if (WriterUtils.outputExists(Paths.get(output.getPath))) {
       val c = new YesNoCancelDialog(
         new Frame,
         "Output file/files exist",
@@ -129,11 +120,14 @@ class ConvertPlugin extends Command {
 
   def program[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](
     paths: List[Path],
-    outputPath: Path,
-    context: Context
-  ): ParSeq[F, Either[Throwable, Unit]] =
-    Programs.convertImgsP[F](paths, outputPath)
-      .map(lImg => ImgUtils.writeOMEMetadata[Either[Throwable, ?]](outputPath, lImg, context))
+    outputPath: Path
+  ): Free[F, Unit] =
+    for {
+      imgs <- Programs.convertImgs[F](paths, outputPath)
+      r <- Metadata[F].writeMetadata(outputPath, imgs)
+    } yield r
+
+
   /**
     * Entry point to running a plugin.
     */
@@ -173,7 +167,7 @@ class ConvertPlugin extends Command {
                   llsmWriter[M](context) or
                       (processCompiler[M] or
                         (ijImgReader[M](context, imgFactory, log) or
-                          (ijMetadataReader[M](config, log) or
+                          (ijMetadataReader[M](config, context, log) or
                             ijProgress[M](status))))
 
       // Get a list of TIFF images from the input path.
@@ -183,23 +177,16 @@ class ConvertPlugin extends Command {
 
       // Create a program for processing our images. This will be executed via
       // the compiler.
-      val p = program[App](imgPaths.toList, Paths.get(output.getPath, outputFileName), context)
+      val p = program[App](imgPaths.toList, Paths.get(output.getPath))
 
-      val outputF: Try[Either[Throwable, Unit]] => Unit = result => result match {
-        case Success(Right(_)) => {
+      val outputF: Either[Throwable, Unit] => Unit = result => result match {
+        case Right(_) => {
           log.info("Successfully converted images")
         }
-        case Success(Left(e)) => log.error(e)
-        case Failure(e) => log.error(e)
+        case Left(e) => log.error(e)
       }
 
-      // If user specifies parallel then run program with Future effects type,
-      // otherwise use Try
-      if (parallel) {
-        p.run(compiler[Future]) onComplete outputF
-      } else {
-        outputF(p.run(compiler[Try]))
-      }
+      outputF(p.foldMap(compiler[Either[Throwable, ?]]))
     }
     case ConfigFailure(m) => log.error(m)
   }
