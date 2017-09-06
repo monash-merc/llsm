@@ -34,7 +34,7 @@ import org.scijava.log.LogService
 
 package object interpreters {
 
-  def ijProgress[M[_]](status: StatusService)(implicit M: MonadError[M, Throwable]): ProgressF ~> M =
+  def ijProgressInterpreter[M[_]](status: StatusService)(implicit M: MonadError[M, Throwable]): ProgressF ~> M =
     new (ProgressF ~> M) {
       def apply[A](fa: ProgressF[A]): M[A] =
         fa match {
@@ -45,7 +45,7 @@ package object interpreters {
         }
     }
 
-  def ijLogging[M[_]](log: LogService)(implicit M: MonadError[M, Throwable]): LoggingF ~> M =
+  def ijLoggingInterpreter[M[_]](log: LogService)(implicit M: MonadError[M, Throwable]): LoggingF ~> M =
     new (LoggingF ~> M) {
       def apply[A](fa: LoggingF[A]): M[A] =
         fa match {
@@ -64,7 +64,7 @@ package object interpreters {
 
 
 
-  def ijMetadataReader[M[_]](
+  def ijMetadataInterpreter[M[_]](
     config: ConfigurableMetadata,
     context: Context,
     log: LogService
@@ -74,13 +74,13 @@ package object interpreters {
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
         for {
-          _ <- metadataLogging(fa).unhalt.foldMap(ijLogging[M](log))
-          m <- basicMetadataReader[M](config, context)(M)(fa)
+          _ <- metadataLogging(fa).unhalt.foldMap(ijLoggingInterpreter[M](log))
+          m <- basicMetadataInterpreter[M](config, context)(M)(fa)
         } yield m
     }
 
 
-  def ijImgReader[M[_]](
+  def ijImgReaderInterpreter[M[_]](
     context: Context,
     factory: ImgFactory[UnsignedShortType],
     log: LogService
@@ -90,13 +90,13 @@ package object interpreters {
     new (ImgReaderF ~> M) {
       def apply[A](fa: ImgReaderF[A]): M[A] =
         for {
-          _ <- readerLogging(fa).unhalt.foldMap(ijLogging[M](log))
-          m <- scifioReader[M](context, factory)(M)(fa)
+          _ <- readerLogging(fa).unhalt.foldMap(ijLoggingInterpreter[M](log))
+          m <- scifioReaderInterpreter[M](context, factory)(M)(fa)
         } yield m
     }
 
   // Visualisation Interpreters
-  def visInterpreter(viewer: Viewer): VisualiseF ~< VisualiseIJF =
+  def visToVisIJTranslator(viewer: Viewer): VisualiseF ~< VisualiseIJF =
     new (VisualiseF ~< VisualiseIJF) {
       def apply[A](f: VisualiseF[A]): Free[VisualiseIJF, A] = f match {
         case VisualiseAPI.Show(img, next) => viewer match {
@@ -106,7 +106,7 @@ package object interpreters {
       }
     }
 
-  def ijVisCompiler[M[_]](
+  def ijVisInterpreter[M[_]](
     implicit
     M: MonadError[M, Throwable]
   ): VisualiseIJF ~> M =
@@ -179,12 +179,12 @@ package object interpreters {
       }
     }
 
-    def ijVis[M[_]](viewer: Viewer)(
+    def visInterpreter[M[_]](viewer: Viewer)(
       implicit
       M: MonadError[M, Throwable]
     ): VisualiseF ~> M =
       new (VisualiseF ~> M) {
         def apply[A](fa: VisualiseF[A]): M[A] =
-          visInterpreter(viewer)(fa).foldMap(ijVisCompiler[M])
+          visToVisIJTranslator(viewer)(fa).foldMap(ijVisInterpreter[M])
       }
 }

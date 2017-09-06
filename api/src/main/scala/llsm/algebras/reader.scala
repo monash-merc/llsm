@@ -6,8 +6,6 @@ import cats.free.{Free, Inject}
 import llsm.io.LLSMImg
 import llsm.io.metadata.FileMetadata
 
-trait ImgReaderAliases {
-}
 
 trait ImgReaderAPI[F[_]] {
   def readImg(path: Path, meta: FileMetadata): F[LLSMImg]

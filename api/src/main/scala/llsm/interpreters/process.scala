@@ -11,7 +11,7 @@ import llsm.io.LLSMImg
 import net.imglib2.img.ImgView
 
 trait ProcessInterpreters {
-  def processCompiler[M[_]](
+  def processInterpreter[M[_]](
     implicit M: MonadError[M, Throwable]
   ): ProcessF ~> M =
     new (ProcessF ~> M) {

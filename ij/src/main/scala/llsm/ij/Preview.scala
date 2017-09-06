@@ -140,11 +140,11 @@ class PreviewPlugin extends Command {
     }
 
     def compiler[M[_]: MonadError[?[_], Throwable]] =
-      ijVis[M](if (bdv) BigDataViewer else HyperStack) or
-      (processCompiler[M] or
-      (ijImgReader[M](context, imgFactory, log) or
-      (ijMetadataReader[M](config, context, log) or
-      ijProgress[M](status))))
+      visInterpreter[M](if (bdv) BigDataViewer else HyperStack) or
+      (processInterpreter[M] or
+      (ijImgReaderInterpreter[M](context, imgFactory, log) or
+      (ijMetadataInterpreter[M](config, context, log) or
+      ijProgressInterpreter[M](status))))
 
     val imgPaths = Files.list(Paths.get(input.getPath))
       .collect(Collectors.toList[Path])

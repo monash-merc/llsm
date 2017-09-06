@@ -53,7 +53,10 @@ class IOSpec extends IOSuite {
       type MetaImg[A] = Coproduct[MetadataF, ImgReaderF, A]
       type App[A] = Coproduct[ProcessF, MetaImg, A]
 
-      val interpreter = processCompiler[Try] or (new MetadataSuite().metaMockCompiler[Try](channel*time, channel, time) or scifioReader[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
+      val interpreter =
+        processInterpreter[Try] or
+        (new MetadataSuite().metaMockInterpreter[Try](channel*time, channel, time) or
+        scifioReaderInterpreter[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
 
       program[App](Paths.get(imgPath)).foldMap(interpreter) match {
         case Success(LLSMImg(img, meta@_)) => {

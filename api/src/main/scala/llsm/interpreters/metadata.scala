@@ -33,7 +33,7 @@ trait MetadataInterpreters {
 
   type Exec[M[_], A] = Kleisli[M, Unit, A]
 
-  val metaFToMetaLowF: MetadataF ≈< MetadataLowF =
+  val metaToMetaLowTranslator: MetadataF ≈< MetadataLowF =
     new (MetadataF ≈< MetadataLowF) {
       def apply[A](fa: MetadataF[A]): FreeApplicative[MetadataLowF, A] =
         fa match {
@@ -55,7 +55,7 @@ trait MetadataInterpreters {
     }
 
 
-  private def simpleMetaLowReader[M[_]](
+  private def metaLowInterpreter[M[_]](
     config: ConfigurableMetadata,
     context: Context
   )(
@@ -87,7 +87,7 @@ trait MetadataInterpreters {
   }
 
 
-  def basicMetadataReader[M[_]](
+  def basicMetadataInterpreter[M[_]](
     config: ConfigurableMetadata,
     context: Context
   )(
@@ -96,7 +96,9 @@ trait MetadataInterpreters {
   ): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
-        metaFToMetaLowF(fa).foldMap[Exec[M, ?]](simpleMetaLowReader[M](config, context)).run(())
+        metaToMetaLowTranslator(fa)
+          .foldMap[Exec[M, ?]](metaLowInterpreter[M](config, context))
+          .run(())
   }
 
   def metadataLogging: MetadataF ~< Halt[LoggingF, ?] =

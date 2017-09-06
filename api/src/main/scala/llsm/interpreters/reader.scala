@@ -23,7 +23,7 @@ trait ImgReaderInterpreters {
    *  @param context scijava org.scijava.Context
    *  @tparam M return type that needs an instance of cats.MonadError
    */
-  def scifioReader[M[_]](
+  def scifioReaderInterpreter[M[_]](
     context: Context,
     factory: ImgFactory[UnsignedShortType]
   )(implicit

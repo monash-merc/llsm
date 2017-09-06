@@ -14,7 +14,7 @@ class MetadataSuite extends BaseSuite with MetadataImplicits {
 
   type Exec[M[_], A] = Kleisli[M, Unit, A]
 
-  private def metaLowMockCompiler[M[_]](
+  private def metaLowMockInterpreter[M[_]](
     s: Int,
     c: Int,
     t: Int
@@ -46,9 +46,11 @@ class MetadataSuite extends BaseSuite with MetadataImplicits {
     }
   }
 
-  def metaMockCompiler[M[_]](s: Int, c: Int, t: Int)(implicit M: ApplicativeError[M, Throwable]): MetadataF ~> M =
+  def metaMockInterpreter[M[_]](s: Int, c: Int, t: Int)(implicit M: ApplicativeError[M, Throwable]): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
-        metaFToMetaLowF(fa).foldMap[Exec[M, ?]](metaLowMockCompiler[M](s, c, t)(M)).run(())
+        metaToMetaLowTranslator(fa)
+          .foldMap[Exec[M, ?]](metaLowMockInterpreter[M](s, c, t)(M))
+          .run(())
     }
 }

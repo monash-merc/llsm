@@ -164,11 +164,11 @@ class ConvertPlugin extends Command {
       // reading metadata, reading data, deskewing, writing processed data and
       // reporting progress to ImageJ.
       def compiler[M[_]: MonadError[?[_], Throwable]] =
-                  llsmWriter[M](context) or
-                      (processCompiler[M] or
-                        (ijImgReader[M](context, imgFactory, log) or
-                          (ijMetadataReader[M](config, context, log) or
-                            ijProgress[M](status))))
+                  imgWriterInterpreter[M](context) or
+                      (processInterpreter[M] or
+                        (ijImgReaderInterpreter[M](context, imgFactory, log) or
+                          (ijMetadataInterpreter[M](config, context, log) or
+                            ijProgressInterpreter[M](status))))
 
       // Get a list of TIFF images from the input path.
       val imgPaths = Files.list(Paths.get(input.getPath))

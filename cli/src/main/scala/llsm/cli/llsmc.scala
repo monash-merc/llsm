@@ -189,7 +189,14 @@ object LLSMC extends App {
   parser.parse(args, Config()) match {
     case Some(config) => {
 
-      type App[A] = Coproduct[ImgWriterF, Coproduct[ProcessF, Coproduct[ImgReaderF, Coproduct[MetadataF, ProgressF, ?], ?], ?], A]
+      type App[A] =
+        Coproduct[ImgWriterF,
+          Coproduct[ProcessF,
+            Coproduct[ImgReaderF,
+              Coproduct[MetadataF, ProgressF, ?],
+            ?],
+          ?],
+        A]
 
       val context = new Context(classOf[SCIFIOService], classOf[SciJavaService])
 
@@ -216,11 +223,11 @@ object LLSMC extends App {
             .toList
 
       def compiler[M[_]: MonadError[?[_], Throwable]] =
-                llsmWriter[M](context) or
-                    (processCompiler[M] or
-                      (cliImgReader[M](context, imgFactory, config.debug) or
-                        (cliMetadataReader[M](conf, context, config.debug) or
-                          consoleProgress[M])))
+                imgWriterInterpreter[M](context) or
+                    (processInterpreter[M] or
+                      (cliImgReaderInterpreter[M](context, imgFactory, config.debug) or
+                        (cliMetadataInterpreter[M](conf, context, config.debug) or
+                          consoleProgressInterpreter[M])))
 
       val prog = program[App](fl, config.output, context)
 

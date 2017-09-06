@@ -19,7 +19,7 @@ import org.scijava.Context
 
 object Interpreters {
 
-  def consoleProgress[M[_]](implicit
+  def consoleProgressInterpreter[M[_]](implicit
     M: MonadError[M, Throwable]
   ): ProgressF ~> M =
     new (ProgressF ~> M) {
@@ -32,7 +32,7 @@ object Interpreters {
         }
     }
 
-  def consoleLogging[M[_]](
+  def consoleLoggingInterpreter[M[_]](
     debug: Boolean
   )(implicit
     M: MonadError[M, Throwable]
@@ -54,7 +54,7 @@ object Interpreters {
     }
 
 
-  def cliMetadataReader[M[_]](
+  def cliMetadataInterpreter[M[_]](
     config: ConfigurableMetadata,
     context: Context,
     debug: Boolean
@@ -64,13 +64,13 @@ object Interpreters {
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
         for {
-          _ <- metadataLogging(fa).unhalt.foldMap(consoleLogging[M](debug))
-          m <- basicMetadataReader[M](config, context)(M)(fa)
+          _ <- metadataLogging(fa).unhalt.foldMap(consoleLoggingInterpreter[M](debug))
+          m <- basicMetadataInterpreter[M](config, context)(M)(fa)
         } yield m
     }
 
 
-  def cliImgReader[M[_]](
+  def cliImgReaderInterpreter[M[_]](
     context: Context,
     factory: ImgFactory[UnsignedShortType],
     debug: Boolean
@@ -80,8 +80,8 @@ object Interpreters {
     new (ImgReaderF ~> M) {
       def apply[A](fa: ImgReaderF[A]): M[A] =
         for {
-          _ <- readerLogging(fa).unhalt.foldMap(consoleLogging[M](debug))
-          m <- scifioReader[M](context, factory)(M)(fa)
+          _ <- readerLogging(fa).unhalt.foldMap(consoleLoggingInterpreter[M](debug))
+          m <- scifioReaderInterpreter[M](context, factory)(M)(fa)
         } yield m
     }
 }

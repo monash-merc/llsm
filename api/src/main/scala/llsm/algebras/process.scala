@@ -9,7 +9,8 @@ import net.imglib2.`type`.numeric.integer.UnsignedShortType
 
 trait ProcessAPI[F[_]] {
   def aggregate(imgs: List[LLSMImg]): F[SCIFIOImgPlus[UnsignedShortType]]
-  def deskewImg(img: LLSMImg, shearDim: Int, refDim: Int, shearFactor: Double, interpolation: InterpolationMethod): F[LLSMImg]
+  def deskewImg(img: LLSMImg, shearDim: Int, refDim: Int, shearFactor: Double,
+                interpolation: InterpolationMethod): F[LLSMImg]
 }
 
 sealed trait ProcessF[A]

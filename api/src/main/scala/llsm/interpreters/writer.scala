@@ -73,9 +73,7 @@ trait ImgWriterInterpreters {
     sourceTransform
   }
 
-
-
-  def llsmWriter[M[_]](
+  def imgWriterInterpreter[M[_]](
     context: Context
   )(
     implicit
@@ -83,10 +81,11 @@ trait ImgWriterInterpreters {
   ): ImgWriterF ~> M =
     new (ImgWriterF ~> M) {
       def apply[B](fa: ImgWriterF[B]): M[B] =
-        llsmWriterToLowWriter(fa).foldMap(llsmLowWriter[M](context))
+        imgWriterToLowWriterTranslator(fa)
+          .foldMap(imgLowWriterInterpreter[M](context))
     }
 
-  val llsmWriterToLowWriter: ImgWriterF ~< LowWriterF =
+  val imgWriterToLowWriterTranslator: ImgWriterF ~< LowWriterF =
     new (ImgWriterF ~< LowWriterF) {
       def apply[A](fa: ImgWriterF[A]): Free[LowWriterF, A] =
         fa match {
@@ -101,7 +100,7 @@ trait ImgWriterInterpreters {
     }
 
 
-  def llsmLowWriter[M[_]](context: Context)(implicit M: MonadError[M, Throwable]): LowWriterF ~> M =
+  def imgLowWriterInterpreter[M[_]](context: Context)(implicit M: MonadError[M, Throwable]): LowWriterF ~> M =
     new (LowWriterF ~> M) {
       def apply[B](fa: LowWriterF[B]): M[B] =
         fa match {
