@@ -102,34 +102,22 @@ object ImgUtils {
       omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
       outExt match {
         case "ome.tif" => {
-          imgs.foreach {
+          imgs.sorted.foreach {
             case LLSMImg(_, FileMetadata(file, wave, _, _, _)) => {
-              omexml.setTiffDataFirstC(
-                new NonNegativeInteger(file.channel),
-                0,
-                file.channel * wave.nFrames + file.stack
-              )
-              omexml.setTiffDataFirstT(
-                new NonNegativeInteger(file.stack),
-                0,
-                file.channel * wave.nFrames + file.stack
-              )
-              omexml.setTiffDataPlaneCount(
-                new NonNegativeInteger(wave.nSlices.toInt),
-                0,
-                file.channel * wave.nFrames + file.stack
-              )
-              omexml.setUUIDFileName(
-                file.name,
-                0,
-                file.channel * wave.nFrames + file.stack
-              )
-              omexml.setUUIDValue(
-                file.id.toString,
-                0,
-                file.channel * wave.nFrames + file.stack
+              (0 until wave.nSlices.toInt).foreach {
+                z => {
+                  val i = ((file.stack * wave.channels.size * wave.nSlices) +
+                           (file.channel * wave.nSlices) + z).toInt
 
-              )
+                  omexml.setTiffDataFirstZ(new NonNegativeInteger(z), 0, i)
+                  omexml.setTiffDataIFD(new NonNegativeInteger(z), 0, i)
+                  omexml.setTiffDataFirstC(new NonNegativeInteger(file.channel), 0, i)
+                  omexml.setTiffDataFirstT(new NonNegativeInteger(file.stack), 0, i)
+                  omexml.setTiffDataPlaneCount(new NonNegativeInteger(1), 0, i)
+                  omexml.setUUIDFileName(file.name, 0, i)
+                  omexml.setUUIDValue(file.id.toString, 0, i)
+                }
+              }
             }
           }
           Some(omexml.dumpXML)
