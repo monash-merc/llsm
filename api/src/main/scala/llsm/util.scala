@@ -48,7 +48,7 @@ object ImgUtils {
           .map {
             case (_, cStack) => {
               val cGroups: List[RandomAccessibleInterval[UnsignedShortType]] =
-                cStack.map(c => c.img)
+                cStack.sorted.map(c => c.img)
               if (cGroups.size > 1)
                 Some(Views.stack[UnsignedShortType](cGroups.asJava))
               else cGroups.headOption
