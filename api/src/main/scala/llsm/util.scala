@@ -15,16 +15,34 @@ import cats.implicits._
 import _root_.io.scif.img.SCIFIOImgPlus
 import _root_.io.scif.ome.services.OMEMetadataService
 import llsm.io.LLSMImg
-import llsm.io.metadata.{FileMetadata, MetadataUtils}
+import llsm.io.metadata.{
+  FileMetadata,
+  MetadataUtils,
+  WaveformMetadata
+}
 import llsm.interpreters.WriterUtils
 import loci.formats.ome.OMEXMLMetadataImpl
 import net.imglib2.RandomAccessibleInterval
 import net.imglib2.img.{Img, ImgView}
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
 import net.imglib2.view.Views
-import ome.xml.model.primitives.NonNegativeInteger
+import ome.units.UNITS
+import ome.units.quantity.{
+  Length,
+  Time
+}
+import ome.xml.meta.MetadataStore
+import ome.xml.model.enums.{
+  AcquisitionMode,
+  ContrastMethod,
+  IlluminationType
+}
+import ome.xml.model.primitives.{
+  Color,
+  NonNegativeInteger
+}
 import org.scijava.Context
-
+import org.scijava.util.ColorRGB
 
 object ImgUtils {
 
@@ -73,6 +91,48 @@ object ImgUtils {
     }
   }
 
+  /**
+   * Gets a packed integer, 8 bits per color component, for a wavelength in
+   * in the visible spectrum. This is a little complicated because users
+   * typically like colours biased toward red. Hence we adjust the wavelength
+   * using an offset that scales depending on the magnitude of wavelength i.e.,
+   * the higher the wavelength the greater the offset.
+   *
+   * Note: Adjusted wavelengths outside the below or above the visible spectrum
+   * (min and max) are clamped to blue and red.
+   *
+   * HSB alpha, next is red, then green, and finally blue is LSB.
+   *
+   */
+  private def getColour(wl: Double, min: Double, max: Double, offset: Double): Int = {
+    val ratio = (wl - min) / (max - min)
+    val adWl = wl + offset * ratio
+    val rgb = if (adWl < min)
+      ColorRGB.fromHSVColor(0.75, 1, 1)
+    else if (adWl > max)
+      ColorRGB.fromHSVColor(0, 1, 1)
+    else {
+      val scaled = 0.75 - ((adWl - min) / (max - min) * 0.75)
+      ColorRGB.fromHSVColor(scaled, 1, 1)
+    }
+    (rgb.getRed << 24) | (rgb.getGreen << 16) | (rgb.getBlue << 8) | rgb.getAlpha
+  }
+
+  def addChannelMeta(omexml: MetadataStore): FileMetadata => Unit = {
+    case FileMetadata(_, WaveformMetadata(_, _, _, _, channels, _, _, _), _, _, _) =>
+        channels.foreach {
+          case WaveformMetadata.Channel(_, _, _, _, _, _, WaveformMetadata.Excitation(ch, filter@_, laser, power@_, exposure@_)) => {
+            omexml.setChannelID(s"Channel:${ch}", 0, ch)
+            omexml.setChannelAcquisitionMode(AcquisitionMode.SPIM, 0, ch)
+            omexml.setChannelIlluminationType(IlluminationType.EPIFLUORESCENCE, 0, ch)
+            omexml.setChannelContrastMethod(ContrastMethod.FLUORESCENCE, 0, ch)
+            omexml.setChannelColor(new Color(getColour(laser.toDouble, 380, 650, 70)), 0, ch)
+            omexml.setChannelExcitationWavelength(new Length(laser, UNITS.NANOMETRE), 0, ch)
+          }
+        }
+  }
+
+
   /** Writes a companion OME metadata file for a List of processed LLSM Images.
    *
    * Takes a list of processed LLSMImgs and builds an OMEXML data
@@ -92,7 +152,10 @@ object ImgUtils {
   ): M[Unit] = {
     val outPath: Path = path.getParent
     val (outName, outExt) = WriterUtils.splitExtension(path.getFileName.toString)
-    val companionName = s"$outName.companion.ome"
+    val companionName = outExt match {
+      case "ome.tif"  => s"$outName.companion.ome"
+      case _          => s"$outName.ome.xml"
+    }
 
     val omeService = context.getService(classOf[OMEMetadataService])
 
@@ -100,6 +163,8 @@ object ImgUtils {
       val omexml = new OMEXMLMetadataImpl()
       omeService.populateMetadata(omexml, 0, companionName, meta)
       omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
+      imgs.headOption
+        .foreach(img => addChannelMeta(omexml)(img.meta))
       outExt match {
         case "ome.tif" => {
           imgs.sorted.foreach {
@@ -116,6 +181,14 @@ object ImgUtils {
                   omexml.setTiffDataPlaneCount(new NonNegativeInteger(1), 0, i)
                   omexml.setUUIDFileName(file.name, 0, i)
                   omexml.setUUIDValue(file.id.toString, 0, i)
+
+                  omexml.setPlaneTheC(new NonNegativeInteger(file.channel), 0, i)
+                  omexml.setPlaneTheZ(new NonNegativeInteger(z), 0, i)
+                  omexml.setPlaneTheT(new NonNegativeInteger(file.stack), 0, i)
+                  wave.channels.headOption
+                    .foreach(c =>
+                        omexml.setPlaneExposureTime(new Time(c.excitation.exposure, UNITS.MILLISECOND), 0, i)
+                    )
                 }
               }
             }
@@ -130,7 +203,10 @@ object ImgUtils {
               case other => other
             }
           }
-          new RuleTransformer(rewriteTransform).transform(XML.loadString(omexml.dumpXML)).headOption.map(x => x.toString)
+          new RuleTransformer(rewriteTransform)
+            .transform(XML.loadString(omexml.dumpXML))
+            .headOption
+            .map(x => x.toString)
         }
       }
     })
