@@ -182,9 +182,9 @@ lazy val docSettings = Seq(
   micrositeGithubOwner := "monash-merc",
   micrositeGithubRepo := "llsm",
   micrositePalette := Map(
-    "brand-primary"   -> "#43C5E4",
+    "brand-primary"   -> "#009FD8",
     "brand-secondary" -> "#006CAB",
-    "brand-tertiary"  -> "#009FD8",
+    "brand-tertiary"  -> "#004D7B",
     "gray-dark"       -> "#231F20",
     "gray"            -> "#423F40",
     "gray-light"      -> "#939598",
