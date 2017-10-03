@@ -454,9 +454,9 @@ and a raw metadata file.">
       
       
     </li><li name="llsm.Deskew#calcZInterval" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="calcZInterval(sampleInterval:Double,zPiezoInterval:Double,angle:Double,xVoxelSize:Double):Double"></a><a id="calcZInterval(Double,Double,Double,Double):Double"></a>
+      <a id="calcZInterval(sampleInterval:Double,zPiezoInterval:Double,angle:Double):Double"></a><a id="calcZInterval(Double,Double,Double):Double"></a>
       <span class="permalink">
-      <a href="../llsm/Deskew$.html#calcZInterval(sampleInterval:Double,zPiezoInterval:Double,angle:Double,xVoxelSize:Double):Double" title="Permalink">
+      <a href="../llsm/Deskew$.html#calcZInterval(sampleInterval:Double,zPiezoInterval:Double,angle:Double):Double" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -465,7 +465,7 @@ and a raw metadata file.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">calcZInterval</span><span class="params">(<span name="sampleInterval">sampleInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="zPiezoInterval">zPiezoInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="angle">angle: <span class="extype" name="scala.Double">Double</span></span>, <span name="xVoxelSize">xVoxelSize: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">calcZInterval</span><span class="params">(<span name="sampleInterval">sampleInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="zPiezoInterval">zPiezoInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="angle">angle: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       
       
@@ -484,7 +484,7 @@ and a raw metadata file.">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -519,7 +519,7 @@ and a raw metadata file.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deskewRealStack</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="net.imglib2.type.numeric.RealType">RealType</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>]</span><span class="params">(<span name="input">input: <span class="extype" name="net.imglib2.RandomAccessibleInterval">RandomAccessibleInterval</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>, <span name="shearDim">shearDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="referenceDim">referenceDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="shearInterval">shearInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="interpolator">interpolator: <span class="extype" name="net.imglib2.interpolation.InterpolatorFactory">InterpolatorFactory</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>, <span class="extype" name="net.imglib2.RandomAccessible">RandomAccessible</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]] = <span class="defval" name="new NearestNeighborInterpolatorFactory[A]()">...</span></span>)</span><span class="result">: <span class="extype" name="net.imglib2.RandomAccessibleInterval">RandomAccessibleInterval</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>
+        <span class="name">deskewRealStack</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="net.imglib2.type.numeric.RealType">RealType</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>]</span><span class="params">(<span name="input">input: <span class="extype" name="net.imglib2.RandomAccessibleInterval">RandomAccessibleInterval</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>, <span name="shearDim">shearDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="referenceDim">referenceDim: <span class="extype" name="scala.Int">Int</span></span>, <span name="shearInterval">shearInterval: <span class="extype" name="scala.Double">Double</span></span>, <span name="interpolator">interpolator: <span class="extype" name="net.imglib2.interpolation.InterpolatorFactory">InterpolatorFactory</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>, <span class="extype" name="net.imglib2.RandomAccessible">RandomAccessible</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]]</span>)</span><span class="result">: <span class="extype" name="net.imglib2.RandomAccessibleInterval">RandomAccessibleInterval</span>[<span class="extype" name="llsm.Deskew.deskewRealStack.A">A</span>]</span>
       </span>
       
       
@@ -586,7 +586,7 @@ and a raw metadata file.">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>

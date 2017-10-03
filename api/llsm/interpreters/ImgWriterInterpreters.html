@@ -313,7 +313,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -367,7 +367,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -406,6 +406,54 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="llsm.interpreters.ImgWriterInterpreters#imgLowWriterInterpreter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="imgLowWriterInterpreter[M[_]](context:org.scijava.Context)(implicitM:cats.MonadError[M,Throwable]):llsm.algebras.LowWriterF~&gt;M"></a><a id="imgLowWriterInterpreter[M[_]](Context)(MonadError[M,Throwable]):~&gt;[LowWriterF,M]"></a>
+      <span class="permalink">
+      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#imgLowWriterInterpreter[M[_]](context:org.scijava.Context)(implicitM:cats.MonadError[M,Throwable]):llsm.algebras.LowWriterF~&gt;M" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imgLowWriterInterpreter</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <span class="extype" name="cats.MonadError">MonadError</span>[<span class="extype" name="llsm.interpreters.ImgWriterInterpreters.imgLowWriterInterpreter.M">M</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../algebras/LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <span class="extype" name="llsm.interpreters.ImgWriterInterpreters.imgLowWriterInterpreter.M">M</span>]</span>
+      </span>
+      
+      
+    </li><li name="llsm.interpreters.ImgWriterInterpreters#imgWriterInterpreter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="imgWriterInterpreter[M[_]](context:org.scijava.Context)(implicitme:cats.MonadError[M,Throwable]):llsm.algebras.ImgWriterF~&gt;M"></a><a id="imgWriterInterpreter[M[_]](Context)(MonadError[M,Throwable]):~&gt;[ImgWriterF,M]"></a>
+      <span class="permalink">
+      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#imgWriterInterpreter[M[_]](context:org.scijava.Context)(implicitme:cats.MonadError[M,Throwable]):llsm.algebras.ImgWriterF~&gt;M" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imgWriterInterpreter</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="me">me: <span class="extype" name="cats.MonadError">MonadError</span>[<span class="extype" name="llsm.interpreters.ImgWriterInterpreters.imgWriterInterpreter.M">M</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../algebras/ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>, <span class="extype" name="llsm.interpreters.ImgWriterInterpreters.imgWriterInterpreter.M">M</span>]</span>
+      </span>
+      
+      
+    </li><li name="llsm.interpreters.ImgWriterInterpreters#imgWriterToLowWriterTranslator" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="imgWriterToLowWriterTranslator:llsm.algebras.ImgWriterF~&lt;llsm.algebras.LowWriterF"></a><a id="imgWriterToLowWriterTranslator:~&lt;[ImgWriterF,LowWriterF]"></a>
+      <span class="permalink">
+      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#imgWriterToLowWriterTranslator:llsm.algebras.ImgWriterF~&lt;llsm.algebras.LowWriterF" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imgWriterToLowWriterTranslator</span><span class="result">: <a href="../fp/index.html#~&lt;[F[_],G[_]]=llsm.fp.package.Interpreter[F,G]" class="extmbr" name="llsm.fp.~&lt;">~&lt;</a>[<a href="../algebras/ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>, <a href="../algebras/LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>]</span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -422,54 +470,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="llsm.interpreters.ImgWriterInterpreters#llsmLowWriter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="llsmLowWriter[M[_]](context:org.scijava.Context)(implicitM:cats.MonadError[M,Throwable]):cats.~&gt;[llsm.algebras.LowWriterF,M]"></a><a id="llsmLowWriter[M[_]](Context)(MonadError[M,Throwable]):~&gt;[LowWriterF,M]"></a>
-      <span class="permalink">
-      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#llsmLowWriter[M[_]](context:org.scijava.Context)(implicitM:cats.MonadError[M,Throwable]):cats.~&gt;[llsm.algebras.LowWriterF,M]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">llsmLowWriter</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <span class="extype" name="cats.MonadError">MonadError</span>[<span class="extype" name="llsm.interpreters.ImgWriterInterpreters.llsmLowWriter.M">M</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../algebras/LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>, <span class="extype" name="llsm.interpreters.ImgWriterInterpreters.llsmLowWriter.M">M</span>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.interpreters.ImgWriterInterpreters#llsmWriter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="llsmWriter[M[_]](context:org.scijava.Context)(implicitme:cats.MonadError[M,Throwable]):cats.~&gt;[llsm.algebras.ImgWriterF,M]"></a><a id="llsmWriter[M[_]](Context)(MonadError[M,Throwable]):~&gt;[ImgWriterF,M]"></a>
-      <span class="permalink">
-      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#llsmWriter[M[_]](context:org.scijava.Context)(implicitme:cats.MonadError[M,Throwable]):cats.~&gt;[llsm.algebras.ImgWriterF,M]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">llsmWriter</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="me">me: <span class="extype" name="cats.MonadError">MonadError</span>[<span class="extype" name="llsm.interpreters.ImgWriterInterpreters.llsmWriter.M">M</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../algebras/ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>, <span class="extype" name="llsm.interpreters.ImgWriterInterpreters.llsmWriter.M">M</span>]</span>
-      </span>
-      
-      
-    </li><li name="llsm.interpreters.ImgWriterInterpreters#llsmWriterToLowWriter" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="llsmWriterToLowWriter:llsm.fp.~&lt;[llsm.algebras.ImgWriterF,llsm.algebras.LowWriterF]"></a><a id="llsmWriterToLowWriter:~&lt;[ImgWriterF,LowWriterF]"></a>
-      <span class="permalink">
-      <a href="../../llsm/interpreters/ImgWriterInterpreters.html#llsmWriterToLowWriter:llsm.fp.~&lt;[llsm.algebras.ImgWriterF,llsm.algebras.LowWriterF]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">llsmWriterToLowWriter</span><span class="result">: <a href="../fp/index.html#~&lt;[F[_],G[_]]=llsm.fp.package.Interpreter[F,G]" class="extmbr" name="llsm.fp.~&lt;">~&lt;</a>[<a href="../algebras/ImgWriterF.html" class="extype" name="llsm.algebras.ImgWriterF">ImgWriterF</a>, <a href="../algebras/LowWriterF.html" class="extype" name="llsm.algebras.LowWriterF">LowWriterF</a>]</span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

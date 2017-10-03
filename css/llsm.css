@@ -45,3 +45,6 @@ body {
   font-family: "Helvetica Neue", "Lato", sans-serif;
 }
 
+body.docs {
+  background: #FFFFFF;
+}

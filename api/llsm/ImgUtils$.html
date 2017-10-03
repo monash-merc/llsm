@@ -383,9 +383,9 @@ and a raw metadata file.">
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="llsm.ImgUtils#aggregateImgs" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="aggregateImgs(lImgs:List[llsm.io.LLSMImg]):io.scif.img.SCIFIOImgPlus[net.imglib2.type.numeric.integer.UnsignedShortType]"></a><a id="aggregateImgs(List[LLSMImg]):SCIFIOImgPlus[UnsignedShortType]"></a>
+      <a id="aggregateImgs(lImgs:List[llsm.io.LLSMImg]):Option[io.scif.img.SCIFIOImgPlus[net.imglib2.type.numeric.integer.UnsignedShortType]]"></a><a id="aggregateImgs(List[LLSMImg]):Option[SCIFIOImgPlus[UnsignedShortType]]"></a>
       <span class="permalink">
-      <a href="../llsm/ImgUtils$.html#aggregateImgs(lImgs:List[llsm.io.LLSMImg]):io.scif.img.SCIFIOImgPlus[net.imglib2.type.numeric.integer.UnsignedShortType]" title="Permalink">
+      <a href="../llsm/ImgUtils$.html#aggregateImgs(lImgs:List[llsm.io.LLSMImg]):Option[io.scif.img.SCIFIOImgPlus[net.imglib2.type.numeric.integer.UnsignedShortType]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -394,7 +394,7 @@ and a raw metadata file.">
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">aggregateImgs</span><span class="params">(<span name="lImgs">lImgs: <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>)</span><span class="result">: <span class="extype" name="io.scif.img.SCIFIOImgPlus">SCIFIOImgPlus</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]</span>
+        <span class="name">aggregateImgs</span><span class="params">(<span name="lImgs">lImgs: <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="io.scif.img.SCIFIOImgPlus">SCIFIOImgPlus</span>[<span class="extype" name="net.imglib2.type.numeric.integer.UnsignedShortType">UnsignedShortType</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Generate a 5D image from a list of Imgs</p><div class="fullcomment"><div class="comment cmt"><p>Generate a 5D image from a list of Imgs</p><p>Takes a list of stacks and aggregates them into a 4-5D image. Metaddata in
@@ -433,7 +433,7 @@ dropped.
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -487,7 +487,7 @@ dropped.
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -689,9 +689,9 @@ dropped.
               
         </dd></dl></div>
     </li><li name="llsm.ImgUtils#writeOMEMetadata" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="writeOMEMetadata(path:java.nio.file.Path,imgs:List[llsm.io.LLSMImg],context:org.scijava.Context):Unit"></a><a id="writeOMEMetadata(Path,List[LLSMImg],Context):Unit"></a>
+      <a id="writeOMEMetadata[M[_]](path:java.nio.file.Path,imgs:List[llsm.io.LLSMImg],context:org.scijava.Context)(implicitM:cats.ApplicativeError[M,Throwable]):M[Unit]"></a><a id="writeOMEMetadata[M[_]](Path,List[LLSMImg],Context)(ApplicativeError[M,Throwable]):M[Unit]"></a>
       <span class="permalink">
-      <a href="../llsm/ImgUtils$.html#writeOMEMetadata(path:java.nio.file.Path,imgs:List[llsm.io.LLSMImg],context:org.scijava.Context):Unit" title="Permalink">
+      <a href="../llsm/ImgUtils$.html#writeOMEMetadata[M[_]](path:java.nio.file.Path,imgs:List[llsm.io.LLSMImg],context:org.scijava.Context)(implicitM:cats.ApplicativeError[M,Throwable]):M[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -700,7 +700,7 @@ dropped.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeOMEMetadata</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="imgs">imgs: <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>, <span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeOMEMetadata</span><span class="tparams">[<span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="imgs">imgs: <span class="extype" name="scala.List">List</span>[<a href="io/LLSMImg.html" class="extype" name="llsm.io.LLSMImg">LLSMImg</a>]</span>, <span name="context">context: <span class="extype" name="org.scijava.Context">Context</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <span class="extype" name="cats.ApplicativeError">ApplicativeError</span>[<span class="extype" name="llsm.ImgUtils.writeOMEMetadata.M">M</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <span class="extype" name="llsm.ImgUtils.writeOMEMetadata.M">M</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Writes a companion OME metadata file for a List of processed LLSM Images.</p><div class="fullcomment"><div class="comment cmt"><p>Writes a companion OME metadata file for a List of processed LLSM Images.</p><p>Takes a list of processed LLSMImgs and builds an OMEXML data

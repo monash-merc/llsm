@@ -1,0 +1,173 @@
+<html><head><title>LLSM</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Keith Schulze" /><meta name="description" content="Lattice Light-Sheet Microscopy" /><meta name="og:image" content="/llsm/img/poster.png" /><meta name="og:title" content="LLSM" /><meta name="og:site_name" content="LLSM" /><meta name="og:url" content="https://github.com/monash-merc/llsm" /><meta name="og:type" content="website" /><meta name="og:description" content="Lattice Light-Sheet Microscopy" /><link rel="icon" type="image/png" href="/llsm/img/favicon.png" /><meta name="twitter:title" content="LLSM" /><meta name="twitter:image" content="https://github.com/monash-merc/llsmimg/poster.png" /><meta name="twitter:description" content="Lattice Light-Sheet Microscopy" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/llsm/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/llsm/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/llsm/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/llsm/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/llsm/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/llsm/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/llsm/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/llsm/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/llsm/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/llsm/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/llsm/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/llsm/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/llsm/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/llsm/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/llsm/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/llsm/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/llsm/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/llsm/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/llsm/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/llsm/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/llsm/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/llsm/css/style.css" /><link rel="stylesheet" href="/llsm/css/palette.css" /><link rel="stylesheet" href="/llsm/css/codemirror.css" /><link rel="stylesheet" href="/llsm/css/kazari-style.css" /><link rel="stylesheet" href="/llsm/css/monokai.css" /><link rel="stylesheet" href="/llsm/css/llsm.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/llsm/" class="brand"><div class="brand-wrapper"><span>LLSM</span></div></a></li>    <li><a href="/llsm/docs/dev/index.html" class="">Developers</a> <ul class="sub_section"> <li><a href="/llsm/docs/dev/overview.html" class="">Overview</a></li> <li><a href="/llsm/docs/dev/core.html" class="">Core Module</a></li> <li><a href="/llsm/docs/dev/api.html" class=" active ">API Module</a></li></ul></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/monash-merc/llsm"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/monash-merc/llsm"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('LLSM Lattice Light-Sheet Microscopy');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('LLSM Lattice Light-Sheet Microscopy');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="monash-merc" data-github-repo="llsm"><div class="content-wrapper"><section><h2 id="llsm-api">llsm api</h2>
+<p>This is level at which most developers will want to interact with the <code class="highlighter-rouge">llsm</code> libraries. This module provides a Free monad based DSL for processing LLSM data. You can find more general information about Free monads in Scala at the excellent <a href="https://typelevel.org/cats/">Typelevel Cats documentation site</a>. More relevant to the actual implementation used here is a series of blog posts by John Degoes (<a href="http://degoes.net/articles/modern-fp">1</a>, <a href="http://degoes.net/articles/modern-fp-part-2">2</a>) that describe a way to provide modular DSLs and interpreters that can be composed both vertically and horizontally.</p>
+
+<p>Free monads may be a little daunting when you first jump in, but one doesn’t need to understand them intimately to become productive with the DSL. That said, one important concept to grasp is that the declaration of the program or pipeline is separated from it’s execution. Programs are defined either directly through the DSL or by composes a series of smaller programs into a larger one. This program is declarative way of describing the flow of data, but doesn’t actually provide any actual implementation of the processing of the data. Actual execution/processing of the programs is defined separately through an interpreter that interpets the DSL and does the actual hard work. It is strongly recommended that you following the tutorials on the Cats site to gain an insight into the separation between declaration of the program and its execution.</p>
+
+<p>Interpreters too can be composed such that they can fully execute a program and/or provide auxillary functionality (e.g., logging or progress reporting). This is an important insight that is further explained in the blog posts by John Degoes (see above).</p>
+
+<p>The DSLs/algebras provided by the <code class="highlighter-rouge">api</code> module are as follows:</p>
+
+<ul>
+  <li>Metadata</li>
+  <li>ImgReader</li>
+  <li>ImgWriter</li>
+  <li>Process</li>
+  <li>Progress</li>
+  <li>Visualise</li>
+</ul>
+
+<p>While the details of how the algebras are defined is not that important (it’s actually somewhat cumbersome in Scala), you can find the implementations in the <code class="highlighter-rouge">llsm.algerbras</code> package. The api modules also provide some basic inteprepters that can execute the DSLs above. Simple implementations can be found in the <code class="highlighter-rouge">llsm.interpreters</code> package; however, .</p>
+
+<p><code class="highlighter-rouge">llsm</code> strives for purity and as a result all intepreters are parameterised with an effect type, which allows effecting work to be executed in a constrained environment that captures errors etc.</p>
+
+<h2 id="example">Example</h2>
+<p>Let’s dive in and see some code. The following is a simple example that
+reads the metadata and a single image stack from an LLSM dataset and then
+deskews the stack using information in the metadata. This flow is described
+using a Free monad DSL can composes algerbras for reading metadata and images,
+and processing images.</p>
+
+<p>Let’s get some imports out of the way first:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.nio.file.</span><span class="o">{</span>
+  <span class="nc">Path</span><span class="o">,</span>
+  <span class="nc">Paths</span>
+<span class="o">}</span>
+
+<span class="k">import</span> <span class="nn">cats.</span><span class="o">~&gt;</span>
+<span class="k">import</span> <span class="nn">cats.data.Coproduct</span>
+<span class="k">import</span> <span class="nn">cats.free.Free</span>
+<span class="k">import</span> <span class="nn">cats.implicits._</span>
+<span class="k">import</span> <span class="nn">llsm.</span><span class="o">{</span>
+  <span class="nc">Deskew</span><span class="o">,</span>
+  <span class="nc">NoInterpolation</span>
+<span class="o">}</span>
+<span class="k">import</span> <span class="nn">llsm.algebras.</span><span class="o">{</span>
+  <span class="nc">Metadata</span><span class="o">,</span>
+  <span class="nc">MetadataF</span><span class="o">,</span>
+  <span class="nc">ImgReader</span><span class="o">,</span>
+  <span class="nc">ImgReaderF</span><span class="o">,</span>
+  <span class="nc">Process</span><span class="o">,</span>
+  <span class="nc">ProcessF</span>
+<span class="o">}</span>
+<span class="k">import</span> <span class="nn">llsm.interpreters._</span>
+<span class="k">import</span> <span class="nn">llsm.io.LLSMImg</span>
+<span class="k">import</span> <span class="nn">llsm.io.metadata.ConfigurableMetadata</span>
+<span class="k">import</span> <span class="nn">net.imglib2.img.cell.CellImgFactory</span>
+<span class="k">import</span> <span class="nn">net.imglib2.</span><span class="n">`type`</span><span class="o">.</span><span class="n">numeric</span><span class="o">.</span><span class="n">integer</span><span class="o">.</span><span class="nc">UnsignedShortType</span>
+<span class="k">import</span> <span class="nn">org.scijava.Context</span>
+</code></pre>
+</div>
+
+<p><br />
+We will use a skewed PSF image dataset as as example. You could
+replace this with a path to any raw LLSM stack. Note that stack should be in a
+directory that also contains the LLSM instruments Settings file that holds a
+lot of metadata.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// Path to example dataset, which is incidentally a PSF.
+</span><span class="k">val</span> <span class="n">datasetPath</span><span class="k">:</span> <span class="kt">Path</span> <span class="o">=</span>
+  <span class="nc">Paths</span><span class="o">.</span><span class="n">get</span><span class="o">(</span>
+    <span class="n">getClass</span><span class="o">.</span><span class="n">getResource</span><span class="o">(</span><span class="s">"/psf/psf642_ch0_stack0000_642nm_0000000msec_0008096612msecAbs.tif"</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">toURI</span>
+      <span class="o">.</span><span class="n">getPath</span>
+      <span class="o">)</span>
+
+<span class="c1">// SCIFIO reading need a Scijava Context.
+</span><span class="k">val</span> <span class="n">scijavaContext</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Context</span><span class="o">()</span>
+</code></pre>
+</div>
+
+<p><br />
+Some metadata is not included in the metadata file from the LLSM acquisition
+software. Thus we need to specify that here as <code class="highlighter-rouge">ConfigurableMetadata</code>. This
+also includes the Interpolation method we want to use for deskewing.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="c1">// The basicMetadataInterpreter requires some configurable metadata to be
+// specified
+</span><span class="k">val</span> <span class="n">configMeta</span> <span class="k">=</span> <span class="nc">ConfigurableMetadata</span><span class="o">(</span>
+    <span class="mf">0.104</span><span class="o">,</span> <span class="c1">// xVoxelSize
+</span>    <span class="mf">0.104</span><span class="o">,</span> <span class="c1">// yVoxelSize
+</span>    <span class="nc">NoInterpolation</span> <span class="c1">//InterpolationMethod
+</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><br />
+Next we define a <code class="highlighter-rouge">Coproduct</code> type that encapsulates the components/algerbras
+of our intended application/program. In this case we need the <code class="highlighter-rouge">MetadataF</code>,
+<code class="highlighter-rouge">ImgReaderF</code> and <code class="highlighter-rouge">ProcessF</code> algebras.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">type</span> <span class="kt">App</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">Coproduct</span><span class="o">[</span><span class="kt">MetadataF</span>,
+      <span class="kt">Coproduct</span><span class="o">[</span><span class="kt">ImgReaderF</span>, <span class="kt">ProcessF</span>, <span class="kt">?</span><span class="o">]</span>,
+    <span class="kt">A</span><span class="o">]</span>
+</code></pre>
+</div>
+
+<p><br />
+Then we define program using our Free DSL that describes the flow of data for
+the computation. It is parameterised on a type that has implicit Context
+Bounds which allow the injection of 3 algebras we require. The Free injections are
+aliased to <code class="highlighter-rouge">Metadata</code>, <code class="highlighter-rouge">ImgReader</code> and <code class="highlighter-rouge">Process</code> for readability.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">program</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Metadata:</span> <span class="kt">ImgReader:</span> <span class="kt">Process</span><span class="o">](</span>
+    <span class="n">path</span><span class="k">:</span> <span class="kt">Path</span>
+<span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">LLSMImg</span><span class="o">]</span> <span class="k">=</span>
+    <span class="k">for</span> <span class="o">{</span>
+        <span class="n">meta</span>    <span class="k">&lt;-</span> <span class="nc">Metadata</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">readMetadata</span><span class="o">(</span><span class="n">path</span><span class="o">)</span>
+        <span class="n">img</span>     <span class="k">&lt;-</span> <span class="nc">ImgReader</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">readImg</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">meta</span><span class="o">)</span>
+        <span class="n">deskewedImg</span> <span class="k">&lt;-</span> <span class="nc">Process</span><span class="o">[</span><span class="kt">F</span><span class="o">].</span><span class="n">deskewImg</span><span class="o">(</span>
+          <span class="n">img</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span>
+          <span class="nc">Deskew</span><span class="o">.</span><span class="n">calcShearFactor</span><span class="o">(</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">waveform</span><span class="o">.</span><span class="n">sPZTInterval</span><span class="o">,</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">angle</span><span class="o">,</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">xVoxelSize</span><span class="o">),</span>
+          <span class="n">meta</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">interpolation</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">yield</span> <span class="n">deskewedImg</span>
+</code></pre>
+</div>
+
+<p><br />
+Next we define an interpreter for each algebra and combine them into an
+overall interpreter that will execute our program. Some basic
+interpreters for metadata and image reading using SCIFIO, and processing are
+provided in the <code class="highlighter-rouge">llsm.interpreters</code> package. Importantly, the interpreters are
+parameterised on an effect type where all “side”-effects are executed. In this case,
+the effect type we use is an <code class="highlighter-rouge">Either[Throwable, ?]</code>. Exceptions will be
+caught and recorded in the left side of the Either while successful execution will
+result in the output being in the right side of the Either.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="n">compiler</span> <span class="k">=</span>
+  <span class="o">(</span><span class="n">basicMetadataInterpreter</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">?</span><span class="o">]](</span><span class="n">configMeta</span><span class="o">,</span> <span class="n">scijavaContext</span><span class="o">)</span> <span class="n">or</span>
+    <span class="o">(</span><span class="n">scifioReaderInterpreter</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">?</span><span class="o">]](</span><span class="n">scijavaContext</span><span class="o">,</span> <span class="k">new</span> <span class="nc">CellImgFactory</span><span class="o">[</span><span class="kt">UnsignedShortType</span><span class="o">]())</span> <span class="n">or</span>
+     <span class="n">processInterpreter</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">?</span><span class="o">]]))</span>
+</code></pre>
+</div>
+
+<p><br />
+Finally, we execute the program with our compiler and match on the result. In
+this case we don’t actually do anything interesting with the deskewed <code class="highlighter-rouge">img</code>
+result other than state we successfully processed it and then return it.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">program</span><span class="o">[</span><span class="kt">App</span><span class="o">](</span><span class="n">datasetPath</span><span class="o">).</span><span class="n">foldMap</span><span class="o">(</span><span class="n">compiler</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="nc">LLSMImg</span><span class="o">(</span><span class="n">img</span><span class="o">,</span> <span class="n">meta</span><span class="nd">@_</span><span class="o">))</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"Successfully read metadata and img and then deskewed it"</span><span class="o">)</span>
+    <span class="n">img</span>
+  <span class="o">}</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Yikes there was an error: ${e.getMessage}"</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// Successfully read metadata and img and then deskewed it
+// res6: Any = net.imglib2.img.ImgView@1d68100d
+</span></code></pre>
+</div>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/llsm/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'monash-merc/llsm'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/llsm/js/main.js"></script><script src="/llsm/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>

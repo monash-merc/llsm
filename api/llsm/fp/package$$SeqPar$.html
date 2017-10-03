@@ -125,12 +125,6 @@
                         <a href="" title="">
                           SeqPar
                         </a>
-                      </li><li class="current-entities indented2">
-                        <span class="separator"></span>
-                        <a class="object" href="package$$SeqParSeq$.html" title=""></a>
-                        <a href="package$$SeqParSeq$.html" title="">
-                          SeqParSeq
-                        </a>
                       </li>
               </ul>
             </div>
@@ -154,7 +148,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">SeqPar</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SeqPar</span>
       </span>
       </h4>
 
@@ -163,7 +157,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -189,7 +183,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="llsm.fp.SeqPar"><span>SeqPar</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="llsm.fp.SeqPar"><span>SeqPar</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -316,7 +310,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
@@ -370,7 +364,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
@@ -437,7 +431,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="llsm.fp.SeqPar.lift.F">F</span>[<span class="extype" name="llsm.fp.SeqPar.lift.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.lift.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.lift.A">A</span>]</span>
+        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <span class="extype" name="llsm.fp.SeqPar.lift.F">F</span>[<span class="extype" name="llsm.fp.SeqPar.lift.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$12$]cats.free.FreeApplicative[F,β$12$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.lift.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.lift.A">A</span>]</span>
       </span>
       
       
@@ -453,7 +447,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">liftPar</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="freeap">freeap: <span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.SeqPar.liftPar.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftPar.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.liftPar.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftPar.A">A</span>]</span>
+        <span class="name">liftPar</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="freeap">freeap: <span class="extype" name="cats.free.FreeApplicative">FreeApplicative</span>[<span class="extype" name="llsm.fp.SeqPar.liftPar.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftPar.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$12$]cats.free.FreeApplicative[F,β$12$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.liftPar.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftPar.A">A</span>]</span>
       </span>
       
       
@@ -469,7 +463,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">liftSeq</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="free">free: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.fp.SeqPar.liftSeq.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftSeq.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.liftSeq.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftSeq.A">A</span>]</span>
+        <span class="name">liftSeq</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="free">free: <span class="extype" name="cats.free.Free">Free</span>[<span class="extype" name="llsm.fp.SeqPar.liftSeq.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftSeq.A">A</span>]</span>)</span><span class="result">: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$12$]cats.free.FreeApplicative[F,β$12$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.liftSeq.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.liftSeq.A">A</span>]</span>
       </span>
       
       
@@ -533,7 +527,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$9$]cats.free.FreeApplicative[F,β$9$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.run.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.run.A">A</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="llsm.fp.SeqPar.run.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.run.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <span class="extype" name="cats.Monad">Monad</span>[<span class="extype" name="llsm.fp.SeqPar.run.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="llsm.fp.SeqPar.run.M">M</span>[<span class="extype" name="llsm.fp.SeqPar.run.A">A</span>]</span>
+        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="index.html#SeqPar[F[_],A]=cats.free.Free[[β$12$]cats.free.FreeApplicative[F,β$12$],A]" class="extmbr" name="llsm.fp.SeqPar">SeqPar</a>[<span class="extype" name="llsm.fp.SeqPar.run.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.run.A">A</span>]</span>)</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="llsm.fp.SeqPar.run.F">F</span>, <span class="extype" name="llsm.fp.SeqPar.run.M">M</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="M">M: <span class="extype" name="cats.Monad">Monad</span>[<span class="extype" name="llsm.fp.SeqPar.run.M">M</span>]</span>)</span><span class="result">: <span class="extype" name="llsm.fp.SeqPar.run.M">M</span>[<span class="extype" name="llsm.fp.SeqPar.run.A">A</span>]</span>
       </span>
       
       
@@ -663,11 +657,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
