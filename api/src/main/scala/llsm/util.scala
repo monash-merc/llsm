@@ -1,7 +1,6 @@
 package llsm
 
 import java.nio.file.{
-  Files,
   Path,
   Paths
 }
@@ -159,7 +158,7 @@ object ImgUtils {
 
     val omeService = context.getService(classOf[OMEMetadataService])
 
-    val omeString: Option[String] = MetadataUtils.createImageMetadata(imgs).flatMap(meta => {
+    val omeElem: Option[Node] = MetadataUtils.createImageMetadata(imgs).flatMap(meta => {
       val omexml = new OMEXMLMetadataImpl()
       omeService.populateMetadata(omexml, 0, companionName, meta)
       omexml.setUUID(UUID.nameUUIDFromBytes(outName.getBytes).toString)
@@ -193,7 +192,7 @@ object ImgUtils {
               }
             }
           }
-          Some(omexml.dumpXML)
+          Some(XML.loadString(omexml.dumpXML))
         }
         case _ => {
           val rewriteTransform = new RewriteRule {
@@ -206,15 +205,14 @@ object ImgUtils {
           new RuleTransformer(rewriteTransform)
             .transform(XML.loadString(omexml.dumpXML))
             .headOption
-            .map(x => x.toString)
         }
       }
     })
 
-    omeString match {
+    omeElem match {
       case Some(ome) => {
         M.catchNonFatal {
-          val _ = Files.write(Paths.get(outPath.toString, companionName), ome.getBytes)
+          val _ = XML.save(Paths.get(outPath.toString, companionName).toString, ome, "UTF-8", true)
         }
       }
       case None => M.raiseError(new Exception("Unable to create OMEXML companion metadata object."))
