@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.5.0
+
+* Encode more of the Janelia LLSM acquisition settings as OME-XML metadata.
+* Fix subtle Windows UTF-8 OME-XML encoding bug
+
 ## Version 0.4.0
 
 * Enabled WartRemover for core, api and tests. Removed many Scala warts which
