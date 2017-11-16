@@ -41,6 +41,12 @@ img {
   margin: auto;
 }
 
+.technologies .first-icon-wrapper,
+.technologies .second-icon-wrapper,
+.technologies .third-icon-wrapper {
+  opacity: 1.0;
+}
+
 body {
   font-family: "Helvetica Neue", "Lato", sans-serif;
 }

@@ -1,0 +1,278 @@
+<html><head><title>LLSM</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Keith Schulze" /><meta name="description" content="Lattice Light-Sheet Microscopy" /><meta name="og:image" content="/llsm/img/poster.png" /><meta name="og:title" content="LLSM" /><meta name="og:site_name" content="LLSM" /><meta name="og:url" content="https://github.com/monash-merc/llsm" /><meta name="og:type" content="website" /><meta name="og:description" content="Lattice Light-Sheet Microscopy" /><link rel="icon" type="image/png" href="/llsm/img/favicon.png" /><meta name="twitter:title" content="LLSM" /><meta name="twitter:image" content="https://github.com/monash-merc/llsmimg/poster.png" /><meta name="twitter:description" content="Lattice Light-Sheet Microscopy" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/llsm/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/llsm/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/llsm/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/llsm/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/llsm/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/llsm/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/llsm/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/llsm/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/llsm/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/llsm/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/llsm/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/llsm/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/llsm/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/llsm/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/llsm/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/llsm/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/llsm/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/llsm/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/llsm/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/llsm/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/llsm/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/llsm/css/style.css" /><link rel="stylesheet" href="/llsm/css/palette.css" /><link rel="stylesheet" href="/llsm/css/codemirror.css" /><link rel="stylesheet" href="/llsm/css/kazari-style.css" /><link rel="stylesheet" href="/llsm/css/monokai.css" /><link rel="stylesheet" href="/llsm/css/llsm.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/llsm/" class="brand"><div class="brand-wrapper"><span>LLSM</span></div></a></li> <li><a href="/llsm/docs/operators/index.html" class="">LLS Acquisition Guidelines</a> <ul class="sub_section"> <li><a href="/llsm/docs/operators/reproducible.html" class="">General Guidelines</a></li> <li><a href="/llsm/docs/operators/guidelines.html" class="">Janelia LLS Microscope</a></li></ul></li>  </ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/monash-merc/llsm"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/monash-merc/llsm"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('LLSM Lattice Light-Sheet Microscopy');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('LLSM Lattice Light-Sheet Microscopy');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="monash-merc" data-github-repo="llsm"><div class="content-wrapper"><section><h1 id="guidelines-for-acquiring-reproducible-datasets-using-the-janelia-lls-microscope">Guidelines for Acquiring Reproducible Datasets using the Janelia LLS Microscope</h1>
+
+<p>This section provides instructions for acquiring LLS datasets on the the original LLS microscope implementation by Chen et al. 2014, which uses the Janelia LLS LabView Acquisition software. These guidelines aim to capture all the metadata requirements specified in the previous section using the Janelia LLS microscope. In general, these guidelines suggest a specific layout of LLS data and some configuration files.</p>
+
+<p>Instrument and image metadata for Janelia LLS raw datasets is primarily encoded in 2 locations:</p>
+
+<ul>
+  <li>File names for each raw image stack</li>
+  <li>Settings file</li>
+</ul>
+
+<p>Metadata in the Settings files is relatively unstructured/unspecified.</p>
+
+<p>An overview of the recommended layout for LLS data from a Janelia LLS microscope is shown in Fig. 1 below. The layout is experiment centric, where an “Experiment” encompasses a set of datasets for which the LLS configuration and channel setup were equivalent. For many users, Experiment might correspond to a single imaging session. This means creating a directory for an Experiment and hosting multiple datasets within that directory. Each dataset should be created in a separate directory inside the Experiment level. The Janelia LLS acquisition software defaults to outputting a 3D volume/stack for each channel and timepoint. It also outputs the Setting.txt file that holds hardware configuration details.</p>
+
+<p><br /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Experiment
+  | —	dataset 1
+  |	| — dataset 1_ch0_stack0000_488nm_0000msec_....tif
+  |	| — dataset 1_ch0_stack0001_488nm_9749msec_....tif
+  |	| — ...
+  |	| — dataset 1_Settings.txt
+  |
+  | —	dataset 2
+  |	| — dataset 2_ch0_stack0000_488nm_0000msec_....tif
+  |	| — dataset 2_ch0_stack0001_488nm_9749msec_....tif
+  |	| — ...
+  |	| — dataset 2_Settings.txt
+  |
+  | —	dataset 3
+  |	| — dataset 3_ch0_stack0000_488nm_0000msec_....tif
+  |	| — dataset 3_ch0_stack0001_488nm_9749msec_....tif
+  |	| — ...
+  |	| — dataset 3_Settings.txt
+  |
+  | -	dataset n...
+  |
+  | —	configs
+    | — 480nm_0.510_0.570_40_1.110_0.150_-2_0_-1.bmp
+    | — 560nm_0.500_0.550_40_1.110_0.150_-2_0_-1.bmp
+    | — config.json
+</code></pre>
+</div>
+
+<p>Fig. 1. Data layout for an LLS experiment</p>
+
+<p><br /></p>
+
+<h2 id="configs">Configs</h2>
+
+<p>There are a number of parameters not explicitly captured by the Janelia LLSM acquisition software. Two methods are recommended for d capturing these:</p>
+
+<ul>
+  <li>a config.json metadata file</li>
+  <li>a bitmap image of the SLM pattern along with a specific encoding of SLM parameters in the bitmap file name.</li>
+</ul>
+
+<p>Both of these configurable parameter metadata files should be place in a config subdirectory of an Experiment folder.</p>
+
+<h3 id="configurable-parameters---configjson">Configurable Parameters - config.json</h3>
+
+<p>The config.json file is a <a href="https://www.json.org/">JSON formatted</a> text file that explicitly captures important OME metadata that is not recorded by the Janelia acquisition software. This file can include only a minimal (required) set of properties (refer to Table 1. left column, below) or both the minimal set and an extended set of properties (Table 1. left and right columns). An example config.json file that includes the extended set of properties is shown in Fig. 2.</p>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Minimal (required)</th>
+      <th>Extended (optional)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>xVoxelSize<br />yVoxelSize</td>
+      <td>lasers - a list of elements with following attributes:<br />- manufacturer<br />- model<br />- power<br />- powerUnit<br />- wavelength<br />- wavelengthUnit<br /><br />objectives - a list of elements with following attributes:<br />- manufacturer<br />- model<br />- lensNA<br />- magnification<br />- correction<br />- immersion<br /><br />filters - a list of elements with following attributes:<br />- manufacturer<br />- model<br />- filterType</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p>There are restrictions on the values for the following Extended properties: laser <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome_xsd.html#LightSource_PowerUnit">powerUnit</a>, laser <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome_xsd.html#Laser_WavelengthUnit">wavelengthUnit</a>, objective <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome_xsd.html#Objective">correction</a>, objective <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome_xsd.html#Objective">immersion</a> and filter <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome_xsd.html#Filter_Type">filterType</a>. These restrictions are enumerated in the <a href="http://www.openmicroscopy.org/Schemas/Documentation/Generated/OME-2016-06/ome.html">OME model specification</a>.</p>
+
+<p><br /></p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"voxelSizeX"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1018</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"voxelSizeY"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1018</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lasers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"manufacturer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coherent"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OBIS"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"power"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"powerUnits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mW"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"wavelength"</span><span class="p">:</span><span class="w"> </span><span class="mi">488</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"wavelengthUnit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nm"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"manufacturer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coherent"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OBIS"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"power"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"powerUnits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mW"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"wavelength"</span><span class="p">:</span><span class="w"> </span><span class="mi">561</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"wavelengthUnit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nm"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"objectives"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"manufacturer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nikon"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20x PlanApo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"lensNA"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"magnification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20x"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"correction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PlanApo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"detection"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"manufacturer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nikon"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10x PlanApo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"lensNA"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"magnification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20x"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"correction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PlanApo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"illumination"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"filters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"manufacturer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Filter Inc."</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"460 LP"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"filterType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LongPass"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+<p>Fig. 2. Example config.json</p>
+
+<p><br /></p>
+
+<h3 id="lattice-pattern">Lattice Pattern</h3>
+
+<p>Recreating a lattice pattern across different instrument requires several parameters (as described in Section 1). In the case of the Janelia LLS microscope implementation, the SLM hardware model is similar and therefore bitmap patterns can be transferred from instrument to instrument. Nevertheless, to ensure all metadata is captured, we recommend encoding the Lattice pattern parameters into the filename of the bitmap image according to the following underscore separated specification.</p>
+
+<blockquote>
+  <p>Wave_Inner_Outer_Beam#_Spacing_Crop_ShiftX_ShiftY_Tilt.bmp</p>
+</blockquote>
+
+<p>A description of the terms, separated by underscores, is given in Table 2. An example file name might look like:</p>
+
+<blockquote>
+  <p>480nm_0.510<em>0.570_40_1.110_0.150</em>-2<em>0</em>-1.bmp</p>
+</blockquote>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Name</strong></th>
+      <th><strong>Description</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Wave</td>
+      <td>The excitation wavelength (in nanometers)</td>
+    </tr>
+    <tr>
+      <td>Inner</td>
+      <td>Inner diameter (NA) of the annular mask</td>
+    </tr>
+    <tr>
+      <td>Outer</td>
+      <td>Outer diameter (NA) of the annular mask</td>
+    </tr>
+    <tr>
+      <td>Beam#</td>
+      <td>Number of bessel beams across the sheet. Controls width of sheet.</td>
+    </tr>
+    <tr>
+      <td>Spacing</td>
+      <td>Spacing between individual bessel beams (in microns)</td>
+    </tr>
+    <tr>
+      <td>Crop</td>
+      <td>Binary threshold factor, based on the amplitude of the electric field at the sample</td>
+    </tr>
+    <tr>
+      <td>ShiftX</td>
+      <td>Shift of the pattern in the X direction on the SLM (in microns)</td>
+    </tr>
+    <tr>
+      <td>ShiftY</td>
+      <td>Shift of the pattern in the Y direction on the SLM (in microns)</td>
+    </tr>
+    <tr>
+      <td>Tilt</td>
+      <td>Rotation of the pattern clockwise (in degrees)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Table 2. SLM Pattern Generator Parameters</p>
+
+<p><br /></p>
+
+<h2 id="including-a-measured-point-spread-function-psf">Including a Measured Point Spread Function (PSF)</h2>
+
+<p>While PSFs are not strictly necessary unless one wants to perform deconvolution with a measured PSF, they can be useful for assessing the quality of the imaging setup. They are very useful for diagnosing issues with the alignment of an LLS microscope and for setting final offsets. They can also reveal problems with the objectives. For these reasons, performing regular PSF measurements is recommended. In general, new PSF measurements for each Experiment is suggested, but at the very least for each change in the SLM pattern or realignment of the system.</p>
+
+<p>There are two suggested schemes for including PSF data. The choice of which to use depends on the manner in which the PSFs were acquired. In both cases the PSF data should be output to a subdirectory of the Experiment level called “psf.” Fig. 3 shows a scheme in which all PSFs are measured on the same sub-resolution beads, i.e. a single dataset using with all channels. Fig. 4 shows a scheme in which measured PSFs were acquired for each channel separately, i.e. on different sets of beads.</p>
+
+<p><br /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Experiment
+	| —	psf
+	|	| - psf_ch0_stack0000_488nm_0000000msec_....tif
+	|	| - psf_ch1_stack0000_561nm_0000000msec_....tif
+	|	| - psf_ch2_stack0000_642nm_0000000msec_....tif
+	|	| - ...
+	|	| - psf_Settings.txt
+	|
+	| —	dataset 1
+	|	| —	dataset 1_ch0_stack0000_488nm_0000msec_....tif
+	|	| —	dataset 1_ch0_stack0001_488nm_9749msec_....tif
+	|	| — ...
+	|	| — dataset 1_Settings.txt
+	|
+	| —	configs
+		| — 480nm_0.510_0.570_40_1.110_0.150_-2_0_-1.bmp
+		| — 560nm_0.500_0.550_40_1.110_0.150_-2_0_-1.bmp
+		| — config.json
+</code></pre>
+</div>
+
+<p>Fig. 3. Data layout for an LLSM experiment with PSFs for each channel acquired with the same settings on the same sub-resolution beads, e.g. TetraSpeck micro beads.</p>
+
+<p><br /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Experiment
+	| —	psf
+	|	| - psf488
+	|	| - psf488_ch0_stack0000_488nm_0000000msec_....tif
+	|	| - psf488_Settings.txt
+	|
+	|	| - psf561
+	|	| - psf561_ch0_stack0000_561nm_0000000msec_....tif
+	|	| - psf561_Settings.txt
+	|
+	| -	psfn
+		| - ...
+	|
+	| —	dataset 1
+	|	| —	dataset 1_ch0_stack0000_488nm_0000msec_....tif
+	|	| —	dataset 1_ch0_stack0001_488nm_9749msec_....tif
+	|	| — ...
+	|	| — dataset 1_Settings.txt
+	|
+	| —	configs
+		| — 480nm_0.510_0.570_40_1.110_0.150_-2_0_-1.bmp
+		| — 560nm_0.500_0.550_40_1.110_0.150_-2_0_-1.bmp
+		| — config.json
+
+</code></pre>
+</div>
+
+<p>Fig. 4. Data layout for an LLSM experiment with PSFs for each channel acquired with different settings on different beads.</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/llsm/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'monash-merc/llsm'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/llsm/js/main.js"></script><script src="/llsm/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
