@@ -16,7 +16,6 @@ aim to describe:
 - Documentation and examples for using `llsm` API
 - Guidelines for contributing
 
-
-Clearly, we don't have any of this yet, so a lot of work needs to be done. For now,
-please refer to the [Scaladoc](../../api) if you dare to jump in.
+Note: This documentation is a work in progress. [Scaladocs](../../api) for the
+libraries are also available.
 

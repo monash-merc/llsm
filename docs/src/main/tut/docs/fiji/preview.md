@@ -4,9 +4,9 @@ title: Preview
 section: fiji
 ---
 
-# Preview LLSM dataset
+# Process and Preview an LLS Dataset
 
-Plugin to load, process (e.g., deskew) and preview an entire LLSM dataset.
+This plugin allows users to load, process (e.g., deskew) and preview an entire LLSM dataset.
 
 1. Run `Plugins → LLSM → Preview Dataset...`
 2. Select an input directory containing a raw LLSM data (i.e., TIFF series +

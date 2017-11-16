@@ -3,35 +3,33 @@ layout: home
 title: Home
 section: "home"
 position: 0
+technologies:
+ - first: ["Scala", "llsm is written in Scala"]
+ - second: ["ImageJ / Fiji", "llsm leans on the ImageJ / Fiji ecosystem"]
+ - third: ["Typelevel Cats", "Cats gives llsm magical abilities"]
 ---
 
-`llsm` is a set of Scala libraries for working with Lattice Light-Sheet Microscopy (LLSM) data. Features include:
+This website has been established to host the tools, libraries, documentation and other resources
+developed as part of an [Australian National Data Service (ANDS)](http://www.ands.org.au/) Trusted
+Data project focusing on Lattice Light-Sheet (LLS) microscopy data. This site is divided into three
+main sections:
+1. [Documentation and guidelines for LLS microscope users/operators in acquiring
+reproducible LLS datasets.](docs/operators/index.html)
+2. [Documentation for installing and using the `llsm` ImageJ/Fiji plugins and
+   command line tools for preprocessing LLS data.](docs/fiji/index.html)
+3. [Documentation for developers who are interested in using or contributing to
+   the `llsm` libraries and tools for LLS data processing.](docs/dev/index.html)
 
-* Read and parse LLSM metadata from raw LLSM data from the Janelia LabView
-    application.
-* Read LLSM raw data from the Janelia LabView application.
-* Deskew LLSM volumes.
-* Output LLSM volumes as OME-TIFF or HDF5.
-
-`llsm` is underpinned by Typelevel and ImageJ/Fiji community libraries including `cats`, `imglib2` and `scifio`.
-
-# Getting Started
-`llsm` is divided into several sub-projects:
-
-* `core` - processing libraries with limited dependencies (`imglib2`, `scifio`, `cats-core`).
-* `api` - a Free monad based API/DSL for describing LLSM processing workflows
-* `ij` - a set of plugins for ImageJ to accomplish some basic tasks
-* `cli` - a command-line interface for LLSM dataset conversions
 
 # Note
-`llsm` is currently in pre-release. You should expect some bugs.
+`llsm` is pre-release software.
 
 # License
 MIT
 
 # Acknowledgements
 
-`llsm` forms part of the [Australian National Data Service (ANDS)](http://www.ands.org.au/) Trusted Lattice Light-Sheet Microscopy data project. This project is a collaboration between:
+The tools and resources hosted on this site are part of the [Australian National Data Service (ANDS)](http://www.ands.org.au/) Trusted Lattice Light-Sheet Microscopy data project. This project is a collaboration between:
 
 - [Monash University](https://www.monash.edu)
 - [University of New South Wales](https://www.unsw.edu.au)

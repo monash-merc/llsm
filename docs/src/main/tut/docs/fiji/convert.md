@@ -4,9 +4,9 @@ title: Convert
 section: fiji
 ---
 
-# Convert LLSM dataset
+# Process and Convert an LLS Dataset
 
-Load, deskew and convert an LLSM dataset as either an HDF5 or
+This plugin allows a user to load, deskew and convert an LLSM dataset to either HDF5 or
 OME-TIFF.
 
 1. Run `Plugings → LLSM → Convert Dataset...`

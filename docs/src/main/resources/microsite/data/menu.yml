@@ -1,8 +1,18 @@
 options:
-  - title: Introduction
-    url: docs/index.html
 
-  - title: Fiji Plugins
+  - title: LLS Acquisition Guidelines
+    url: docs/operators/index.html
+    menu_type: operators
+    menu_section: operators
+
+    nested_options:
+      - title: General Guidelines
+        url: docs/operators/reproducible.html
+
+      - title: Janelia LLS Microscope
+        url: docs/operators/guidelines.html
+
+  - title: LLS Data Preprocessing
     url: docs/fiji/index.html
     menu_type: fiji
     menu_section: fiji
@@ -11,19 +21,14 @@ options:
       - title: Getting Started
         url: docs/fiji/index.html
 
-      - title: Preview
+      - title: Preview Plugins
         url: docs/fiji/preview.html
 
-      - title: Convert
+      - title: Convert Plugins
         url: docs/fiji/convert.html
 
       - title: Deskewing
         url: docs/fiji/deskew.html
-
-  - title: Instrument Operators
-    url: docs/operators.html
-    menu_type: operators
-    menu_section: operators
 
   - title: Developers
     url: docs/dev/index.html

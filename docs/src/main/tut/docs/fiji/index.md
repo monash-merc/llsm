@@ -1,25 +1,45 @@
 ---
 layout: docs
-title: Fiji Plugins
+title: LLS Processing
 section: fiji
-position: 10
+position: 20
 ---
 
-# Getting Started
-This section describes usage of the ImageJ/Fiji plugins for processing LLSM
-data. The plugins are targeted at end-users and can generally classified into 2
-groups:
+# Preprocessing of LLS Data
+LLS data typically requires some preprocessing before it can be visualised, analysed or
+processed further. Preprocessing usually encompasses deskewing and capture
+of important metadata that it useful for downstream applications. More
+information about deskewing LLS data can be found [here](deskew.html).
 
-- [Previewing LLSM datasets](preview.html)
-- [Converting LLSM datasets to OME-TIFF or BigDataViewer HDF5
+`llsm` provides several plugins for ImageJ/Fiji that enable preprocessing LLS
+data. The main features of these plugins include:
+
+* Reading and parsing LLS metadata from raw LLS data from the Janelia LabView
+    application.
+* Reading LLS raw data from the Janelia LabView application.
+* Deskewing LLS volumes.
+* Previewing LLS datasets as ImageJ HyperStacks or in the BigDataViewer.
+* Exporting or conversion of LLS dataset to OME-TIFF or BigDataViewer HDF5
+    formats.
+
+The plugins cover two primary use cases at this time, although we wish to
+support more in the future:
+
+- [Process and preview LLS datasets](preview.html)
+- [Process and convert LLS datasets to OME-TIFF or BigDataViewer HDF5
     formats](convert.html)
 
-If you are interested in general guidelines for LLSM instrument operators please
-proceed [here](../operators.html) or if you are interested in developing or using
-`llsm` libraries please go [here](../dev/index.html).
+Note: While we aim to support other LLS microscope implementations in the future, the
+`llsm` tools currently only support datasets acquired using the Janelia LLS
+acqusition software. The plugins typically operate directly on the raw data
+structure generated from the Janelia LLS acquisition software. If you are interested in guidelines for acquiring LLS datasets
+proceed [here](../operators/index.html) or if you are interested in developing or using
+`llsm` libraries proceed [here](../dev/index.html).
 
 
-## LLSM Plugin Installation
+## Installing the ImageJ/Fiji Plugins
+There is an ImageJ/Fiji update site for `llsm`, so installing the plugins is
+relatively straight forward:
 
 1. [Download](https://imagej.net/Fiji/Downloads) and install Fiji.
 
