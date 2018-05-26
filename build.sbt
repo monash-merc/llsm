@@ -4,8 +4,8 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
 inThisBuild(List(
   organization := "edu.monash",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.11.11", "2.12.3")
+  scalaVersion := "2.12.6",
+  crossScalaVersions := Seq("2.11.12", "2.12.6")
 ))
 
 addCommandAlias(
@@ -15,13 +15,13 @@ addCommandAlias(
 /**
  * Common dep versions
  */
-lazy val imglib2Version     = "4.2.1"
-lazy val imglib2RTVersion   = "2.0.0-beta-37"
-lazy val scifioVersion      = "0.32.0"
+lazy val imglib2Version     = "5.2.0"
+lazy val imglib2RTVersion   = "2.0.0"
+lazy val scifioVersion      = "0.36.0"
 lazy val scifioOMEVersion   = "0.14.3"
-lazy val bdvCoreVersion     = "4.1.0"
-lazy val imagejVersion      = "2.0.0-rc-61"
-lazy val ijLegacyVersion    = "0.25.0"
+lazy val bdvCoreVersion     = "5.0.0"
+lazy val imagejVersion      = "2.0.0-rc-66"
+lazy val ijLegacyVersion    = "0.30.0"
 lazy val ijScalaVersion     = "0.2.1"
 
 /**
@@ -217,7 +217,7 @@ lazy val docs = project
     )),
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % imglib2Version    % "tut",
-      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "tut",
+      "net.imglib2" % "imglib2-algorithm"     % "0.9.0"           % "tut",
       "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "tut",
       "io.scif"     % "scifio"                % scifioVersion     % "tut",
       "io.scif"     % "scifio-ome-xml"        % scifioOMEVersion  % "tut",
@@ -249,7 +249,7 @@ lazy val core = project
     exportJars := true,
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % imglib2Version    % "provided",
-      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "provided",
+      "net.imglib2" % "imglib2-algorithm"     % "0.9.0"           % "provided",
       "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "provided",
       "io.scif"     % "scifio"                % scifioVersion     % "provided"
     ) ++ coreVersionDeps(scalaVersion.value)
@@ -309,9 +309,9 @@ lazy val ij = project
       "net.imagej"    % "imagej"                    % imagejVersion     % "provided",
       "net.imagej"    % "imagej-legacy"             % ijLegacyVersion   % "provided",
       "org.scijava"   % "scripting-scala"           % ijScalaVersion    % "provided",
-      "net.imglib2"   % "imglib2-ui"                % "2.0.0-beta-33"   % "provided",
+      "net.imglib2"   % "imglib2-ui"                % "2.0.0"   % "provided",
       "sc.fiji"       % "bigdataviewer-core"        % bdvCoreVersion    % "provided",
-      "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-5"    % "provided"
+      "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-11"    % "provided"
     ),
     scalacOptions ~= (_ filterNot(_ == "-Xcheckinit")), // disable checkinit because ImageJ does a lot of runtime injection
     mainClass in (Compile, run) := Some("net.imagej.Main"),

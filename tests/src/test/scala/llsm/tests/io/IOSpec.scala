@@ -56,7 +56,7 @@ class IOSpec extends IOSuite {
       val interpreter =
         processInterpreter[Try] or
         (new MetadataSuite().metaMockInterpreter[Try](channel*time, channel, time) or
-        scifioReaderInterpreter[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType]))
+          scifioReaderInterpreter[Try](new SCIFIO().getContext, new ArrayImgFactory[UnsignedShortType](new UnsignedShortType)))
 
       program[App](Paths.get(imgPath)).foldMap(interpreter) match {
         case Success(LLSMImg(img, meta@_)) => {
