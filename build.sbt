@@ -309,6 +309,9 @@ lazy val ij = project
       "net.imagej"    % "imagej"                    % imagejVersion     % "provided",
       "net.imagej"    % "imagej-legacy"             % ijLegacyVersion   % "provided",
       "org.scijava"   % "scripting-scala"           % ijScalaVersion    % "provided",
+      "net.imglib2"             % "imglib2"               % imglib2Version    % "provided",
+      "net.imglib2"   % "imglib2-cache"             % "1.0.0-beta-9"     % "provided",
+      "net.imglib2"             % "imglib2-realtransform" % imglib2RTVersion  % "provided",
       "net.imglib2"   % "imglib2-ui"                % "2.0.0"   % "provided",
       "sc.fiji"       % "bigdataviewer-core"        % bdvCoreVersion    % "provided",
       "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-11"    % "provided"
