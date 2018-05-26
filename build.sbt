@@ -1,5 +1,5 @@
+import microsites._
 import ReleaseTransformations._
-import sbtunidoc.Plugin.UnidocKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
 inThisBuild(List(
@@ -128,11 +128,11 @@ lazy val publishSettings = List(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    ReleaseStep(action = Command.process("package", _)),
+    releaseStepCommand("package"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    ReleaseStep(action = Command.process("publishSigned", _)),
+    releaseStepCommand("publishSigned"),
     setNextVersion,
     commitNextVersion,
     // ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
@@ -141,8 +141,8 @@ lazy val publishSettings = List(
 )
 
 lazy val noPublishSettings = List(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
@@ -201,11 +201,11 @@ disablePlugins(AssemblyPlugin)
 lazy val docs = project
   .in(file("docs"))
   .disablePlugins(AssemblyPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .enablePlugins(MicrositesPlugin)
   .settings(moduleName := "llsm-docs")
   .settings(llsmSettings)
   .settings(noPublishSettings)
-  .settings(unidocSettings)
   .settings(docSettings)
   .settings(
     scalacOptions in Tut ~= (_.filterNot(
