@@ -336,8 +336,8 @@ lazy val tests = project
   .settings(noPublishSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck"           % "1.13.4",
-      "org.scalatest"  %% "scalatest"            % "3.0.1",
+      "org.scalacheck" %% "scalacheck"           % "1.14.0",
+      "org.scalatest"  %% "scalatest"            % "3.0.5",
       "net.imglib2"    % "imglib2"               % imglib2Version,
       "net.imglib2"    % "imglib2-realtransform" % imglib2RTVersion,
       "io.scif"        % "scifio"                % scifioVersion,
