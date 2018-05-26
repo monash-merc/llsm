@@ -265,8 +265,8 @@ lazy val api = project
   .settings(
     exportJars := true,
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules"  %% "scala-xml"            % "1.0.6",
-      "org.typelevel"           %% "cats-free"            % "0.9.0",
+      "org.scala-lang.modules"  %% "scala-xml"            % "1.1.0",
+      "org.typelevel"           %% "cats-free"            % "1.1.0",
       "net.imglib2"             % "imglib2"               % imglib2Version    % "provided",
       "net.imglib2"             % "imglib2-realtransform" % imglib2RTVersion  % "provided",
       "io.scif"                 % "scifio"                % scifioVersion     % "provided",
@@ -285,7 +285,7 @@ lazy val cli = project
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.github.scopt"  %% "scopt"                % "3.6.0",
+      "com.github.scopt"  %% "scopt"                % "3.7.0",
       "net.imglib2"       % "imglib2"               % imglib2Version,
       "net.imglib2"       % "imglib2-realtransform" % imglib2RTVersion,
       "io.scif"           % "scifio"                % scifioVersion,
@@ -361,8 +361,7 @@ lazy val benchmark = project
       "io.scif"       %   "scifio"                  % scifioVersion,
       "io.scif"       %   "scifio-ome-xml"          % scifioOMEVersion,
       "sc.fiji"       %   "bigdataviewer-core"      % bdvCoreVersion,
-      "io.monix"      %%  "monix-eval"              % "2.3.0",
-      "io.monix"      %%  "monix-cats"              % "2.3.0"
+      "io.monix"      %%  "monix"              % "3.0.0-RC1",
     )
   )
 

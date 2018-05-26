@@ -1,6 +1,7 @@
 package llsm.algebras
 
-import cats.free.{Free, Inject}
+import cats.InjectK
+import cats.free.Free
 import io.scif.img.SCIFIOImgPlus
 import llsm.InterpolationMethod
 import llsm.io.LLSMImg
@@ -33,7 +34,7 @@ object ProcessAPI {
       DeskewImg(img, shearDim, refDim, shearFactor, interpolation, identity)
   }
 
-  implicit def processInject[F[_], G[_]](implicit F: ProcessAPI[F], I: Inject[F, G]): ProcessAPI[Free[G, ?]] =
+  implicit def processInject[F[_], G[_]](implicit F: ProcessAPI[F], I: InjectK[F, G]): ProcessAPI[Free[G, ?]] =
     new ProcessAPI[Free[G, ?]] {
       def aggregate(imgs: List[LLSMImg]): Free[G, SCIFIOImgPlus[UnsignedShortType]] =
         Free.inject[F, G](F.aggregate(imgs))

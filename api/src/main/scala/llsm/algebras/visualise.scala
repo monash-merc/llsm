@@ -1,9 +1,7 @@
 package llsm.algebras
 
-import cats.free.{
-  Free,
-  Inject
-}
+import cats.InjectK
+import cats.free.Free
 import io.scif.img.SCIFIOImgPlus
 import net.imglib2.`type`. numeric.integer.UnsignedShortType
 
@@ -21,7 +19,7 @@ object VisualiseAPI {
       Show(img, identity)
   }
 
-  implicit def visualiseInject[F[_], G[_]](implicit F: VisualiseAPI[F], I: Inject[F, G]): VisualiseAPI[Free[G, ?]] =
+  implicit def visualiseInject[F[_], G[_]](implicit F: VisualiseAPI[F], I: InjectK[F, G]): VisualiseAPI[Free[G, ?]] =
     new VisualiseAPI[Free[G, ?]] {
       def show(img: SCIFIOImgPlus[UnsignedShortType]): Free[G, Unit] =
         Free.inject[F, G](F.show(img))

@@ -3,7 +3,7 @@ package llsm.io
 import java.nio.file.{Path, Paths}
 import scala.util.{Try, Success, Failure}
 
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.implicits._
 import cats.free.Free
 import llsm.algebras.{Metadata, MetadataF, ImgReader, ImgReaderF, Process, ProcessF}
@@ -50,8 +50,8 @@ class IOSpec extends IOSuite {
             deskewedImg <- Process[M].deskewImg(i, 0, 2, shear, m.config.interpolation)
           } yield deskewedImg
 
-      type MetaImg[A] = Coproduct[MetadataF, ImgReaderF, A]
-      type App[A] = Coproduct[ProcessF, MetaImg, A]
+      type MetaImg[A] = EitherK[MetadataF, ImgReaderF, A]
+      type App[A] = EitherK[ProcessF, MetaImg, A]
 
       val interpreter =
         processInterpreter[Try] or

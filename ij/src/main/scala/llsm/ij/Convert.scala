@@ -8,7 +8,7 @@ import java.util.stream.Collectors
 import scala.collection.JavaConverters._
 
 import cats.MonadError
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free.Free
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
@@ -135,10 +135,10 @@ class ConvertPlugin extends Command {
   override def run(): Unit = validateConfig match {
     case ConfigSuccess => {
       type App[A] =
-        Coproduct[ImgWriterF,
-          Coproduct[ProcessF,
-            Coproduct[ImgReaderF,
-              Coproduct[MetadataF, ProgressF, ?],
+        EitherK[ImgWriterF,
+          EitherK[ProcessF,
+            EitherK[ImgReaderF,
+              EitherK[MetadataF, ProgressF, ?],
             ?],
           ?],
         A]

@@ -1,6 +1,7 @@
 package llsm.algebras
 
-import cats.free.{Free, Inject}
+import cats.InjectK
+import cats.free.Free
 
 trait LoggingAPI[F[_]] {
   def info(msg: String): F[Unit]
@@ -45,7 +46,7 @@ object LoggingAPI {
     def traceCause(msg: String, cause: Throwable): LoggingF[Unit] = LoggingAPI.TraceCause(msg, cause)
   }
 
-  implicit def loggingInject[F[_], G[_]](implicit F: LoggingAPI[F], I: Inject[F, G]): LoggingAPI[Free[G, ?]] =
+  implicit def loggingInject[F[_], G[_]](implicit F: LoggingAPI[F], I: InjectK[F, G]): LoggingAPI[Free[G, ?]] =
     new LoggingAPI[Free[G, ?]] {
       def info(msg: String): Free[G, Unit] = Free.inject[F, G](F.info(msg))
       def infoCause(msg: String, cause: Throwable): Free[G, Unit] = Free.inject[F, G](F.infoCause(msg, cause))

@@ -7,7 +7,7 @@ import java.util.stream.Collectors
 import scala.collection.JavaConverters._
 
 import cats.MonadError
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free.Free
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
@@ -115,10 +115,10 @@ class PreviewPlugin extends Command {
   override def run(): Unit = {
 
     type App[A] =
-      Coproduct[VisualiseF,
-        Coproduct[ProcessF,
-          Coproduct[ImgReaderF,
-            Coproduct[MetadataF, ProgressF, ?],
+      EitherK[VisualiseF,
+        EitherK[ProcessF,
+          EitherK[ImgReaderF,
+            EitherK[MetadataF, ProgressF, ?],
           ?],
         ?],
       A]
