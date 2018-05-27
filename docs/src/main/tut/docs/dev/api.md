@@ -40,7 +40,7 @@ import java.nio.file.{
 }
 
 import cats.~>
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free.Free
 import cats.implicits._
 import llsm.{
@@ -98,14 +98,14 @@ val configMeta = ConfigurableMetadata(
 ```
 
 <br>
-Next we define a `Coproduct` type that encapsulates the components/algerbras
+Next we define a `EitherK` type that encapsulates the components/algerbras
 of our intended application/program. In this case we need the `MetadataF`,
 `ImgReaderF` and `ProcessF` algebras.
 
 ```tut:silent
 type App[A] =
-    Coproduct[MetadataF,
-      Coproduct[ImgReaderF, ProcessF, ?],
+    EitherK[MetadataF,
+      EitherK[ImgReaderF, ProcessF, ?],
     A]
 ```
 
@@ -145,7 +145,7 @@ result in the output being in the right side of the Either.
 ```tut:silent
 def compiler =
   (basicMetadataInterpreter[Either[Throwable, ?]](configMeta, scijavaContext) or
-    (scifioReaderInterpreter[Either[Throwable, ?]](scijavaContext, new CellImgFactory[UnsignedShortType]()) or
+    (scifioReaderInterpreter[Either[Throwable, ?]](scijavaContext, new CellImgFactory(new UnsignedShortType)) or
      processInterpreter[Either[Throwable, ?]]))
 ```
 
