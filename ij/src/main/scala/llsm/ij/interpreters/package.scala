@@ -1,10 +1,6 @@
 package llsm.ij
 
-import bdv.util.{
-  AxisOrder,
-  Bdv,
-  BdvFunctions
-}
+import bdv.util.{AxisOrder, Bdv, BdvFunctions}
 import cats._
 import cats.free.Free
 import cats.implicits._
@@ -34,7 +30,8 @@ import org.scijava.log.LogService
 
 package object interpreters {
 
-  def ijProgressInterpreter[M[_]](status: StatusService)(implicit M: MonadError[M, Throwable]): ProgressF ~> M =
+  def ijProgressInterpreter[M[_]](status: StatusService)(
+      implicit M: MonadError[M, Throwable]): ProgressF ~> M =
     new (ProgressF ~> M) {
       def apply[A](fa: ProgressF[A]): M[A] =
         fa match {
@@ -45,32 +42,35 @@ package object interpreters {
         }
     }
 
-  def ijLoggingInterpreter[M[_]](log: LogService)(implicit M: MonadError[M, Throwable]): LoggingF ~> M =
+  def ijLoggingInterpreter[M[_]](log: LogService)(
+      implicit M: MonadError[M, Throwable]): LoggingF ~> M =
     new (LoggingF ~> M) {
       def apply[A](fa: LoggingF[A]): M[A] =
         fa match {
           case LoggingAPI.Info(msg) => M.catchNonFatal(log.info(msg))
-          case LoggingAPI.InfoCause(msg, cause) => M.catchNonFatal(log.info(msg, cause))
+          case LoggingAPI.InfoCause(msg, cause) =>
+            M.catchNonFatal(log.info(msg, cause))
           case LoggingAPI.Warn(msg) => M.catchNonFatal(log.warn(msg))
-          case LoggingAPI.WarnCause(msg, cause) => M.catchNonFatal(log.warn(msg, cause))
+          case LoggingAPI.WarnCause(msg, cause) =>
+            M.catchNonFatal(log.warn(msg, cause))
           case LoggingAPI.Debug(msg) => M.catchNonFatal(log.debug(msg))
-          case LoggingAPI.DebugCause(msg, cause) => M.catchNonFatal(log.debug(msg, cause))
+          case LoggingAPI.DebugCause(msg, cause) =>
+            M.catchNonFatal(log.debug(msg, cause))
           case LoggingAPI.Error(msg) => M.catchNonFatal(log.error(msg))
-          case LoggingAPI.ErrorCause(msg, cause) => M.catchNonFatal(log.error(msg, cause))
+          case LoggingAPI.ErrorCause(msg, cause) =>
+            M.catchNonFatal(log.error(msg, cause))
           case LoggingAPI.Trace(msg) => M.catchNonFatal(log.trace(msg))
-          case LoggingAPI.TraceCause(msg, cause) => M.catchNonFatal(log.trace(msg, cause))
+          case LoggingAPI.TraceCause(msg, cause) =>
+            M.catchNonFatal(log.trace(msg, cause))
         }
     }
 
-
-
   def ijMetadataInterpreter[M[_]](
-    config: ConfigurableMetadata,
-    context: Context,
-    log: LogService
+      config: ConfigurableMetadata,
+      context: Context,
+      log: LogService
   )(implicit
-    M: MonadError[M, Throwable]
-  ): MetadataF ~> M =
+    M: MonadError[M, Throwable]): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
         for {
@@ -79,14 +79,12 @@ package object interpreters {
         } yield m
     }
 
-
   def ijImgReaderInterpreter[M[_]](
-    context: Context,
-    factory: ImgFactory[UnsignedShortType],
-    log: LogService
+      context: Context,
+      factory: ImgFactory[UnsignedShortType],
+      log: LogService
   )(implicit
-    M: MonadError[M, Throwable]
-  ): ImgReaderF ~> M =
+    M: MonadError[M, Throwable]): ImgReaderF ~> M =
     new (ImgReaderF ~> M) {
       def apply[A](fa: ImgReaderF[A]): M[A] =
         for {
@@ -99,16 +97,17 @@ package object interpreters {
   def visToVisIJTranslator(viewer: Viewer): VisualiseF ~< VisualiseIJF =
     new (VisualiseF ~< VisualiseIJF) {
       def apply[A](f: VisualiseF[A]): Free[VisualiseIJF, A] = f match {
-        case VisualiseAPI.Show(img, next) => viewer match {
-          case HyperStack => VisualiseIJF.showHyper(img).map(next)
-          case BigDataViewer => VisualiseIJF.showBDV(img).map(next)
-        }
+        case VisualiseAPI.Show(img, next) =>
+          viewer match {
+            case HyperStack    => VisualiseIJF.showHyper(img).map(next)
+            case BigDataViewer => VisualiseIJF.showBDV(img).map(next)
+          }
       }
     }
 
   def ijVisInterpreter[M[_]](
-    implicit
-    M: MonadError[M, Throwable]
+      implicit
+      M: MonadError[M, Throwable]
   ): VisualiseIJF ~> M =
     new (VisualiseIJF ~> M) {
       def apply[A](f: VisualiseIJF[A]): M[A] = f match {
@@ -125,9 +124,9 @@ package object interpreters {
           val out: ImagePlus = cIndex match {
             case Some(i) =>
               ImageJFunctions.wrap(Views.permute(img, i, 2),
-                s"${imeta.getName}_deskewed")
-              case None =>
-                ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
+                                   s"${imeta.getName}_deskewed")
+            case None =>
+              ImageJFunctions.wrap(img, s"${imeta.getName}_deskewed")
           }
 
           val cal = new Calibration(out)
@@ -152,8 +151,9 @@ package object interpreters {
         case ShowBDV(img) => {
           val imeta = img.getImageMetadata
 
-          val axisOrder = if (imeta.getAxisLength(Axes.CHANNEL) > 1 &&
-            imeta.getAxisLength(Axes.TIME) > 1) {
+          val axisOrder =
+            if (imeta.getAxisLength(Axes.CHANNEL) > 1 &&
+                imeta.getAxisLength(Axes.TIME) > 1) {
               AxisOrder.XYZCT
             } else if (imeta.getAxisLength(Axes.CHANNEL) > 1) {
               AxisOrder.XYZC
@@ -163,7 +163,8 @@ package object interpreters {
               AxisOrder.XYZ
             }
 
-          val bdvOpts = Bdv.options()
+          val bdvOpts = Bdv
+            .options()
             .sourceTransform(
               imeta.getAxis(Axes.X).calibratedValue(1),
               imeta.getAxis(Axes.Y).calibratedValue(1),
@@ -171,7 +172,7 @@ package object interpreters {
             )
             .axisOrder(axisOrder)
 
-          M.pure{
+          M.pure {
             BdvFunctions.show(img, s"${imeta.getName}_deskewed", bdvOpts)
             ()
           }
@@ -179,12 +180,12 @@ package object interpreters {
       }
     }
 
-    def visInterpreter[M[_]](viewer: Viewer)(
+  def visInterpreter[M[_]](viewer: Viewer)(
       implicit
       M: MonadError[M, Throwable]
-    ): VisualiseF ~> M =
-      new (VisualiseF ~> M) {
-        def apply[A](fa: VisualiseF[A]): M[A] =
-          visToVisIJTranslator(viewer)(fa).foldMap(ijVisInterpreter[M])
-      }
+  ): VisualiseF ~> M =
+    new (VisualiseF ~> M) {
+      def apply[A](fa: VisualiseF[A]): M[A] =
+        visToVisIJTranslator(viewer)(fa).foldMap(ijVisInterpreter[M])
+    }
 }

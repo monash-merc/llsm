@@ -31,8 +31,7 @@ private[metadata] abstract class ParserInstances {
         Try(func(s)) match {
           case Success(r) => Right(r)
           case Failure(e) =>
-            Left(ParsingFailure(s"Failed to parse:\n${e.getMessage}",
-                           e))
+            Left(ParsingFailure(s"Failed to parse:\n${e.getMessage}", e))
         }
     }
 

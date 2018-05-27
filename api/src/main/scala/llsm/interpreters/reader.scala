@@ -15,50 +15,44 @@ import org.scijava.Context
 trait ImgReaderInterpreters {
 
   /** Returns an SCIFIO based interpreter for the [[llsm.algebras.ImgReaderAPI]]
-   *
-   *  Interprets the [[llsm.algebras.ImgReaderAPI]] DSL using SCIFIO to
-   *  implement reading functionality and captures the result in a specified
-   *  container M that has an instance of MonadError.
-   *
-   *  @param context scijava org.scijava.Context
-   *  @tparam M return type that needs an instance of cats.MonadError
-   */
+    *
+    *  Interprets the [[llsm.algebras.ImgReaderAPI]] DSL using SCIFIO to
+    *  implement reading functionality and captures the result in a specified
+    *  container M that has an instance of MonadError.
+    *
+    *  @param context scijava org.scijava.Context
+    *  @tparam M return type that needs an instance of cats.MonadError
+    */
   def scifioReaderInterpreter[M[_]](
-    context: Context,
-    factory: ImgFactory[UnsignedShortType]
+      context: Context,
+      factory: ImgFactory[UnsignedShortType]
   )(implicit
-    M: ApplicativeError[M, Throwable]
-  ): ImgReaderF ~> M =
+    M: ApplicativeError[M, Throwable]): ImgReaderF ~> M =
     new (ImgReaderF ~> M) {
       def apply[A](fa: ImgReaderF[A]): M[A] =
         fa match {
           case ImgReaderAPI.ReadImg(path, meta, next) => {
             M.pure {
               val imgOpener = new ImgOpener(context)
-              val conf = new SCIFIOConfig().imgOpenerSetComputeMinMax(false)
-              val scifio = new SCIFIO(context)
-              val rdr = scifio.initializer().initializeReader(path.toString)
+              val conf      = new SCIFIOConfig().imgOpenerSetComputeMinMax(false)
+              val scifio    = new SCIFIO(context)
+              val rdr       = scifio.initializer().initializeReader(path.toString)
 
               next(
-                LLSMImg(
-                  imgOpener.openImgs(
-                    rdr,
-                    factory,
-                    conf).get(0),
-                  meta)
+                LLSMImg(imgOpener.openImgs(rdr, factory, conf).get(0), meta)
               )
             }
           }
-      }
-  }
+        }
+    }
 
   /** Logging for ImgReader DSL
-   *
-   *  Defines ImgReader DSL in terms of Logging DSL, which adds the side effect of
-   *  logging to each call in the ImgReader DSL. The intention is for this to
-   *  be composed with a ImgReader interpreter to define a new interpreter that
-   *  logs as well.
-   */
+    *
+    *  Defines ImgReader DSL in terms of Logging DSL, which adds the side effect of
+    *  logging to each call in the ImgReader DSL. The intention is for this to
+    *  be composed with a ImgReader interpreter to define a new interpreter that
+    *  logs as well.
+    */
   def readerLogging: ImgReaderF ~< Halt[LoggingF, ?] =
     new (ImgReaderF ~< Halt[LoggingF, ?]) {
       def apply[A](fa: ImgReaderF[A]): Free[Halt[LoggingF, ?], A] =

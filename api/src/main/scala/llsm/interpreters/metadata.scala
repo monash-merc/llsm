@@ -17,7 +17,7 @@ import llsm.algebras.{
   MetadataF,
   MetadataLow,
   MetadataLowF
- }
+}
 import llsm.fp._
 import llsm.io.metadata.{
   ConfigurableMetadata,
@@ -25,7 +25,7 @@ import llsm.io.metadata.{
   FileMetadata,
   Parser,
   ParsingFailure
- }
+}
 import llsm.io.metadata.implicits._
 import org.scijava.Context
 
@@ -56,61 +56,69 @@ trait MetadataInterpreters {
         }
     }
 
-
   private def metaLowInterpreter[M[_]](
-    config: ConfigurableMetadata,
-    context: Context
+      config: ConfigurableMetadata,
+      context: Context
   )(
-    implicit
-    M: ApplicativeError[M, Throwable]
-  ): FunctionK[MetadataLowF, Exec[M, ?]] = λ[FunctionK[MetadataLowF, Exec[M, ?]]] {
-    fa => Kleisli { _ =>
-      fa match {
-        case MetadataLow.ConfigurableMeta => M.pure(config)
-        case MetadataLow.ExtractFilenameMeta(path) =>
-          Parser[FilenameMetadata](path.getFileName.toString) match {
-            case Right(fm) => M.pure(fm)
-            case Left(ParsingFailure(_, e)) => M.raiseError(new Exception(e))
-          }
-        case MetadataLow.ExtractTextMeta(path) => {
-          val parent = path.getParent
-          Files.list(parent).iterator.asScala
-            .find(_.toString.endsWith(".txt")) match {
-              case Some(p) => FileMetadata.readMetadataFromTxtFile(p) match {
-                case Right(m) => M.pure(m)
-                case Left(FileMetadata.MetadataIOError(msg)) => M.raiseError(new Exception(msg))
-              }
-              case None => M.raiseError(new Exception("FileMetadata file not found"))
+      implicit
+      M: ApplicativeError[M, Throwable]
+  ): FunctionK[MetadataLowF, Exec[M, ?]] =
+    λ[FunctionK[MetadataLowF, Exec[M, ?]]] { fa =>
+      Kleisli { _ =>
+        fa match {
+          case MetadataLow.ConfigurableMeta => M.pure(config)
+          case MetadataLow.ExtractFilenameMeta(path) =>
+            Parser[FilenameMetadata](path.getFileName.toString) match {
+              case Right(fm)                  => M.pure(fm)
+              case Left(ParsingFailure(_, e)) => M.raiseError(new Exception(e))
             }
+          case MetadataLow.ExtractTextMeta(path) => {
+            val parent = path.getParent
+            Files
+              .list(parent)
+              .iterator
+              .asScala
+              .find(_.toString.endsWith(".txt")) match {
+              case Some(p) =>
+                FileMetadata.readMetadataFromTxtFile(p) match {
+                  case Right(m) => M.pure(m)
+                  case Left(FileMetadata.MetadataIOError(msg)) =>
+                    M.raiseError(new Exception(msg))
+                }
+              case None =>
+                M.raiseError(new Exception("FileMetadata file not found"))
+            }
+          }
+          case MetadataLow.WriteMetadata(path, metas) =>
+            ImgUtils.writeOMEMetadata[M](path, metas, context)
         }
-        case MetadataLow.WriteMetadata(path, metas) => ImgUtils.writeOMEMetadata[M](path, metas, context)
       }
     }
-  }
-
 
   def basicMetadataInterpreter[M[_]](
-    config: ConfigurableMetadata,
-    context: Context
+      config: ConfigurableMetadata,
+      context: Context
   )(
-    implicit
-    M: ApplicativeError[M, Throwable]
+      implicit
+      M: ApplicativeError[M, Throwable]
   ): MetadataF ~> M =
     new (MetadataF ~> M) {
       def apply[A](fa: MetadataF[A]): M[A] =
         metaToMetaLowTranslator(fa)
           .foldMap[Exec[M, ?]](metaLowInterpreter[M](config, context))
           .run(())
-  }
+    }
 
   def metadataLogging: MetadataF ~< Halt[LoggingF, ?] =
     new (MetadataF ~< Halt[LoggingF, ?]) {
       def apply[A](fa: MetadataF[A]): Free[Halt[LoggingF, ?], A] =
         fa match {
           case MetadataAPI.ReadMetadata(path, _) =>
-            Free.liftF[Halt[LoggingF, ?], A](LoggingAPI[LoggingF].debug(s"Reading metadata for: $path"))
+            Free.liftF[Halt[LoggingF, ?], A](
+              LoggingAPI[LoggingF].debug(s"Reading metadata for: $path"))
           case MetadataAPI.WriteMetadata(path, _, _) =>
-            Free.liftF[Halt[LoggingF, ?], A](LoggingAPI[LoggingF].debug(s"Reading metadata for: $path"))
+            Free.liftF[Halt[LoggingF, ?], A](
+              LoggingAPI[LoggingF].debug(s"Reading metadata for: $path"))
         }
     }
 }

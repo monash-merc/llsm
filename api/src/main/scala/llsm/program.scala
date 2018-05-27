@@ -4,16 +4,9 @@ import java.nio.file.Path
 
 import cats.free.Free
 import cats.implicits._
-import llsm.algebras.{
-  ImgReader,
-  ImgWriter,
-  Metadata,
-  Process,
-  Progress
-}
+import llsm.algebras.{ImgReader, ImgWriter, Metadata, Process, Progress}
 import llsm.fp.ParSeq
 import llsm.io.LLSMImg
-
 
 /**
   * Tools for reading, parsing and writing LLSM images and metadata
@@ -28,22 +21,20 @@ object Programs {
       path: Path
   ): Free[F, LLSMImg] =
     for {
-      _   <- Progress[F].status(s"Reading metadata: ${path.toString}")
+      // _   <- Progress[F].status(s"Reading metadata: ${path.getFileName.toString}")
       m   <- Metadata[F].readMetadata(path)
-      _   <- Progress[F].status(s"Reading: ${path.toString}")
+      // _   <- Progress[F].status(s"Reading: ${path.getFileName.toString}")
       img <- ImgReader[F].readImg(path, m)
-      _   <- Progress[F].status(s"Deskewing: ${path.toString}")
+      // _   <- Progress[F].status(s"Deskewing: ${path.getFileName.toString}")
       deskewedImg <- Process[F].deskewImg(
         img,
         0,
         2,
-        Deskew.calcShearFactor(
-          m.waveform.sPZTInterval,
-          m.sample.angle,
-          m.config.xVoxelSize),
+        Deskew.calcShearFactor(m.waveform.sPZTInterval,
+                               m.sample.angle,
+                               m.config.xVoxelSize),
         m.config.interpolation)
     } yield deskewedImg
-
 
   def convertImg[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](
       path: Path,
@@ -51,7 +42,8 @@ object Programs {
   ): Free[F, LLSMImg] =
     for {
       deskewedImg <- processImg[F](path)
-      _ <- Progress[F].status(s"Writing: ${deskewedImg.meta.filename.name} ch: ${deskewedImg.meta.filename.channel} t: ${deskewedImg.meta.filename.stack}")
+      _ <- Progress[F].status(
+        s"Writing: ${deskewedImg.meta.filename.name} ch: ${deskewedImg.meta.filename.channel} t: ${deskewedImg.meta.filename.stack}")
       m <- ImgWriter[F].writeImg(outputPath, deskewedImg)
     } yield deskewedImg.copy(meta = m)
 
@@ -60,10 +52,11 @@ object Programs {
       outputPath: Path
   ): Free[F, List[LLSMImg]] =
     paths.zipWithIndex.traverse[Free[F, ?], LLSMImg] {
-      case (p, i) => for {
-        img <- convertImg[F](p, outputPath)
-        _ <- Progress[F].progress(i + 1, paths.size)
-      } yield img
+      case (p, i) =>
+        for {
+          img <- convertImg[F](p, outputPath)
+          _   <- Progress[F].progress(i + 1, paths.size)
+        } yield img
     }
 
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
@@ -72,11 +65,12 @@ object Programs {
       outputPath: Path
   ): ParSeq[F, List[LLSMImg]] =
     paths.zipWithIndex.traverse[ParSeq[F, ?], LLSMImg] {
-      case (p, i) => ParSeq.liftSeq[F, LLSMImg]{
-        for {
-          img <- convertImg[F](p, outputPath)
-          _ <- Progress[F].progress(i + 1, paths.size)
-        } yield img
-      }
+      case (p, i) =>
+        ParSeq.liftSeq[F, LLSMImg] {
+          for {
+            img <- convertImg[F](p, outputPath)
+            _   <- Progress[F].progress(i + 1, paths.size)
+          } yield img
+        }
     }
 }

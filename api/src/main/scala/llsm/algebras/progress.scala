@@ -13,7 +13,7 @@ sealed trait ProgressF[A]
 object ProgressAPI {
 
   case class Progress(value: Int, max: Int) extends ProgressF[Unit]
-  case class Status(message: String) extends ProgressF[Unit]
+  case class Status(message: String)        extends ProgressF[Unit]
 
   implicit val progress = new ProgressAPI[ProgressF] {
     def progress(value: Int, max: Int): ProgressF[Unit] =
@@ -23,9 +23,9 @@ object ProgressAPI {
   }
 
   implicit def progressInject[F[_], G[_]](
-    implicit
-    F: ProgressAPI[F],
-    I: InjectK[F, G]
+      implicit
+      F: ProgressAPI[F],
+      I: InjectK[F, G]
   ): ProgressAPI[Free[G, ?]] =
     new ProgressAPI[Free[G, ?]] {
       def progress(value: Int, max: Int): Free[G, Unit] =
@@ -34,4 +34,3 @@ object ProgressAPI {
         Free.inject[F, G](F.status(message))
     }
 }
-

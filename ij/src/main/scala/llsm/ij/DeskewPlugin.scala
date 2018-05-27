@@ -59,7 +59,8 @@ class DeskewPlugin extends Command {
     val ip: Img[T] forSome { type T <: RealType[T] } = input.getImgPlus.getImg
       .asInstanceOf[Img[T] forSome { type T <: RealType[T] }]
 
-    val shearFactor: Double = (Math.cos(Math.toRadians(31.8)) * sampleIncrement) / pixelSize
+    val shearFactor
+      : Double = (Math.cos(Math.toRadians(31.8)) * sampleIncrement) / pixelSize
 
     val zInterval: Double = Math.sin(Math.toRadians(31.8)) * sampleIncrement
 

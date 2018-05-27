@@ -8,7 +8,8 @@ case class LLSMImg(img: Img[UnsignedShortType], meta: FileMetadata)
 
 object LLSMImg {
   implicit val ordering = new Ordering[LLSMImg] {
-    override def compare(x: LLSMImg, y: LLSMImg): Int = FileMetadata.compare(x.meta, y.meta)
+    override def compare(x: LLSMImg, y: LLSMImg): Int =
+      FileMetadata.compare(x.meta, y.meta)
   }
 }
 
