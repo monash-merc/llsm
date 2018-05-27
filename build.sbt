@@ -398,9 +398,7 @@ def orgScalacOptions(version: String): List[String] =
 
 def scalaVersionDeps(version: String): List[ModuleID] = {
   CrossVersion.partialVersion(version) match {
-    case Some((2, 11)) => List(
-        compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0")
-      )
+    case Some((2, 11)) => List.empty
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }
@@ -410,7 +408,7 @@ def scalaVersionDeps(version: String): List[ModuleID] = {
 def coreVersionDeps(version: String): List[ModuleID] =
   CrossVersion.partialVersion(version) match {
     case Some((2, 11)) =>
-      List("org.typelevel" %% "cats-core"       % "0.9.0")
+      List("org.typelevel" %% "cats-core"       % "1.1.0")
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }
