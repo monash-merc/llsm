@@ -13,7 +13,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import cats._
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.implicits._
 import io.scif.SCIFIOService
 import io.scif.img.cell.SCIFIOCellImgFactory
@@ -190,10 +190,10 @@ object LLSMC extends App {
     case Some(config) => {
 
       type App[A] =
-        Coproduct[ImgWriterF,
-          Coproduct[ProcessF,
-            Coproduct[ImgReaderF,
-              Coproduct[MetadataF, ProgressF, ?],
+        EitherK[ImgWriterF,
+          EitherK[ProcessF,
+            EitherK[ImgReaderF,
+              EitherK[MetadataF, ProgressF, ?],
             ?],
           ?],
         A]
@@ -201,9 +201,15 @@ object LLSMC extends App {
       val context = new Context(classOf[SCIFIOService], classOf[SciJavaService])
 
       val imgFactory = config.container match {
-        case ArrayContainer   => new ArrayImgFactory[UnsignedShortType]
-        case PlanarContainer  => new PlanarImgFactory[UnsignedShortType]
-        case CellContainer    => new SCIFIOCellImgFactory[UnsignedShortType]
+        case ArrayContainer   => new ArrayImgFactory[UnsignedShortType](
+          new UnsignedShortType
+        )
+        case PlanarContainer  => new PlanarImgFactory[UnsignedShortType](
+          new UnsignedShortType
+        )
+        case CellContainer    => new SCIFIOCellImgFactory[UnsignedShortType](
+          new UnsignedShortType
+        )
       }
 
       val conf = ConfigurableMetadata(

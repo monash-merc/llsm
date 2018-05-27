@@ -38,16 +38,18 @@ trait MetadataInterpreters {
       def apply[A](fa: MetadataF[A]): FreeApplicative[MetadataLowF, A] =
         fa match {
           case MetadataAPI.ReadMetadata(path, next) => {
-            @SuppressWarnings(Array("org.wartremover.warts.Any"))
             val fetchedMeta =
-              (MetadataLow.extractFilenameMeta(path) |@|
-               MetadataLow.extractTextMeta(path) |@|
+              (MetadataLow.extractFilenameMeta(path),
+               MetadataLow.extractTextMeta(path),
                MetadataLow.configurableMeta)
 
-            fetchedMeta.map[A] {
+            @SuppressWarnings(Array("org.wartremover.warts.Any"))
+            val result = fetchedMeta.mapN[A] {
               case (f, t, c) =>
                 next(FileMetadata(f, t.waveform, t.camera, t.sample, c))
             }
+
+            result
           }
           case MetadataAPI.WriteMetadata(path, meta, next) =>
             MetadataLow.writeMeta(path, meta).map(next)

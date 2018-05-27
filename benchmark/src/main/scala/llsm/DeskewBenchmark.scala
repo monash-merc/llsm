@@ -31,7 +31,7 @@ class FakeDeskewBenchmark extends FakeDeskewData {
   def toImg(view: RandomAccessibleInterval[UnsignedShortType])
     : Img[UnsignedShortType] = {
     val out: Img[UnsignedShortType] =
-      img.factory().create(view, new UnsignedShortType)
+      img.factory().create(view)
 
     val oc  = out.localizingCursor
     val vra = view.randomAccess

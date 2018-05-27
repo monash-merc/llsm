@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
 
 import cats.MonadError
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free._
 import cats.implicits._
 import llsm.algebras.{ImgReader, ImgReaderF, Metadata, MetadataF, Process, ProcessF}
@@ -20,7 +20,6 @@ import llsm.interpreters._
 import llsm.io.LLSMImg
 import llsm.io.metadata.ConfigurableMetadata
 import monix.eval.Task
-import monix.cats._
 import net.imglib2.img.Img
 import net.imglib2.img.cell.CellImgFactory
 import net.imglib2.`type`.numeric.integer.UnsignedShortType
@@ -30,11 +29,13 @@ import _root_.io.scif.img.ImgOpener
 
 trait IOContext extends BenchmarkContext {
 
-  type App[A] = Coproduct[ProcessF, Coproduct[ImgReaderF, MetadataF, ?], A]
+  type App[A] = EitherK[ProcessF, EitherK[ImgReaderF, MetadataF, ?], A]
 
   def config(interp: InterpolationMethod) = ConfigurableMetadata(0.1018, 0.1018, interp)
     val imgOpener = new ImgOpener(context)
-    val cf = new CellImgFactory[UnsignedShortType]()
+    val cf = new CellImgFactory[UnsignedShortType](
+      new UnsignedShortType
+    )
 
   def imgsPath: Path = Paths.get("/Users/keithschulze/Desktop/test5")
 
@@ -94,6 +95,6 @@ class IOBenchmark extends IOContext {
   def ioRaw: Img[UnsignedShortType] = {
     // val scifioConfig = new SCIFIOConfig().imgOpenerSetImgModes(SCIFIOConfig.ImgMode.CELL)
 
-    imgOpener.openImgs(imgPath.toString, cf, new UnsignedShortType).get(0)
+    imgOpener.openImgs(imgPath.toString, cf).get(0)
   }
 }

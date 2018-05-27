@@ -8,7 +8,7 @@ import java.util.stream.Collectors
 import scala.collection.JavaConverters._
 
 import cats.MonadError
-import cats.data.Coproduct
+import cats.data.EitherK
 import cats.free.Free
 import cats.implicits._
 import io.scif.img.cell.SCIFIOCellImgFactory
@@ -35,6 +35,7 @@ import llsm.algebras.{
 import llsm.interpreters._
 import llsm.io.metadata.{ ConfigurableMetadata }
 import llsm.ij.interpreters._
+import net.imglib2.cache.img.DiskCachedCellImgOptions
 import net.imglib2.img.ImgFactory
 import net.imglib2.img.array.ArrayImgFactory
 import net.imglib2.img.planar.PlanarImgFactory
@@ -134,10 +135,10 @@ class ConvertPlugin extends Command {
   override def run(): Unit = validateConfig match {
     case ConfigSuccess => {
       type App[A] =
-        Coproduct[ImgWriterF,
-          Coproduct[ProcessF,
-            Coproduct[ImgReaderF,
-              Coproduct[MetadataF, ProgressF, ?],
+        EitherK[ImgWriterF,
+          EitherK[ProcessF,
+            EitherK[ImgReaderF,
+              EitherK[MetadataF, ProgressF, ?],
             ?],
           ?],
         A]
@@ -154,9 +155,12 @@ class ConvertPlugin extends Command {
         })
 
       val imgFactory: ImgFactory[UnsignedShortType] = container match {
-        case "Array"  => new ArrayImgFactory[UnsignedShortType]
-        case "Planar" => new PlanarImgFactory[UnsignedShortType]
-        case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType]
+        case "Array"  => new ArrayImgFactory[UnsignedShortType](new UnsignedShortType)
+        case "Planar" => new PlanarImgFactory[UnsignedShortType](new UnsignedShortType)
+        case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType](
+          new UnsignedShortType,
+          DiskCachedCellImgOptions.options()
+        )
         case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
       }
 

@@ -2,7 +2,8 @@ package llsm.algebras
 
 import java.nio.file.Path
 
-import cats.free.{Free, Inject}
+import cats.InjectK
+import cats.free.Free
 import llsm.io.LLSMImg
 import llsm.io.metadata.FileMetadata
 
@@ -23,7 +24,7 @@ object ImgReaderAPI {
       ReadImg(path, meta, identity)
   }
 
-  implicit def imgReaderInject[F[_], G[_]](implicit F: ImgReaderAPI[F], I: Inject[F, G]): ImgReaderAPI[Free[G, ?]] =
+  implicit def imgReaderInject[F[_], G[_]](implicit F: ImgReaderAPI[F], I: InjectK[F, G]): ImgReaderAPI[Free[G, ?]] =
     new ImgReaderAPI[Free[G, ?]] {
       def readImg(path: Path, meta: FileMetadata): Free[G, LLSMImg] =
         Free.inject[F, G](F.readImg(path, meta))

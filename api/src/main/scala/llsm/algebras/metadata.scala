@@ -2,10 +2,10 @@ package llsm.algebras
 
 import java.nio.file.Path
 
+import cats.InjectK
 import cats.free.{
   Free,
-  FreeApplicative,
-  Inject
+  FreeApplicative
 }
 import llsm.io.LLSMImg
 import llsm.io.metadata.{
@@ -33,7 +33,7 @@ object MetadataAPI {
       WriteMetadata(path, metas, identity)
   }
 
-  implicit def metadataInject[F[_], G[_]](implicit F: MetadataAPI[F], I: Inject[F, G]): MetadataAPI[Free[G, ?]] =
+  implicit def metadataInject[F[_], G[_]](implicit F: MetadataAPI[F], I: InjectK[F, G]): MetadataAPI[Free[G, ?]] =
     new MetadataAPI[Free[G, ?]] {
       def readMetadata(path: Path): Free[G, FileMetadata] =
         Free.inject[F, G](F.readMetadata(path))

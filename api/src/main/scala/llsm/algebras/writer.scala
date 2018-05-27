@@ -1,7 +1,8 @@
 package llsm.algebras
 
 import java.nio.file.Path
-import cats.free.{Free, Inject}
+import cats.InjectK
+import cats.free.Free
 
 import llsm.io.LLSMImg
 import llsm.io.metadata.FileMetadata
@@ -21,7 +22,7 @@ object ImgWriterAPI {
     def writeImg(path: Path, img: LLSMImg): ImgWriterF[FileMetadata] = WriteImg(path, img, identity)
   }
 
-  implicit def imgWriterInject[F[_], G[_]](implicit F: ImgWriterAPI[F], I: Inject[F, G]): ImgWriterAPI[Free[G, ?]] =
+  implicit def imgWriterInject[F[_], G[_]](implicit F: ImgWriterAPI[F], I: InjectK[F, G]): ImgWriterAPI[Free[G, ?]] =
     new ImgWriterAPI[Free[G, ?]] {
       def writeImg(path: Path, img: LLSMImg): Free[G, FileMetadata] =
         Free.inject[F, G](F.writeImg(path, img))

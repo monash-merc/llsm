@@ -164,7 +164,7 @@ trait ImgWriterInterpreters {
               val channels: Map[Integer, BasicViewSetup] = (0 until c).map(n => {
                 val setup = new BasicViewSetup(n, s"channel ${n + 1}", size, voxelSize)
                 setup.setAttribute(new Channel(n + 1))
-                new Integer(n) -> setup
+                Integer.valueOf(n) -> setup
               }).toMap
               val timePoints: List[TimePoint] = (0 until t).map(n => new TimePoint(n)).toList
               val lookback = new DefaultLoopbackHeuristic
@@ -172,8 +172,8 @@ trait ImgWriterInterpreters {
                 override def afterEachPlane(usedLoopBack: Boolean): Unit = {}
               }
               val partition = new Partition(path.toString,
-                timePoints.map(t => new Integer(t.getId) -> new Integer(t.getId)).toMap.asJava,
-                channels.map{ case (_, c) => new Integer(c.getId) -> new Integer(c.getId)}.toMap.asJava)
+                timePoints.map(t => Integer.valueOf(t.getId) -> Integer.valueOf(t.getId)).toMap.asJava,
+                channels.map{ case (_, c) => Integer.valueOf(c.getId) -> Integer.valueOf(c.getId)}.toMap.asJava)
               val cores = Runtime.getRuntime().availableProcessors()
               val numCellCreatorThreads = Math.min(if (cores > 1) cores - 1 else 1, 4)
               val progress = new ProgressWriterConsole

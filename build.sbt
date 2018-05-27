@@ -1,11 +1,11 @@
+import microsites._
 import ReleaseTransformations._
-import sbtunidoc.Plugin.UnidocKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
 inThisBuild(List(
   organization := "edu.monash",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.11.11", "2.12.3")
+  scalaVersion := "2.12.6",
+  crossScalaVersions := Seq("2.11.12", "2.12.6")
 ))
 
 addCommandAlias(
@@ -15,13 +15,13 @@ addCommandAlias(
 /**
  * Common dep versions
  */
-lazy val imglib2Version     = "4.2.1"
-lazy val imglib2RTVersion   = "2.0.0-beta-37"
-lazy val scifioVersion      = "0.32.0"
+lazy val imglib2Version     = "5.2.0"
+lazy val imglib2RTVersion   = "2.0.0"
+lazy val scifioVersion      = "0.36.0"
 lazy val scifioOMEVersion   = "0.14.3"
-lazy val bdvCoreVersion     = "4.1.0"
-lazy val imagejVersion      = "2.0.0-rc-61"
-lazy val ijLegacyVersion    = "0.25.0"
+lazy val bdvCoreVersion     = "5.0.0"
+lazy val imagejVersion      = "2.0.0-rc-66"
+lazy val ijLegacyVersion    = "0.30.0"
 lazy val ijScalaVersion     = "0.2.1"
 
 /**
@@ -128,11 +128,11 @@ lazy val publishSettings = List(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    ReleaseStep(action = Command.process("package", _)),
+    releaseStepCommand("package"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    ReleaseStep(action = Command.process("publishSigned", _)),
+    releaseStepCommand("publishSigned"),
     setNextVersion,
     commitNextVersion,
     // ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
@@ -141,8 +141,8 @@ lazy val publishSettings = List(
 )
 
 lazy val noPublishSettings = List(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
@@ -201,11 +201,11 @@ disablePlugins(AssemblyPlugin)
 lazy val docs = project
   .in(file("docs"))
   .disablePlugins(AssemblyPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .enablePlugins(MicrositesPlugin)
   .settings(moduleName := "llsm-docs")
   .settings(llsmSettings)
   .settings(noPublishSettings)
-  .settings(unidocSettings)
   .settings(docSettings)
   .settings(
     scalacOptions in Tut ~= (_.filterNot(
@@ -217,7 +217,7 @@ lazy val docs = project
     )),
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % imglib2Version    % "tut",
-      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "tut",
+      "net.imglib2" % "imglib2-algorithm"     % "0.9.0"           % "tut",
       "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "tut",
       "io.scif"     % "scifio"                % scifioVersion     % "tut",
       "io.scif"     % "scifio-ome-xml"        % scifioOMEVersion  % "tut",
@@ -249,7 +249,7 @@ lazy val core = project
     exportJars := true,
     libraryDependencies ++= Seq(
       "net.imglib2" % "imglib2"               % imglib2Version    % "provided",
-      "net.imglib2" % "imglib2-algorithm"     % "0.8.0"           % "provided",
+      "net.imglib2" % "imglib2-algorithm"     % "0.9.0"           % "provided",
       "net.imglib2" % "imglib2-realtransform" % imglib2RTVersion  % "provided",
       "io.scif"     % "scifio"                % scifioVersion     % "provided"
     ) ++ coreVersionDeps(scalaVersion.value)
@@ -265,8 +265,8 @@ lazy val api = project
   .settings(
     exportJars := true,
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules"  %% "scala-xml"            % "1.0.6",
-      "org.typelevel"           %% "cats-free"            % "0.9.0",
+      "org.scala-lang.modules"  %% "scala-xml"            % "1.1.0",
+      "org.typelevel"           %% "cats-free"            % "1.1.0",
       "net.imglib2"             % "imglib2"               % imglib2Version    % "provided",
       "net.imglib2"             % "imglib2-realtransform" % imglib2RTVersion  % "provided",
       "io.scif"                 % "scifio"                % scifioVersion     % "provided",
@@ -285,7 +285,7 @@ lazy val cli = project
   .settings(noPublishSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.github.scopt"  %% "scopt"                % "3.6.0",
+      "com.github.scopt"  %% "scopt"                % "3.7.0",
       "net.imglib2"       % "imglib2"               % imglib2Version,
       "net.imglib2"       % "imglib2-realtransform" % imglib2RTVersion,
       "io.scif"           % "scifio"                % scifioVersion,
@@ -309,9 +309,12 @@ lazy val ij = project
       "net.imagej"    % "imagej"                    % imagejVersion     % "provided",
       "net.imagej"    % "imagej-legacy"             % ijLegacyVersion   % "provided",
       "org.scijava"   % "scripting-scala"           % ijScalaVersion    % "provided",
-      "net.imglib2"   % "imglib2-ui"                % "2.0.0-beta-33"   % "provided",
+      "net.imglib2"             % "imglib2"               % imglib2Version    % "provided",
+      "net.imglib2"   % "imglib2-cache"             % "1.0.0-beta-9"     % "provided",
+      "net.imglib2"             % "imglib2-realtransform" % imglib2RTVersion  % "provided",
+      "net.imglib2"   % "imglib2-ui"                % "2.0.0"   % "provided",
       "sc.fiji"       % "bigdataviewer-core"        % bdvCoreVersion    % "provided",
-      "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-5"    % "provided"
+      "sc.fiji"       % "bigdataviewer-vistools"    % "1.0.0-beta-11"    % "provided"
     ),
     scalacOptions ~= (_ filterNot(_ == "-Xcheckinit")), // disable checkinit because ImageJ does a lot of runtime injection
     mainClass in (Compile, run) := Some("net.imagej.Main"),
@@ -336,8 +339,8 @@ lazy val tests = project
   .settings(noPublishSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck"           % "1.13.4",
-      "org.scalatest"  %% "scalatest"            % "3.0.1",
+      "org.scalacheck" %% "scalacheck"           % "1.14.0",
+      "org.scalatest"  %% "scalatest"            % "3.0.5",
       "net.imglib2"    % "imglib2"               % imglib2Version,
       "net.imglib2"    % "imglib2-realtransform" % imglib2RTVersion,
       "io.scif"        % "scifio"                % scifioVersion,
@@ -361,8 +364,7 @@ lazy val benchmark = project
       "io.scif"       %   "scifio"                  % scifioVersion,
       "io.scif"       %   "scifio-ome-xml"          % scifioOMEVersion,
       "sc.fiji"       %   "bigdataviewer-core"      % bdvCoreVersion,
-      "io.monix"      %%  "monix-eval"              % "2.3.0",
-      "io.monix"      %%  "monix-cats"              % "2.3.0"
+      "io.monix"      %%  "monix"              % "3.0.0-RC1",
     )
   )
 
@@ -396,9 +398,7 @@ def orgScalacOptions(version: String): List[String] =
 
 def scalaVersionDeps(version: String): List[ModuleID] = {
   CrossVersion.partialVersion(version) match {
-    case Some((2, 11)) => List(
-        compilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0")
-      )
+    case Some((2, 11)) => List.empty
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }
@@ -408,7 +408,7 @@ def scalaVersionDeps(version: String): List[ModuleID] = {
 def coreVersionDeps(version: String): List[ModuleID] =
   CrossVersion.partialVersion(version) match {
     case Some((2, 11)) =>
-      List("org.typelevel" %% "cats-core"       % "0.9.0")
+      List("org.typelevel" %% "cats-core"       % "1.1.0")
     case Some((2, 12)) => List.empty
     case _             => List.empty
   }

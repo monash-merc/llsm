@@ -43,7 +43,6 @@ trait ImgReaderInterpreters {
                 LLSMImg(
                   imgOpener.openImgs(
                     rdr,
-                    new UnsignedShortType,
                     factory,
                     conf).get(0),
                   meta)

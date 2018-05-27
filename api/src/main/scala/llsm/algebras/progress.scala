@@ -1,6 +1,7 @@
 package llsm.algebras
 
-import cats.free.{Free, Inject}
+import cats.InjectK
+import cats.free.Free
 
 trait ProgressAPI[F[_]] {
   def progress(value: Int, max: Int): F[Unit]
@@ -24,7 +25,7 @@ object ProgressAPI {
   implicit def progressInject[F[_], G[_]](
     implicit
     F: ProgressAPI[F],
-    I: Inject[F, G]
+    I: InjectK[F, G]
   ): ProgressAPI[Free[G, ?]] =
     new ProgressAPI[Free[G, ?]] {
       def progress(value: Int, max: Int): Free[G, Unit] =
