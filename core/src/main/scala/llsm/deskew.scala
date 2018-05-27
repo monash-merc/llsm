@@ -69,22 +69,47 @@ object Deskew {
       shearInterval: Double,
       interpolator: InterpolatorFactory[A, RandomAccessible[A]])
     : RandomAccessibleInterval[A] = {
-    val iv = Views.interpolate[A, RandomAccessible[A]](
-      Views.extendZero(input), interpolator)
+    val iv = Views.interpolate[A, RandomAccessible[A]](Views.extendZero(input),
+                                                       interpolator)
     realShearedView[A](iv, input, shearDim, referenceDim, shearInterval)
   }
 
-  def deskew[A <: RealType[A]](shearDim: Int, refDim: Int, shearFactor: Double, interpolation: InterpolationMethod): RandomAccessibleInterval[A] => RandomAccessibleInterval[A] =
-    img => interpolation match {
-      case NoInterpolation => deskewStack[A](img, shearDim, refDim, shearFactor.toInt)
-      case NNInterpolation => deskewRealStack[A](img, shearDim, refDim, shearFactor, new NearestNeighborInterpolatorFactory)
-      case LinearInterpolation => deskewRealStack[A](img, shearDim, refDim, shearFactor, new NLinearInterpolatorFactory)
-      case LanczosInterpolation => deskewRealStack[A](img, shearDim, refDim, shearFactor, new LanczosInterpolatorFactory)
+  def deskew[A <: RealType[A]](shearDim: Int,
+                               refDim: Int,
+                               shearFactor: Double,
+                               interpolation: InterpolationMethod)
+    : RandomAccessibleInterval[A] => RandomAccessibleInterval[A] =
+    img =>
+      interpolation match {
+        case NoInterpolation =>
+          deskewStack[A](img, shearDim, refDim, shearFactor.toInt)
+        case NNInterpolation =>
+          deskewRealStack[A](img,
+                             shearDim,
+                             refDim,
+                             shearFactor,
+                             new NearestNeighborInterpolatorFactory)
+        case LinearInterpolation =>
+          deskewRealStack[A](img,
+                             shearDim,
+                             refDim,
+                             shearFactor,
+                             new NLinearInterpolatorFactory)
+        case LanczosInterpolation =>
+          deskewRealStack[A](img,
+                             shearDim,
+                             refDim,
+                             shearFactor,
+                             new LanczosInterpolatorFactory)
     }
 
-  def calcShearFactor(interval: Double, angle: Double, voxelSize: Double): Double =
+  def calcShearFactor(interval: Double,
+                      angle: Double,
+                      voxelSize: Double): Double =
     Math.cos(Math.toRadians(angle)) * interval / voxelSize
 
-  def calcZInterval(sampleInterval: Double, zPiezoInterval: Double, angle: Double): Double =
+  def calcZInterval(sampleInterval: Double,
+                    zPiezoInterval: Double,
+                    angle: Double): Double =
     Math.sin(Math.toRadians(angle)) * sampleInterval + zPiezoInterval
 }

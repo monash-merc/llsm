@@ -33,7 +33,7 @@ import llsm.algebras.{
   ProgressF
 }
 import llsm.interpreters._
-import llsm.io.metadata.{ ConfigurableMetadata }
+import llsm.io.metadata.{ConfigurableMetadata}
 import llsm.ij.interpreters._
 import net.imglib2.cache.img.DiskCachedCellImgOptions
 import net.imglib2.img.ImgFactory
@@ -46,8 +46,6 @@ import org.scijava.command.Command
 import org.scijava.log.LogService
 import org.scijava.ui.UIService
 import org.scijava.plugin.{Plugin, Parameter}
-
-
 @Plugin(`type` = classOf[Command],
         headless = true,
         menuPath = "Plugins>LLSM>Convert Dataset...")
@@ -56,7 +54,10 @@ class ConvertPlugin extends Command {
   @Parameter(style = "directory", `type` = ItemIO.INPUT)
   var input: File = _
 
-  @Parameter(style = "save", label = "Output", validater = "validateName", `type` = ItemIO.INPUT)
+  @Parameter(style = "save",
+             label = "Output",
+             validater = "validateName",
+             `type` = ItemIO.INPUT)
   var output: File = _
 
   // @Parameter()
@@ -68,9 +69,9 @@ class ConvertPlugin extends Command {
   var pixelSize: Double = 0.104
 
   @Parameter(label = "Img Container Type",
-    choices = Array("Array", "Planar", "Cell"),
-    persist = false,
-    required = false)
+             choices = Array("Array", "Planar", "Cell"),
+             persist = false,
+             required = false)
   var container: String = "Cell"
 
   @Parameter(label = "Interpolation scheme",
@@ -92,42 +93,43 @@ class ConvertPlugin extends Command {
   var context: Context = _
 
   sealed trait ValidConfig
-  case object ConfigSuccess extends ValidConfig
+  case object ConfigSuccess             extends ValidConfig
   case class ConfigFailure(msg: String) extends ValidConfig
 
   object ValidConfig {
-    def success(): ValidConfig = ConfigSuccess
+    def success(): ValidConfig         = ConfigSuccess
     def fail(msg: String): ValidConfig = ConfigFailure(msg)
   }
 
   def validateConfig(): ValidConfig =
-    if (!output.getPath().endsWith(".h5") && !output.getPath().endsWith(".ome.tif"))
-      ValidConfig.fail("Invalid output type. Only .h5 and .ome.tif are supported")
+    if (!output
+          .getPath()
+          .endsWith(".h5") && !output.getPath().endsWith(".ome.tif"))
+      ValidConfig.fail(
+        "Invalid output type. Only .h5 and .ome.tif are supported")
     else if (WriterUtils.outputExists(Paths.get(output.getPath))) {
       val c = new YesNoCancelDialog(
         new Frame,
         "Output file/files exist",
         "The output file/files you specified already exist. Do you want to continue and overwrite them?"
       )
-      val cancel = c.cancelPressed
+      val cancel  = c.cancelPressed
       val proceed = c.yesPressed
       if (cancel)
         ValidConfig.fail("Outputs exist. Action cancelled.")
-      else if(!proceed)
+      else if (!proceed)
         ValidConfig.fail("Outputs exist. User specified not to proceed.")
       else ValidConfig.success
-    }
-    else ValidConfig.success
+    } else ValidConfig.success
 
   def program[F[_]: Metadata: ImgReader: ImgWriter: Process: Progress](
-    paths: List[Path],
-    outputPath: Path
+      paths: List[Path],
+      outputPath: Path
   ): Free[F, Unit] =
     for {
       imgs <- Programs.convertImgs[F](paths, outputPath)
-      r <- Metadata[F].writeMetadata(outputPath, imgs)
+      r    <- Metadata[F].writeMetadata(outputPath, imgs)
     } yield r
-
 
   /**
     * Entry point to running a plugin.
@@ -135,59 +137,69 @@ class ConvertPlugin extends Command {
   override def run(): Unit = validateConfig match {
     case ConfigSuccess => {
       type App[A] =
-        EitherK[ImgWriterF,
+        EitherK[
+          ImgWriterF,
           EitherK[ProcessF,
-            EitherK[ImgReaderF,
-              EitherK[MetadataF, ProgressF, ?],
-            ?],
-          ?],
-        A]
+                  EitherK[ImgReaderF, EitherK[MetadataF, ProgressF, ?], ?],
+                  ?],
+          A]
 
       val config = ConfigurableMetadata(
         pixelSize,
         pixelSize,
         interpolation match {
-          case "Nearest Neighbour"  => NNInterpolation
-          case "Linear"             => LinearInterpolation
-          case "Lancsoz"            => LanczosInterpolation
-          case "None"               => NoInterpolation
-          case _                    => throw new Exception("Unknown Interpolation type. Please submit a bug report.")
-        })
+          case "Nearest Neighbour" => NNInterpolation
+          case "Linear"            => LinearInterpolation
+          case "Lancsoz"           => LanczosInterpolation
+          case "None"              => NoInterpolation
+          case _ =>
+            throw new Exception(
+              "Unknown Interpolation type. Please submit a bug report.")
+        }
+      )
 
       val imgFactory: ImgFactory[UnsignedShortType] = container match {
-        case "Array"  => new ArrayImgFactory[UnsignedShortType](new UnsignedShortType)
-        case "Planar" => new PlanarImgFactory[UnsignedShortType](new UnsignedShortType)
-        case "Cell"   => new SCIFIOCellImgFactory[UnsignedShortType](
-          new UnsignedShortType,
-          DiskCachedCellImgOptions.options()
-        )
-        case _        => throw new Exception("Unknown Img container type. Please submit a bug report.")
+        case "Array" =>
+          new ArrayImgFactory[UnsignedShortType](new UnsignedShortType)
+        case "Planar" =>
+          new PlanarImgFactory[UnsignedShortType](new UnsignedShortType)
+        case "Cell" =>
+          new SCIFIOCellImgFactory[UnsignedShortType](
+            new UnsignedShortType,
+            DiskCachedCellImgOptions.options()
+          )
+        case _ =>
+          throw new Exception(
+            "Unknown Img container type. Please submit a bug report.")
       }
 
       // Create a compiler for our program that combines interpreters for
       // reading metadata, reading data, deskewing, writing processed data and
       // reporting progress to ImageJ.
       def compiler[M[_]: MonadError[?[_], Throwable]] =
-                  imgWriterInterpreter[M](context) or
-                      (processInterpreter[M] or
-                        (ijImgReaderInterpreter[M](context, imgFactory, log) or
-                          (ijMetadataInterpreter[M](config, context, log) or
-                            ijProgressInterpreter[M](status))))
+        imgWriterInterpreter[M](context) or
+          (processInterpreter[M] or
+            (ijImgReaderInterpreter[M](context, imgFactory, log) or
+              (ijMetadataInterpreter[M](config, context, log) or
+                ijProgressInterpreter[M](status))))
 
       // Get a list of TIFF images from the input path.
-      val imgPaths = Files.list(Paths.get(input.getPath))
+      val imgPaths = Files
+        .list(Paths.get(input.getPath))
         .collect(Collectors.toList[Path])
-        .asScala.filter(_.toString.endsWith(".tif"))
+        .asScala
+        .filter(_.toString.endsWith(".tif"))
 
       // Create a program for processing our images. This will be executed via
       // the compiler.
       val p = program[App](imgPaths.toList, Paths.get(output.getPath))
 
-      val outputF: Either[Throwable, Unit] => Unit = result => result match {
-        case Right(_) => {
-          log.info("Successfully converted images")
-        }
-        case Left(e) => log.error(e)
+      val outputF: Either[Throwable, Unit] => Unit = result =>
+        result match {
+          case Right(_) => {
+            log.info("Successfully converted images")
+          }
+          case Left(e) => log.error(e)
       }
 
       outputF(p.foldMap(compiler[Either[Throwable, ?]]))

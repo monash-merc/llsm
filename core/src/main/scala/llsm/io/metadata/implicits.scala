@@ -6,7 +6,6 @@ import scala.util.{Left, Failure, Right, Success, Try}
 import llsm.EitherImplicits
 import llsm.ListImplicits
 
-
 trait ImplicitParsers extends EitherImplicits with ListImplicits {
 
   implicit val sampleStageParser = new Parser[SampleStage] {
@@ -15,7 +14,8 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
         case List(_, ang) =>
           Try(ang.trim.toDouble) match {
             case Success(a) => Right(SampleStage(a))
-            case Failure(e) => Left(ParsingFailure(s"Unable to parse angle of sample stage", e))
+            case Failure(e) =>
+              Left(ParsingFailure(s"Unable to parse angle of sample stage", e))
           }
       }
   }
@@ -28,38 +28,51 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
             ch <- Try(channel.substring(2).toInt) match {
               case Success(ch) => Right(ch)
               case Failure(e) =>
-                  Left(ParsingFailure(
+                Left(
+                  ParsingFailure(
                     s"Unable to parse channel number from file name: $s",
                     e))
             }
             st <- Try(stack.substring(5).toInt) match {
               case Success(st) => Right(st)
               case Failure(e) =>
-                  Left(ParsingFailure(
+                Left(
+                  ParsingFailure(
                     s"Unable to parse stack index from file name: $s",
                     e))
             }
             w <- Try(cw.substring(0, cw.length - 2).toInt) match {
               case Success(wave) => Right(wave)
               case Failure(e) =>
-                  Left(ParsingFailure(
+                Left(
+                  ParsingFailure(
                     s"Unable to parse channel wavelength from file name: $s",
                     e))
-              }
+            }
             t <- Try(time.substring(0, 7).toLong) match {
               case Success(t) => Right(t)
               case Failure(e) =>
-                Left(ParsingFailure(s"Unable to parse timestamp from file name: $s",
-                               e))
+                Left(
+                  ParsingFailure(
+                    s"Unable to parse timestamp from file name: $s",
+                    e))
             }
             tAbs <- Try(absTime.substring(0, 10).toLong) match {
               case Success(tAbs) => Right(tAbs)
               case Failure(e) =>
-                  Left(ParsingFailure(
+                Left(
+                  ParsingFailure(
                     s"Unable to parse absolute timestamp from file name: $s",
                     e))
             }
-          } yield FilenameMetadata(UUID.nameUUIDFromBytes(s.getBytes), name.reverse.mkString("_"), ch, st, w, t, tAbs)
+          } yield
+            FilenameMetadata(UUID.nameUUIDFromBytes(s.getBytes),
+                             name.reverse.mkString("_"),
+                             ch,
+                             st,
+                             w,
+                             t,
+                             tAbs)
         case _ =>
           Left(
             ParsingFailure(
@@ -80,24 +93,29 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
           for {
             c <- channelFromLabel(label) match {
               case Success(c) => Right(c)
-              case Failure(e) => Left(ParsingFailure("Could not parse channel label", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse channel label", e))
             }
             o <- Try(off.toDouble) match {
               case Success(o) => Right(o)
-              case Failure(e) => Left(ParsingFailure("Could not parse offset", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse offset", e))
             }
             i <- Try(int.toDouble) match {
               case Success(i) => Right(i)
-              case Failure(e) => Left(ParsingFailure("Could not parse interval", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse interval", e))
             }
             p <- Try(pix.toLong) match {
               case Success(p) => Right(p)
-              case Failure(e) => Left(ParsingFailure("Could not parse pixel number", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse pixel number", e))
             }
           } yield WaveformMetadata.Stage(c, o, i, p)
         case _ =>
-          Left(ParsingFailure("Could not parse stage metadata",
-                              new Throwable("Could not parse stage metadata")))
+          Left(
+            ParsingFailure("Could not parse stage metadata",
+                           new Throwable("Could not parse stage metadata")))
       }
   }
 
@@ -108,11 +126,13 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
           for {
             c <- channelFromLabel(label) match {
               case Success(c) => Right(c)
-              case Failure(e) => Left(ParsingFailure("Could not parse channel label", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse channel label", e))
             }
             s <- Try(sn.toInt) match {
               case Success(s) => Right(s)
-              case Failure(e) => Left(ParsingFailure("Could not parse stack number", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse stack number", e))
             }
           } yield WaveformMetadata.Stack(c, s)
         case _ =>
@@ -131,7 +151,8 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
           for {
             c <- channelFromLabel(label) match {
               case Success(c) => Right(c)
-              case Failure(e) => Left(ParsingFailure("Could not parse channel label", e))
+              case Failure(e) =>
+                Left(ParsingFailure("Could not parse channel label", e))
             }
             filt <- Right(f)
             laser <- Try(l.toInt) match {
@@ -210,8 +231,15 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
       stack: List[WaveformMetadata.Stack],
       excitation: List[WaveformMetadata.Excitation])
     : List[WaveformMetadata.Channel] = {
-    for (n <- (0 until xGalv.size).toList) yield
-      WaveformMetadata.Channel(xGalv(n).channel, stack(n).number, xGalv(n), zGalv(n), zPZT(n), sPZT(n), excitation(n))
+    for (n <- (0 until xGalv.size).toList)
+      yield
+        WaveformMetadata.Channel(xGalv(n).channel,
+                                 stack(n).number,
+                                 xGalv(n),
+                                 zGalv(n),
+                                 zPZT(n),
+                                 sPZT(n),
+                                 excitation(n))
   }
 
   implicit val wfParser = new Parser[WaveformMetadata] {
@@ -221,17 +249,30 @@ trait ImplicitParsers extends EitherImplicits with ListImplicits {
           for {
             wft <- Parser[WaveformMetadata.Type](t.trim)
             xGalv <- sequenceListEither(
-              xg.split("\\n").toList.map(l => Parser[WaveformMetadata.Stage](l)))
+              xg.split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Stage](l)))
             zGalv <- sequenceListEither(
-              zg.split("\\n").toList.map(l => Parser[WaveformMetadata.Stage](l)))
+              zg.split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Stage](l)))
             zPZT <- sequenceListEither(
-              zp.split("\\n").toList.map(l => Parser[WaveformMetadata.Stage](l)))
+              zp.split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Stage](l)))
             sPZT <- sequenceListEither(
-              sp.split("\\n").toList.map(l => Parser[WaveformMetadata.Stage](l)))
+              sp.split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Stage](l)))
             st <- sequenceListEither(
-              stacks.split("\\n").toList.map(l => Parser[WaveformMetadata.Stack](l)))
+              stacks
+                .split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Stack](l)))
             exp <- sequenceListEither(
-              ex.split("\\n").toList.map(l => Parser[WaveformMetadata.Excitation](l)))
+              ex.split("\\n")
+                .toList
+                .map(l => Parser[WaveformMetadata.Excitation](l)))
             cyc <- Parser[WaveformMetadata.Cycle](cycle.trim)
             zm  <- Parser[WaveformMetadata.ZMotion](zmotion.trim)
           } yield {

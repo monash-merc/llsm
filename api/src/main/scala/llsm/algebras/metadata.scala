@@ -3,10 +3,7 @@ package llsm.algebras
 import java.nio.file.Path
 
 import cats.InjectK
-import cats.free.{
-  Free,
-  FreeApplicative
-}
+import cats.free.{Free, FreeApplicative}
 import llsm.io.LLSMImg
 import llsm.io.metadata.{
   ConfigurableMetadata,
@@ -23,8 +20,10 @@ trait MetadataAPI[F[_]] {
 sealed trait MetadataF[A]
 
 object MetadataAPI {
-  case class ReadMetadata[A](path: Path, next: FileMetadata => A) extends MetadataF[A]
-  case class WriteMetadata[A](path: Path, metas: List[LLSMImg], next: Unit => A) extends MetadataF[A]
+  case class ReadMetadata[A](path: Path, next: FileMetadata => A)
+      extends MetadataF[A]
+  case class WriteMetadata[A](path: Path, metas: List[LLSMImg], next: Unit => A)
+      extends MetadataF[A]
 
   implicit val metadata = new MetadataAPI[MetadataF] {
     def readMetadata(path: Path): MetadataF[FileMetadata] =
@@ -33,7 +32,9 @@ object MetadataAPI {
       WriteMetadata(path, metas, identity)
   }
 
-  implicit def metadataInject[F[_], G[_]](implicit F: MetadataAPI[F], I: InjectK[F, G]): MetadataAPI[Free[G, ?]] =
+  implicit def metadataInject[F[_], G[_]](
+      implicit F: MetadataAPI[F],
+      I: InjectK[F, G]): MetadataAPI[Free[G, ?]] =
     new MetadataAPI[Free[G, ?]] {
       def readMetadata(path: Path): Free[G, FileMetadata] =
         Free.inject[F, G](F.readMetadata(path))
@@ -47,16 +48,20 @@ sealed trait MetadataLowF[A]
 
 object MetadataLow {
   case object ConfigurableMeta extends MetadataLowF[ConfigurableMetadata]
-  case class ExtractFilenameMeta(path: Path) extends MetadataLowF[FilenameMetadata]
+  case class ExtractFilenameMeta(path: Path)
+      extends MetadataLowF[FilenameMetadata]
   case class ExtractTextMeta(path: Path) extends MetadataLowF[TextMetadata]
-  case class WriteMetadata(path: Path, metas: List[LLSMImg]) extends MetadataLowF[Unit]
+  case class WriteMetadata(path: Path, metas: List[LLSMImg])
+      extends MetadataLowF[Unit]
 
   def configurableMeta: FreeApplicative[MetadataLowF, ConfigurableMetadata] =
     FreeApplicative.lift(ConfigurableMeta)
-  def extractFilenameMeta(path: Path): FreeApplicative[MetadataLowF, FilenameMetadata] =
+  def extractFilenameMeta(
+      path: Path): FreeApplicative[MetadataLowF, FilenameMetadata] =
     FreeApplicative.lift(ExtractFilenameMeta(path))
   def extractTextMeta(path: Path): FreeApplicative[MetadataLowF, TextMetadata] =
     FreeApplicative.lift(ExtractTextMeta(path))
-  def writeMeta(path: Path, metas: List[LLSMImg]): FreeApplicative[MetadataLowF, Unit] =
+  def writeMeta(path: Path,
+                metas: List[LLSMImg]): FreeApplicative[MetadataLowF, Unit] =
     FreeApplicative.lift(WriteMetadata(path, metas))
 }
